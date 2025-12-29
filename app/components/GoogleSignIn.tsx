@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+
 interface GoogleSignInProps {
   backendUrl?: string;
 }
@@ -15,7 +17,7 @@ export function GoogleSignIn({ backendUrl }: GoogleSignInProps) {
   if (!baseUrl) {
     console.error('NEXT_PUBLIC_BACKEND_URL 환경변수가 설정되지 않았습니다.');
     return (
-      <div className="text-red-600 text-center p-4">
+      <div className="text-destructive text-center p-4">
         설정 오류: 백엔드 URL이 정의되지 않았습니다.
       </div>
     );
@@ -28,9 +30,11 @@ export function GoogleSignIn({ backendUrl }: GoogleSignInProps) {
   };
 
   return (
-    <button
+    <Button
       onClick={handleClick}
-      className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 font-medium transition"
+      variant="outline"
+      size="lg"
+      className="w-full gap-3"
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24">
         <text x="0" y="20" fontSize="20">
@@ -38,6 +42,6 @@ export function GoogleSignIn({ backendUrl }: GoogleSignInProps) {
         </text>
       </svg>
       <span>Google 계정으로 로그인</span>
-    </button>
+    </Button>
   );
 }

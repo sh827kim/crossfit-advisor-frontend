@@ -1,13 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
-/**
- * 로그인 오류 페이지
- * 로그인 실패 시 사용자에게 오류 메시지를 표시합니다.
- */
-export default function LoginErrorPage() {
+function LoginErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
@@ -47,58 +47,64 @@ export default function LoginErrorPage() {
     errorMessages.unknown_error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="w-full max-w-md px-4">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          {/* 헤더 */}
-          <div className="mb-8 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+        <Card>
+          <CardHeader className="text-center space-y-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-destructive/10 rounded-full">
               <span className="text-3xl">⚠️</span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {errorInfo.title}
-            </h1>
-          </div>
+            <CardTitle>{errorInfo.title}</CardTitle>
+          </CardHeader>
 
-          {/* 오류 메시지 */}
-          <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-800 text-center">
-              {errorInfo.description}
-            </p>
+          <CardContent className="space-y-4">
+            {/* 오류 메시지 */}
+            <Alert variant="destructive">
+              <AlertDescription>
+                <p className="text-center">
+                  {errorInfo.description}
+                </p>
+                {/* 상세 오류 코드 */}
+                {error && (
+                  <p className="text-xs text-center mt-2 font-mono opacity-75">
+                    오류 코드: {error}
+                  </p>
+                )}
+              </AlertDescription>
+            </Alert>
+          </CardContent>
 
-            {/* 상세 오류 코드 */}
-            {error && (
-              <p className="text-xs text-red-600 text-center mt-2 font-mono">
-                오류 코드: {error}
-              </p>
-            )}
-          </div>
+          <CardFooter className="flex flex-col gap-3">
+            {/* 행동 버튼 */}
+            <Button asChild className="w-full" size="lg">
+              <Link href="/login">다시 로그인하기</Link>
+            </Button>
 
-          {/* 행동 버튼 */}
-          <div className="space-y-3">
-            <Link
-              href="/login"
-              className="block w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 font-medium text-center transition"
-            >
-              다시 로그인하기
-            </Link>
+            <Button asChild variant="secondary" className="w-full" size="lg">
+              <Link href="/">홈으로 돌아가기</Link>
+            </Button>
+          </CardFooter>
+        </Card>
 
-            <Link
-              href="/"
-              className="block w-full bg-gray-200 text-gray-900 py-3 px-4 rounded-md hover:bg-gray-300 font-medium text-center transition"
-            >
-              홈으로 돌아가기
-            </Link>
-          </div>
-
-          {/* 도움말 */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-600 text-center">
-              문제가 계속되면 다시 시도하거나 홈으로 돌아가세요.
-            </p>
-          </div>
+        {/* 도움말 */}
+        <div className="mt-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            문제가 계속되면 다시 시도하거나 홈으로 돌아가세요.
+          </p>
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * 로그인 오류 페이지
+ * 로그인 실패 시 사용자에게 오류 메시지를 표시합니다.
+ */
+export default function LoginErrorPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">로드 중...</div>}>
+      <LoginErrorContent />
+    </Suspense>
   );
 }
