@@ -43,9 +43,6 @@ pnpm lint
 `.env.local` 파일 생성 (`.env.example` 참고):
 
 ```env
-# Google OAuth 클라이언트 ID (Google Cloud Console에서 발급)
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-
 # 백엔드 API URL (환경에 따라 변경)
 NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
 
