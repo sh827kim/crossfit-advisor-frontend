@@ -12,6 +12,9 @@ import {
   type User,
   type TokenResponse,
 } from '@/app/lib/auth-storage';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 interface CommonResult<T> {
   success: boolean;
@@ -157,10 +160,10 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">로드 중...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+          <p className="mt-4 text-muted-foreground">로드 중...</p>
         </div>
       </div>
     );
@@ -168,20 +171,27 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="w-full max-w-md px-4">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-              <h2 className="text-lg font-semibold text-red-900 mb-2">오류 발생</h2>
-              <p className="text-red-800 text-sm">{error}</p>
-            </div>
-            <button
-              onClick={() => router.push('/login')}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium"
-            >
-              다시 로그인하기
-            </button>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-destructive">오류 발생</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Alert variant="destructive">
+                <AlertDescription className="text-sm">
+                  {error}
+                </AlertDescription>
+              </Alert>
+              <Button
+                onClick={() => router.push('/login')}
+                className="w-full"
+                size="lg"
+              >
+                다시 로그인하기
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -189,47 +199,53 @@ export default function DashboardPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="w-full max-w-md px-4">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <p className="text-center text-gray-600 mb-4">사용자 정보를 찾을 수 없습니다.</p>
-            <button
-              onClick={() => router.push('/login')}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium"
-            >
-              로그인하기
-            </button>
-          </div>
+          <Card>
+            <CardContent className="space-y-4 pt-6">
+              <p className="text-center text-muted-foreground">
+                사용자 정보를 찾을 수 없습니다.
+              </p>
+              <Button
+                onClick={() => router.push('/login')}
+                className="w-full"
+                size="lg"
+              >
+                로그인하기
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* 네비게이션 바 */}
       <nav className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-foreground">
               🏋️ 또와드
             </h1>
             <div className="flex items-center gap-6">
               <div className="text-right">
-                <p className="text-sm text-gray-900 font-medium">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.email}</p>
+                <p className="text-sm text-foreground font-medium">{user.name}</p>
+                <p className="text-xs text-muted-foreground">{user.email}</p>
               </div>
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={async () => {
                   // 로그아웃 처리
                   clearAuthData();
                   await logoutFromBackend();
                   router.push('/login');
                 }}
-                className="text-sm text-gray-600 hover:text-gray-900 font-medium"
               >
                 로그아웃
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -239,127 +255,120 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* WOD 입력 카드 */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                📝 WOD 입력하기
-              </h2>
-              <p className="text-gray-600">
-                오늘의 WOD를 입력해주세요!
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 font-medium transition">
+          <Card>
+            <CardHeader>
+              <CardTitle>📝 WOD 입력하기</CardTitle>
+              <CardDescription>오늘의 WOD를 입력해주세요!</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button className="w-full" size="lg">
                 📷 카메라로 촬영
-              </button>
-              <button className="w-full bg-gray-200 text-gray-900 py-3 px-4 rounded-md hover:bg-gray-300 font-medium transition">
+              </Button>
+              <Button variant="secondary" className="w-full" size="lg">
                 ✍️ 텍스트로 입력
-              </button>
-            </div>
-          </div>
+              </Button>
+            </CardContent>
+          </Card>
 
           {/* AI 추천 카드 */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                🤖 AI 추천받기
-              </h2>
-              <p className="text-gray-600">
+          <Card>
+            <CardHeader>
+              <CardTitle>🤖 AI 추천받기</CardTitle>
+              <CardDescription>
                 WOD 분석 후 맞춤형 보강운동을 추천받으세요
-              </p>
-            </div>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-              <p className="text-sm text-blue-800">
-                💡 <strong>팁:</strong> WOD를 먼저 입력해주세요. 이후 AI 에이전트가 최적의 보강운동을 제안해줄 것입니다.
-              </p>
-            </div>
-          </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Alert>
+                <AlertDescription className="text-sm">
+                  💡 <strong>팁:</strong> WOD를 먼저 입력해주세요. 이후 AI 에이전트가 최적의 보강운동을 제안해줄 것입니다.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
 
           {/* 설정 카드 */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                ⚙️ 내 설정
-              </h2>
-              <p className="text-gray-600">
+          <Card>
+            <CardHeader>
+              <CardTitle>⚙️ 내 설정</CardTitle>
+              <CardDescription>
                 선호하는 보강운동 방식을 설정하세요
-              </p>
-            </div>
-
-            <button className="w-full bg-gray-200 text-gray-900 py-3 px-4 rounded-md hover:bg-gray-300 font-medium transition">
-              설정 관리하기
-            </button>
-          </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary" className="w-full" size="lg">
+                설정 관리하기
+              </Button>
+            </CardContent>
+          </Card>
 
           {/* 기록 카드 */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                📊 나의 기록
-              </h2>
-              <p className="text-gray-600">
+          <Card>
+            <CardHeader>
+              <CardTitle>📊 나의 기록</CardTitle>
+              <CardDescription>
                 운동 기록을 관리하고 진행상황을 추적하세요
-              </p>
-            </div>
-
-            <button className="w-full bg-gray-200 text-gray-900 py-3 px-4 rounded-md hover:bg-gray-300 font-medium transition">
-              기록 보기
-            </button>
-          </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary" className="w-full" size="lg">
+                기록 보기
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         {/* 안내 섹션 */}
-        <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            🎯 시작하기
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-start gap-4">
-              <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-600">
-                1
+        <Card className="mt-12">
+          <CardHeader>
+            <CardTitle>🎯 시작하기</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary">
+                  1
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">
+                    WOD 입력
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    텍스트로 자유롭게 입력하거나 사진을 촬영하세요
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  WOD 입력
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  텍스트로 자유롭게 입력하거나 사진을 촬영하세요
-                </p>
+
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">
+                    AI 분석
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    AI 에이전트가 WOD를 분석하고 추천 운동을 제안합니다
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">
+                    조절하기
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    대화를 통해 강도나 부위를 조절할 수 있습니다
+                  </p>
+                </div>
               </div>
             </div>
-
-            <div className="flex items-start gap-4">
-              <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-600">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  AI 분석
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  AI 에이전트가 WOD를 분석하고 추천 운동을 제안합니다
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-600">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  조절하기
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  대화를 통해 강도나 부위를 조절할 수 있습니다
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
