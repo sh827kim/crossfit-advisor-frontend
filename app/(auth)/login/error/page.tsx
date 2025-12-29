@@ -47,7 +47,7 @@ function LoginErrorContent() {
     errorMessages.unknown_error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="w-full max-w-md px-4">
         <Card>
           <CardHeader className="text-center space-y-4">
