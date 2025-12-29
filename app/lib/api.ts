@@ -127,11 +127,20 @@ export async function authenticatedFetch(
     const response = await fetch(url, {
       ...options,
       headers,
+      // 리다이렉트를 자동으로 따르지 않고 직접 처리
+      redirect: 'manual',
     });
 
-    // 401 에러가 나면 토큰이 유효하지 않은 것이므로 로그아웃 처리
-    if (response.status === 401) {
+    // 401 에러 또는 리다이렉트 상태 코드(301, 302, 303, 307, 308)
+    // 리다이렉트는 서버가 인증 실패 시 Google 로그인으로 보내는 것을 의미
+    if (response.status === 401 || (response.status >= 301 && response.status <= 308)) {
       clearAuthData();
+
+      // 클라이언트에서 로그인 페이지로 리다이렉트
+      if (typeof window !== 'undefined') {
+        window.location.href = process.env.NEXT_PUBLIC_LOGIN_ERROR_REDIRECT_PATH || '/login';
+      }
+
       throw new Error('Unauthorized. Please login again.');
     }
 

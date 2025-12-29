@@ -98,7 +98,7 @@ export default function Home() {
         {/* 추가 기능 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           {/* AI 대화 */}
-          <Card className="bg-blue-50 border-blue-200">
+          <Card>
             <CardContent className="pt-6">
               <div className="text-4xl mb-4">💬</div>
               <CardTitle className="mb-2">실시간 조정</CardTitle>
@@ -110,7 +110,7 @@ export default function Home() {
           </Card>
 
           {/* 개인 기록 */}
-          <Card className="bg-green-50 border-green-200">
+          <Card>
             <CardContent className="pt-6">
               <div className="text-4xl mb-4">📊</div>
               <CardTitle className="mb-2">나의 기록</CardTitle>
@@ -146,7 +146,7 @@ export default function Home() {
         </Card>
 
         {/* CTA */}
-        <Card className="bg-gradient-to-r from-primary to-blue-500 text-white border-none">
+        <Card className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-none">
           <CardContent className="text-center py-12">
             <h2 className="text-3xl font-bold mb-4">또와드와 함께 시작해봐요!</h2>
             <p className="text-lg mb-8 opacity-90">
