@@ -56,5 +56,4 @@ next-env.d.ts
 .Xauthority
 
 # pnpm
-pnpm-lock.yaml
 .claude
