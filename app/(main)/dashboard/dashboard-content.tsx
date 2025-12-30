@@ -261,10 +261,19 @@ export default function DashboardContent() {
               <CardDescription>오늘의 WOD를 입력해주세요!</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button className="w-full" size="lg">
+              <Button
+                className="w-full"
+                size="lg"
+                onClick={() => router.push('/wod-input?source=camera')}
+              >
                 📷 카메라로 촬영
               </Button>
-              <Button variant="secondary" className="w-full" size="lg">
+              <Button
+                variant="secondary"
+                className="w-full"
+                size="lg"
+                onClick={() => router.push('/wod-input?source=text')}
+              >
                 ✍️ 텍스트로 입력
               </Button>
             </CardContent>
@@ -287,6 +296,26 @@ export default function DashboardContent() {
             </CardContent>
           </Card>
 
+          {/* AI 채팅 카드 */}
+          <Card>
+            <CardHeader>
+              <CardTitle>💬 AI 채팅</CardTitle>
+              <CardDescription>
+                AI와 대화하며 운동 추천을 조절하세요
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                variant="secondary"
+                className="w-full"
+                size="lg"
+                onClick={() => router.push('/chat')}
+              >
+                채팅 시작하기
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* 설정 카드 */}
           <Card>
             <CardHeader>
@@ -296,7 +325,12 @@ export default function DashboardContent() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="secondary" className="w-full" size="lg">
+              <Button
+                variant="secondary"
+                className="w-full"
+                size="lg"
+                onClick={() => router.push('/settings')}
+              >
                 설정 관리하기
               </Button>
             </CardContent>
