@@ -1,4 +1,5 @@
 // 브라우저 로컬 스토리지에서 인증 정보를 관리하는 유틸리티
+import type { UnitType } from './types/user-settings.types';
 
 const ACCESS_TOKEN_KEY = 'auth_access_token';
 const REFRESH_TOKEN_KEY = 'auth_refresh_token';
@@ -8,6 +9,11 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  // 사용자 설정 정보
+  nickname: string;
+  unitType: UnitType;
+  workoutMinutes: number;
+  additionalInfo: string | null;
 }
 
 export interface TokenResponse {

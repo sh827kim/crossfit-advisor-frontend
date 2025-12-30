@@ -166,3 +166,60 @@ export async function logoutFromBackend(): Promise<void> {
     console.error('로그아웃 API 호출 오류:', error);
   }
 }
+
+/**
+ * OCR API - 이미지 파일을 백엔드로 전송하여 Google Vision API로 텍스트 추출
+ * @param file 처리할 이미지 파일
+ * @returns 추출된 텍스트
+ */
+export async function sendImageToOCR(file: File): Promise<string> {
+  try {
+    // Access Token 확인 및 갱신
+    const accessToken = await ensureValidAccessToken();
+    const backendUrl = getBackendUrl();
+
+    // FormData 생성 (multipart/form-data)
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // 백엔드 /api/ocr에 파일 업로드
+    const response = await fetch(`${backendUrl}/api/ocr`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: formData,
+      // multipart/form-data를 사용할 때 Content-Type 헤더를 자동으로 설정하도록 생략
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        clearAuthData();
+        if (typeof window !== 'undefined') {
+          window.location.href = process.env.NEXT_PUBLIC_LOGIN_ERROR_REDIRECT_PATH || '/login';
+        }
+        throw new Error('인증이 필요합니다.');
+      }
+      throw new Error(`OCR 처리 실패: ${response.status}`);
+    }
+
+    interface OcrResponse {
+      success: boolean;
+      message: string;
+      data: {
+        detectedText: string;
+      };
+    }
+
+    const result: OcrResponse = await response.json();
+
+    if (!result.success || !result.data?.detectedText) {
+      throw new Error(result.message || 'OCR 처리 결과가 유효하지 않습니다.');
+    }
+
+    return result.data.detectedText;
+  } catch (error) {
+    console.error('OCR API 호출 오류:', error);
+    throw error;
+  }
+}
