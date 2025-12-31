@@ -269,7 +269,8 @@ export default function DashboardContent() {
             </CardHeader>
             <CardContent className="space-y-0 flex gap-4 pt-6">
               <Button
-                className="flex-1 shadow-md"
+                variant="outline"
+                className="flex-1 shadow-md bg-slate-800"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=camera')}
               >
@@ -277,7 +278,7 @@ export default function DashboardContent() {
               </Button>
               <Button
                 variant="outline"
-                className="flex-1 shadow-md"
+                className="flex-1 shadow-md bg-slate-800"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=text')}
               >
@@ -294,14 +295,15 @@ export default function DashboardContent() {
                 WOD 분석 후 맞춤형 보강운동을 추천받고 AI와 대화하세요
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-6">
               <Alert>
                 <AlertDescription className="text-sm">
                   💡 <strong>팁:</strong> WOD를 먼저 입력해주세요. 이후 AI 에이전트가 최적의 보강운동을 제안해줄 것입니다.
                 </AlertDescription>
               </Alert>
               <Button
-                className="w-full"
+                variant="outline"
+                className="w-full shadow-md bg-slate-800"
                 size="lg"
                 onClick={() => router.push('/chat')}
               >
@@ -318,8 +320,12 @@ export default function DashboardContent() {
                 운동 기록을 관리하고 진행상황을 추적하세요
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Button variant="secondary" className="w-full" size="lg">
+            <CardContent className="pt-6">
+              <Button
+                variant="outline"
+                className="w-full shadow-md bg-slate-800"
+                size="lg"
+              >
                 기록 보기
               </Button>
             </CardContent>
