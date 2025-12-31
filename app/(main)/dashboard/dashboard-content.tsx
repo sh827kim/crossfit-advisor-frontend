@@ -269,16 +269,14 @@ export default function DashboardContent() {
             </CardHeader>
             <CardContent className="space-y-0 flex gap-4 pt-6">
               <Button
-                variant="outline"
-                className="flex-1 shadow-md bg-slate-800"
+                className="flex-1 shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=camera')}
               >
                 📷 카메라로 촬영
               </Button>
               <Button
-                variant="outline"
-                className="flex-1 shadow-md bg-slate-800"
+                className="flex-1 shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=text')}
               >
@@ -302,8 +300,7 @@ export default function DashboardContent() {
                 </AlertDescription>
               </Alert>
               <Button
-                variant="outline"
-                className="w-full shadow-md bg-slate-800"
+                className="w-full shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
                 size="lg"
                 onClick={() => router.push('/chat')}
               >
@@ -322,8 +319,7 @@ export default function DashboardContent() {
             </CardHeader>
             <CardContent className="pt-6">
               <Button
-                variant="outline"
-                className="w-full shadow-md bg-slate-800"
+                className="w-full shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
                 size="lg"
               >
                 기록 보기
