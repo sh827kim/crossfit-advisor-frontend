@@ -3,20 +3,36 @@
 @layer base {
   :root {
     --radius: 0.5rem;
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   html {
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   body {
-    background-color: #FFFFFF;
-    color: #000000;
+    background-color: #0f0f0f;
+    color: #f5f5f5;
     font-family: Arial, Helvetica, sans-serif;
   }
 
   * {
-    border-color: #E5E7EB;
+    border-color: #2a2a2a;
+  }
+
+  /* 텍스트 선택 스타일 - 다크톤 하이라이트 */
+  ::selection {
+    background-color: #3a3a3a;
+    color: #d97706;
+  }
+
+  input::selection {
+    background-color: #3a3a3a;
+    color: #d97706;
+  }
+
+  textarea::selection {
+    background-color: #3a3a3a;
+    color: #d97706;
   }
 }

@@ -69,24 +69,24 @@ export default function SettingsForm() {
   // 로딩 상태
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">설정 로드 중...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-amber-600 border-r-transparent"></div>
+          <p className="mt-4 text-gray-400">설정 로드 중...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900">
       <Toaster position="top-center" />
 
       {/* 네비게이션 바 */}
-      <nav className="bg-white shadow">
+      <nav className="bg-slate-900 shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-black">
+            <h1 className="text-2xl font-bold text-amber-600">
               🏋️ 또와드 - 내 설정
             </h1>
             <Button

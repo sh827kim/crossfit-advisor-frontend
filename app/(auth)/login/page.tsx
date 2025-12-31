@@ -10,11 +10,11 @@ import { LoginButtonClient } from '@/app/components/LoginButtonClient';
  */
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen flex items-center justify-center bg-slate-950">
       <div className="w-full max-w-md px-4">
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl">🏋️ 또와드</CardTitle>
+            <CardTitle className="text-3xl text-amber-600">🏋️ 또와드</CardTitle>
             <CardDescription className="text-base mt-2">
               오늘도 또 와드를 해냈다! 내일은 또와드와 함께
             </CardDescription>

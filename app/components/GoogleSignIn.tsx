@@ -33,7 +33,7 @@ export function GoogleSignIn({ backendUrl }: GoogleSignInProps) {
     <Button
       onClick={handleClick}
       size="lg"
-      className="w-full gap-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-colors"
+      className="w-full gap-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors"
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
         <text x="0" y="20" fontSize="20">

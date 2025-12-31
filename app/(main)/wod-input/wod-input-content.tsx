@@ -108,19 +108,19 @@ export function WodInputContent() {
         {session.status === 'processing' && (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-r-transparent" />
-              <p className="mb-4 text-gray-600">
+              <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-amber-600 border-r-transparent" />
+              <p className="mb-4 text-gray-400">
                 텍스트 추출 중...
               </p>
               {progress > 0 && (
                 <div className="w-full max-w-xs">
-                  <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div className="relative h-2 w-full overflow-hidden rounded-full bg-slate-700">
                     <div
-                      className="h-full bg-blue-500 transition-all duration-300"
+                      className="h-full bg-amber-600 transition-all duration-300"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-                  <p className="mt-2 text-center text-sm text-gray-500">
+                  <p className="mt-2 text-center text-sm text-gray-400">
                     {progress}
                     %
                   </p>
@@ -133,8 +133,8 @@ export function WodInputContent() {
         {/* OCR 처리 실패 */}
         {session.status === 'error' && session.error && (
           <div className="space-y-4">
-            <Alert className="border-red-200 bg-red-50">
-              <AlertDescription className="text-red-800">
+            <Alert className="border-red-700 bg-red-900/20">
+              <AlertDescription className="text-red-400">
                 {session.error}
               </AlertDescription>
             </Alert>
