@@ -160,10 +160,10 @@ export default function DashboardContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">로드 중...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-amber-600 border-r-transparent"></div>
+          <p className="mt-4 text-gray-400">로드 중...</p>
         </div>
       </div>
     );
@@ -171,11 +171,11 @@ export default function DashboardContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="w-full max-w-md px-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-red-600">오류 발생</CardTitle>
+              <CardTitle className="text-amber-600">오류 발생</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Alert variant="destructive">
@@ -199,11 +199,11 @@ export default function DashboardContent() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="w-full max-w-md px-4">
           <Card>
             <CardContent className="space-y-4 pt-6">
-              <p className="text-center text-gray-600">
+              <p className="text-center text-gray-400">
                 사용자 정보를 찾을 수 없습니다.
               </p>
               <Button
@@ -221,17 +221,17 @@ export default function DashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900">
       {/* 네비게이션 바 */}
-      <nav className="bg-white shadow">
+      <nav className="bg-slate-900 shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-black">
+            <h1 className="text-2xl font-bold text-amber-600">
               🏋️ 또와드
             </h1>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm text-black font-medium">{user.nickname}</p>
+                <p className="text-sm text-white font-medium">{user.nickname}</p>
               </div>
               <Button
                 variant="ghost"
@@ -260,16 +260,16 @@ export default function DashboardContent() {
 
       {/* 메인 콘텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8">
           {/* WOD 입력 카드 */}
           <Card>
             <CardHeader>
               <CardTitle>📝 WOD 입력하기</CardTitle>
               <CardDescription>오늘의 WOD를 입력해주세요!</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-0 flex gap-4">
               <Button
-                className="w-full"
+                className="flex-1"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=camera')}
               >
@@ -277,7 +277,7 @@ export default function DashboardContent() {
               </Button>
               <Button
                 variant="secondary"
-                className="w-full"
+                className="flex-1"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=text')}
               >
