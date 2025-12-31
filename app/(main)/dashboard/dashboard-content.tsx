@@ -229,11 +229,18 @@ export default function DashboardContent() {
             <h1 className="text-2xl font-bold text-black">
               🏋️ 또와드
             </h1>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm text-black font-medium">{user.name}</p>
-                <p className="text-xs text-gray-600">{user.email}</p>
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push('/settings')}
+                title="설정"
+              >
+                ⚙️
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
@@ -284,54 +291,21 @@ export default function DashboardContent() {
             <CardHeader>
               <CardTitle>🤖 AI 추천받기</CardTitle>
               <CardDescription>
-                WOD 분석 후 맞춤형 보강운동을 추천받으세요
+                WOD 분석 후 맞춤형 보강운동을 추천받고 AI와 대화하세요
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <Alert>
                 <AlertDescription className="text-sm">
                   💡 <strong>팁:</strong> WOD를 먼저 입력해주세요. 이후 AI 에이전트가 최적의 보강운동을 제안해줄 것입니다.
                 </AlertDescription>
               </Alert>
-            </CardContent>
-          </Card>
-
-          {/* AI 채팅 카드 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>💬 AI 채팅</CardTitle>
-              <CardDescription>
-                AI와 대화하며 운동 추천을 조절하세요
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
               <Button
-                variant="secondary"
                 className="w-full"
                 size="lg"
                 onClick={() => router.push('/chat')}
               >
-                채팅 시작하기
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* 설정 카드 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>⚙️ 내 설정</CardTitle>
-              <CardDescription>
-                선호하는 보강운동 방식을 설정하세요
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button
-                variant="secondary"
-                className="w-full"
-                size="lg"
-                onClick={() => router.push('/settings')}
-              >
-                설정 관리하기
+                💬 채팅 시작하기
               </Button>
             </CardContent>
           </Card>
@@ -351,58 +325,6 @@ export default function DashboardContent() {
             </CardContent>
           </Card>
         </div>
-
-        {/* 안내 섹션 */}
-        <Card className="mt-12">
-          <CardHeader>
-            <CardTitle>🎯 시작하기</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-500">
-                  1
-                </div>
-                <div>
-                  <h3 className="font-semibold text-black mb-2">
-                    WOD 입력
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    텍스트로 자유롭게 입력하거나 사진을 촬영하세요
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-500">
-                  2
-                </div>
-                <div>
-                  <h3 className="font-semibold text-black mb-2">
-                    AI 분석
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    AI 에이전트가 WOD를 분석하고 추천 운동을 제안합니다
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-500">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-semibold text-black mb-2">
-                    조절하기
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    대화를 통해 강도나 부위를 조절할 수 있습니다
-                  </p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </main>
     </div>
   );

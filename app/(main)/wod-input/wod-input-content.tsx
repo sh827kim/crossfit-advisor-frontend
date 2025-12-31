@@ -217,7 +217,7 @@ export function WodInputContent() {
               disabled={!textInput.trim()}
               className="flex-1"
             >
-              AI에게 전달
+              보강운동 추천받기
             </Button>
           </div>
 
