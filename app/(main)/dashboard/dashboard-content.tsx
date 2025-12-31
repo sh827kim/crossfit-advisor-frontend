@@ -231,7 +231,7 @@ export default function DashboardContent() {
             </h1>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm text-black font-medium">{user.name}</p>
+                <p className="text-sm text-black font-medium">{user.nickname}</p>
               </div>
               <Button
                 variant="ghost"

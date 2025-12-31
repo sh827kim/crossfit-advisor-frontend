@@ -8,7 +8,6 @@ const USER_KEY = 'auth_user';
 export interface User {
   id: string;
   email: string;
-  name: string;
   // 사용자 설정 정보
   nickname: string;
   unitType: UnitType;
