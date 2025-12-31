@@ -267,17 +267,17 @@ export default function DashboardContent() {
               <CardTitle>📝 WOD 입력하기</CardTitle>
               <CardDescription>오늘의 WOD를 입력해주세요!</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-0 flex gap-4">
+            <CardContent className="space-y-0 flex gap-4 pt-6">
               <Button
-                className="flex-1"
+                className="flex-1 shadow-md"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=camera')}
               >
                 📷 카메라로 촬영
               </Button>
               <Button
-                variant="secondary"
-                className="flex-1"
+                variant="outline"
+                className="flex-1 shadow-md"
                 size="lg"
                 onClick={() => router.push('/wod-input?source=text')}
               >
