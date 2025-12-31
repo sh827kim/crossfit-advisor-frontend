@@ -10,26 +10,26 @@ const config = {
   theme: {
     extend: {
       colors: {
-        // 라이트 테마 - 파란색 포인트 (검은 텍스트)
-        background: "#FFFFFF",
-        foreground: "#000000",
-        card: "#FFFFFF",
-        "card-foreground": "#000000",
-        popover: "#FFFFFF",
-        "popover-foreground": "#000000",
-        muted: "#F3F4F6",
-        "muted-foreground": "#4B5563",
-        accent: "#3B82F6",
-        "accent-foreground": "#FFFFFF",
-        destructive: "#EF4444",
-        "destructive-foreground": "#FFFFFF",
-        border: "#E5E7EB",
-        input: "#F9FAFB",
-        ring: "#3B82F6",
-        primary: "#3B82F6",
-        "primary-foreground": "#FFFFFF",
-        secondary: "#E5E7EB",
-        "secondary-foreground": "#000000",
+        // 다크톤 테마 - 오렌지 포인트
+        background: "#0f0f0f",        // 거의 검정색 배경
+        foreground: "#f5f5f5",        // 밝은 흰색 텍스트
+        card: "#1a1a1a",              // 진한 회색 카드
+        "card-foreground": "#f5f5f5", // 밝은 텍스트
+        popover: "#1a1a1a",           // 진한 회색 팝오버
+        "popover-foreground": "#f5f5f5",
+        muted: "#2a2a2a",             // 중간 회색 (비활성 배경)
+        "muted-foreground": "#a0a0a0", // 회색 텍스트
+        accent: "#d97706",            // amber-600 (차분한 오렌지)
+        "accent-foreground": "#ffffff",
+        destructive: "#ef4444",       // 빨간색 (에러)
+        "destructive-foreground": "#ffffff",
+        border: "#2a2a2a",            // 진한 회색 테두리
+        input: "#1a1a1a",             // 진한 회색 입력 필드
+        ring: "#d97706",              // amber-600 포커스 링
+        primary: "#d97706",           // amber-600 주색
+        "primary-foreground": "#ffffff",
+        secondary: "#b45309",         // amber-700 (진한 오렌지)
+        "secondary-foreground": "#ffffff",
       },
       borderRadius: {
         lg: "var(--radius)",

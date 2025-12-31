@@ -82,15 +82,15 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-slate-950">
       <Toaster position="top-center" />
 
       {/* 헤더 */}
-      <nav className="bg-white shadow">
+      <nav className="bg-slate-900 shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold text-black">
+              <h1 className="text-2xl font-bold text-amber-600">
                 🏋️ 또와드 - AI 채팅
               </h1>
               {session.isConnected && (
@@ -140,8 +140,8 @@ export default function ChatInterface() {
                 <Card
                   className={`max-w-[80%] md:max-w-[60%] p-4 rounded-lg ${
                     message.role === 'user'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white text-black border border-gray-200'
+                      ? 'bg-slate-800 text-white border border-amber-600'
+                      : 'bg-slate-900 text-white border border-slate-700'
                   }`}
                 >
                   {message.role === 'user' ? (
@@ -188,44 +188,44 @@ export default function ChatInterface() {
                           code: (props: any) => {
                             const { inline, children } = props;
                             return inline ? (
-                              <code className="bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-xs font-mono">
+                              <code className="bg-slate-800 text-amber-500 px-1.5 py-0.5 rounded text-xs font-mono">
                                 {children}
                               </code>
                             ) : (
-                              <code className="block bg-gray-900 text-gray-100 p-3 rounded-lg text-xs font-mono overflow-x-auto my-2">
+                              <code className="block bg-slate-800 text-gray-100 p-3 rounded-lg text-xs font-mono overflow-x-auto my-2">
                                 {children}
                               </code>
                             );
                           },
                           pre: ({ children }) => (
-                            <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto text-xs font-mono my-2">
+                            <pre className="bg-slate-800 text-gray-100 p-3 rounded-lg overflow-x-auto text-xs font-mono my-2">
                               {children}
                             </pre>
                           ),
                           blockquote: ({ children }) => (
-                            <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-600 my-2">
+                            <blockquote className="border-l-4 border-amber-600 pl-4 italic text-gray-300 my-2">
                               {children}
                             </blockquote>
                           ),
                           table: ({ children }) => (
-                            <table className="border-collapse border border-gray-300 text-xs my-2">
+                            <table className="border-collapse border border-slate-700 text-xs my-2">
                               {children}
                             </table>
                           ),
                           th: ({ children }) => (
-                            <th className="border border-gray-300 px-2 py-1 bg-gray-100">
+                            <th className="border border-slate-700 px-2 py-1 bg-slate-800">
                               {children}
                             </th>
                           ),
                           td: ({ children }) => (
-                            <td className="border border-gray-300 px-2 py-1">{children}</td>
+                            <td className="border border-slate-700 px-2 py-1">{children}</td>
                           ),
                           a: ({ href, children }) => (
                             <a
                               href={href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline"
+                              className="text-amber-500 hover:underline"
                             >
                               {children}
                             </a>
@@ -254,7 +254,7 @@ export default function ChatInterface() {
       </main>
 
       {/* 입력 폼 */}
-      <footer className="bg-white border-t border-gray-200 px-4 py-4">
+      <footer className="bg-slate-900 border-t border-slate-700 px-4 py-4">
         <form
           onSubmit={handleSendMessage}
           className="max-w-4xl mx-auto flex gap-2"

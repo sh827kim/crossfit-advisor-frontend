@@ -24,12 +24,12 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-slate-950">
       {/* 네비게이션 */}
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-slate-900 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="text-2xl font-bold text-primary">🏋️ 또와드</div>
+            <div className="text-2xl font-bold text-amber-600">🏋️ 또와드</div>
             <Button asChild>
               <Link href="/login">로그인</Link>
             </Button>
@@ -49,7 +49,7 @@ export default function Home() {
             WOD 후 보강운동이 고민이신가요?<br />
             AI가 당신의 약점을 분석해 맞춤형 보강운동을 추천해줍니다.
           </p>
-          <Button asChild size="lg" className="text-lg">
+          <Button asChild size="lg" className="text-lg px-8 py-6 bg-amber-600 hover:bg-amber-700 shadow-lg hover:shadow-xl transition-all">
             <Link href="/login">
               지금 시작하기 →
             </Link>
@@ -145,20 +145,6 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        {/* CTA */}
-        <Card className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-none">
-          <CardContent className="text-center py-12">
-            <h2 className="text-3xl font-bold mb-4">또와드와 함께 시작해봐요!</h2>
-            <p className="text-lg mb-8 opacity-90">
-              오늘도 와드를 해냈다면, 내일의 보강은 또와드에게 맡겨보세요.
-            </p>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/login">
-                로그인하기
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
       </main>
 
       {/* 푸터 */}
