@@ -181,7 +181,7 @@ export function WodInputContent() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="wod-input" className="text-sm font-medium">
+            <label htmlFor="wod-input" className="text-sm font-medium text-white">
               오늘의 WOD를 입력하세요
             </label>
             <Textarea
@@ -197,7 +197,7 @@ export function WodInputContent() {
               rows={10}
               className="resize-none"
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-400">
               {textInput.length}
               자
             </p>
@@ -222,7 +222,7 @@ export function WodInputContent() {
           </div>
 
           {/* 도움말 */}
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-400">
             WOD 정보를 최대한 자세히 입력할수록 더 정확한 보강운동 추천을 받을 수 있습니다.
           </p>
         </CardContent>
