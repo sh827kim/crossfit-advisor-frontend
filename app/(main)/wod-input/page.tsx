@@ -7,12 +7,12 @@ import { WodInputContent } from './wod-input-content';
  */
 export default function WodInputPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900">
       {/* 헤더 */}
-      <nav className="bg-white shadow">
+      <nav className="bg-slate-900 shadow">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center">
-            <h1 className="text-2xl font-bold text-black">
+            <h1 className="text-2xl font-bold text-amber-600">
               🏋️ WOD 입력
             </h1>
           </div>
@@ -25,8 +25,8 @@ export default function WodInputPage() {
           fallback={
             <div className="flex h-96 items-center justify-center">
               <div className="text-center">
-                <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-r-transparent" />
-                <p className="text-gray-600">WOD 입력 페이지 로딩 중...</p>
+                <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-amber-600 border-r-transparent" />
+                <p className="text-gray-400">WOD 입력 페이지 로딩 중...</p>
               </div>
             </div>
           }
