@@ -11,6 +11,7 @@ import {
   saveRefreshToken,
   saveTokens,
   clearAuthData,
+  checkTokensValidity,
   type User,
   type TokenResponse,
 } from '@/app/lib/auth-storage';
@@ -43,24 +44,68 @@ export default function DashboardContent() {
           throw new Error('NEXT_PUBLIC_BACKEND_URL 환경변수가 설정되지 않았습니다.');
         }
 
-        // URL 쿼리 파라미터에서 refreshToken 확인 (백엔드 리다이렉트)
+        // URL 쿼리 파라미터에서 refreshToken 확인 (백엔드 리다이렉트 - 로그인 직후)
         const urlRefreshToken = searchParams.get('refreshToken');
         if (urlRefreshToken) {
-          // 백엔드에서 받은 refreshToken을 localStorage에 저장
+          // 백엔드에서 받은 refreshToken을 localStorage에 저장하고 새로운 accessToken 발급받기
           saveRefreshToken(urlRefreshToken);
-        }
 
-        // 토큰이 이미 초기화되어 있으면 스킵
-        const existingAccessToken = getAccessToken();
-        if (existingAccessToken) {
+          // refreshToken으로 accessToken 발급받기
+          const refreshResponse = await fetch(`${backendUrl}/auth-token/refresh`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              refreshToken: urlRefreshToken,
+            }),
+          });
+
+          if (!refreshResponse.ok) {
+            clearAuthData();
+            router.push('/login');
+            return;
+          }
+
+          const result: CommonResult<TokenResponse> = await refreshResponse.json();
+
+          if (!result.success || !result.data?.accessToken || !result.data?.refreshToken) {
+            clearAuthData();
+            throw new Error(result.message || '토큰 응답이 유효하지 않습니다.');
+          }
+
+          // 토큰 저장
+          saveTokens(result.data.accessToken, result.data.refreshToken);
+
+          // URL에서 refreshToken 파라미터 제거 (히스토리 정리)
+          window.history.replaceState({}, '', '/dashboard');
+
+          // 사용자 정보 조회
           await fetchUserInfo();
           return;
         }
 
-        // localStorage에서 refreshToken 조회
+        // 기존 토큰 확인
+        const tokenStatus = checkTokensValidity();
+
+        // 토큰이 없거나 리프레시 토큰이 만료된 경우 로그인 필요
+        if (!tokenStatus.isValid || tokenStatus.refreshTokenExpired) {
+          clearAuthData();
+          router.push('/login');
+          return;
+        }
+
+        // 토큰이 이미 유효하면 사용자 정보 조회
+        const existingAccessToken = getAccessToken();
+        if (existingAccessToken && !tokenStatus.accessTokenExpired) {
+          await fetchUserInfo();
+          return;
+        }
+
+        // accessToken이 만료되었으면 refreshToken으로 갱신
         const refreshToken = getRefreshToken();
         if (!refreshToken) {
-          // 첫 로그인 시 refreshToken이 없으면 로그인 페이지로
+          clearAuthData();
           router.push('/login');
           return;
         }
@@ -78,7 +123,7 @@ export default function DashboardContent() {
 
         if (!refreshResponse.ok) {
           if (refreshResponse.status === 401) {
-            // 인증되지 않음 - 로그인 페이지로
+            clearAuthData();
             router.push('/login');
             return;
           }
@@ -88,6 +133,7 @@ export default function DashboardContent() {
         const result: CommonResult<TokenResponse> = await refreshResponse.json();
 
         if (!result.success || !result.data?.accessToken || !result.data?.refreshToken) {
+          clearAuthData();
           throw new Error(result.message || '토큰 응답이 유효하지 않습니다.');
         }
 

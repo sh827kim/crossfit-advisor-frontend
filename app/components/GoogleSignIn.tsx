@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { clearAuthData } from '@/app/lib/auth-storage';
 
 interface GoogleSignInProps {
   backendUrl?: string;
@@ -26,6 +27,8 @@ export function GoogleSignIn({ backendUrl }: GoogleSignInProps) {
   const googleAuthUrl = `${baseUrl}/oauth2/authorization/google`;
 
   const handleClick = () => {
+    // 로그인 전에 기존 토큰 정리 (중복 로그인 화면 방지)
+    clearAuthData();
     window.location.href = googleAuthUrl;
   };
 

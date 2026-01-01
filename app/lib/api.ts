@@ -6,6 +6,7 @@ import {
   saveTokens,
   isTokenExpired,
   clearAuthData,
+  checkTokensValidity,
   type TokenResponse,
 } from './auth-storage';
 
@@ -70,21 +71,37 @@ export async function refreshAccessToken(
 
 /**
  * 현재 Access Token을 확인하고, 필요시 자동으로 갱신합니다.
+ * Refresh Token이 만료된 경우 에러를 던집니다.
  * @returns 유효한 Access Token
+ * @throws RefreshTokenExpiredError - Refresh Token이 만료된 경우
+ * @throws Error - 기타 오류
  */
 export async function ensureValidAccessToken(): Promise<string> {
+  const tokenStatus = checkTokensValidity();
+
+  // 토큰이 없는 경우
+  if (!tokenStatus.isValid && (tokenStatus.refreshTokenExpired || !getRefreshToken())) {
+    throw new Error('REFRESH_TOKEN_EXPIRED');
+  }
+
   let accessToken = getAccessToken();
 
   if (!accessToken) {
-    throw new Error('No access token found');
+    throw new Error('REFRESH_TOKEN_EXPIRED');
   }
 
   // Access Token이 곧 만료되면 갱신
-  if (isTokenExpired(accessToken)) {
+  if (tokenStatus.accessTokenExpired) {
     const refreshToken = getRefreshToken();
 
     if (!refreshToken) {
-      throw new Error('No refresh token found');
+      throw new Error('REFRESH_TOKEN_EXPIRED');
+    }
+
+    // Refresh Token이 만료된 경우 먼저 확인
+    if (tokenStatus.refreshTokenExpired) {
+      clearAuthData();
+      throw new Error('REFRESH_TOKEN_EXPIRED');
     }
 
     try {
@@ -102,6 +119,7 @@ export async function ensureValidAccessToken(): Promise<string> {
 /**
  * Authorization 헤더에 Access Token을 포함한 API 호출
  * Access Token이 만료되었으면 자동으로 갱신합니다.
+ * Refresh Token이 만료된 경우 로그인 페이지로 리다이렉트합니다.
  * @param endpoint - API 엔드포인트
  * @param options - fetch 옵션
  */
@@ -146,6 +164,15 @@ export async function authenticatedFetch(
 
     return response;
   } catch (error) {
+    // Refresh Token 만료 에러 처리
+    if (error instanceof Error && error.message === 'REFRESH_TOKEN_EXPIRED') {
+      clearAuthData();
+      if (typeof window !== 'undefined') {
+        window.location.href = process.env.NEXT_PUBLIC_LOGIN_ERROR_REDIRECT_PATH || '/login';
+      }
+      throw new Error('로그인이 필요합니다. 다시 로그인해주세요.');
+    }
+
     console.error('인증된 API 호출 오류:', error);
     throw error;
   }
@@ -219,6 +246,15 @@ export async function sendImageToOCR(file: File): Promise<string> {
 
     return result.data.detectedText;
   } catch (error) {
+    // Refresh Token 만료 에러 처리
+    if (error instanceof Error && error.message === 'REFRESH_TOKEN_EXPIRED') {
+      clearAuthData();
+      if (typeof window !== 'undefined') {
+        window.location.href = process.env.NEXT_PUBLIC_LOGIN_ERROR_REDIRECT_PATH || '/login';
+      }
+      throw new Error('로그인이 필요합니다. 다시 로그인해주세요.');
+    }
+
     console.error('OCR API 호출 오류:', error);
     throw error;
   }
