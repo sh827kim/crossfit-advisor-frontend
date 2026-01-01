@@ -77,13 +77,17 @@ export function WodInputContent() {
       <div className="space-y-6">
         {/* 모드 전환 버튼 */}
         <div className="flex gap-2">
-          <Button disabled className="flex-1">
+          <Button
+            className="flex-1 bg-slate-800 text-foreground hover:bg-slate-700"
+            size="lg"
+          >
             📷 OCR 입력
           </Button>
           <Button
             variant="outline"
             onClick={() => setMode('text')}
             className="flex-1"
+            size="lg"
           >
             ✍️ 텍스트 입력
           </Button>
@@ -138,7 +142,11 @@ export function WodInputContent() {
                 {session.error}
               </AlertDescription>
             </Alert>
-            <Button onClick={handleRetake} className="w-full">
+            <Button
+              onClick={handleRetake}
+              className="w-full shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
+              size="lg"
+            >
               다시 촬영
             </Button>
           </div>
@@ -166,10 +174,14 @@ export function WodInputContent() {
           variant="outline"
           onClick={() => setMode('ocr')}
           className="flex-1"
+          size="lg"
         >
           📷 OCR 입력
         </Button>
-        <Button disabled className="flex-1">
+        <Button
+          className="flex-1 bg-slate-800 text-foreground hover:bg-slate-700"
+          size="lg"
+        >
           ✍️ 텍스트 입력
         </Button>
       </div>
@@ -209,13 +221,15 @@ export function WodInputContent() {
               onClick={() => router.back()}
               variant="outline"
               className="flex-1"
+              size="lg"
             >
               취소
             </Button>
             <Button
               onClick={handleTextSend}
               disabled={!textInput.trim()}
-              className="flex-1"
+              className="flex-1 shadow-md bg-slate-800 text-foreground hover:bg-slate-700 disabled:bg-slate-600"
+              size="lg"
             >
               보강운동 추천받기
             </Button>

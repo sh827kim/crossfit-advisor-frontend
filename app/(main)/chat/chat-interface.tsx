@@ -99,14 +99,15 @@ export default function ChatInterface() {
             </div>
             <div className="flex items-center gap-4">
               <Button
-                variant="outline"
+                className="shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
                 size="sm"
                 onClick={handleNewConversation}
               >
                 새 대화
               </Button>
               <Button
-                variant="ghost"
+                className="shadow-md bg-slate-800 text-foreground hover:bg-slate-700"
+                size="sm"
                 onClick={() => router.push('/dashboard')}
               >
                 대시보드로
@@ -273,6 +274,7 @@ export default function ChatInterface() {
           <Button
             type="submit"
             disabled={session.isLoading || !inputMessage.trim()}
+            className="shadow-md bg-slate-800 text-foreground hover:bg-slate-700 disabled:bg-slate-600"
           >
             {session.isLoading ? '전송 중...' : '전송'}
           </Button>

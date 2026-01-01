@@ -150,3 +150,36 @@ export function isTokenExpired(token: string, bufferSeconds = 60): boolean {
   const expiresIn = getTokenExpiresIn(token);
   return expiresIn < bufferSeconds;
 }
+
+/**
+ * Access Token과 Refresh Token의 유효성을 함께 확인
+ * @returns {accessTokenExpired, refreshTokenExpired, isValid}
+ * - accessTokenExpired: Access Token이 만료되었는지 여부
+ * - refreshTokenExpired: Refresh Token이 만료되었는지 여부
+ * - isValid: 둘 다 유효한지 여부
+ */
+export function checkTokensValidity(): {
+  accessTokenExpired: boolean;
+  refreshTokenExpired: boolean;
+  isValid: boolean;
+} {
+  const accessToken = getAccessToken();
+  const refreshToken = getRefreshToken();
+
+  if (!accessToken || !refreshToken) {
+    return {
+      accessTokenExpired: !accessToken,
+      refreshTokenExpired: !refreshToken,
+      isValid: false,
+    };
+  }
+
+  const accessTokenExpired = isTokenExpired(accessToken);
+  const refreshTokenExpired = isTokenExpired(refreshToken);
+
+  return {
+    accessTokenExpired,
+    refreshTokenExpired,
+    isValid: !accessTokenExpired && !refreshTokenExpired,
+  };
+}
