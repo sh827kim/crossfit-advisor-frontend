@@ -1,10 +1,10 @@
 # Crossfit Advisor Frontend
 
-Crossfit **초심자**를 위한  
+Crossfit **초심자**를 위한
 WOD 분석 + 보강운동 추천을 제공하는 **AI Agent 기반 프론트엔드 애플리케이션**이다.
 
-사용자는 당일 WOD를 텍스트 또는 사진(OCR)으로 입력하고,  
-AI Agent와의 대화를 통해 보강운동을 추천·조절하며  
+사용자는 당일 WOD를 텍스트로 입력하고,
+AI Agent와의 대화를 통해 보강운동을 추천·조절하며
 개인 운동 기록을 관리할 수 있다.
 
 본 문서는 **MVP 구현 기준**이며,  
@@ -32,11 +32,6 @@ AI Agent와의 대화를 통해 보강운동을 추천·조절하며
 - 프론트엔드는 인증 UI 및 토큰 전달 역할만 담당
 - 실제 사용자 검증/세션 관리는 백엔드 책임
 
-### OCR
-- **tesseract.js 사용**
-- 모바일 카메라 연동 필수
-- OCR 결과는 반드시 **사용자 편집 가능**
-
 ---
 
 ## 3. MVP Feature Scope
@@ -49,17 +44,20 @@ AI Agent와의 대화를 통해 보강운동을 추천·조절하며
 
 ### 3.2 WOD Input
 
-#### Text Input
-- WOD 자유 입력
+사용자는 두 가지 방식으로 WOD를 입력할 수 있습니다:
+
+#### Text Input (텍스트 입력)
+- WOD를 자유 형식으로 직접 입력
 - 형식 제한 없음 (AMRAP / For Time / EMOM 등)
 
-#### Image Input (OCR)
-- 모바일 카메라 촬영
-- tesseract.js로 OCR 수행
-- OCR 결과 텍스트를 사용자에게 노출
-- 사용자가 수정 후 확정한 텍스트만 사용
+#### Image Input with Backend OCR (이미지 입력 with 백엔드 OCR)
+- 모바일 카메라 촬영 또는 갤러리에서 기존 사진 선택
+- 프론트엔드에서 이미지 파일을 백엔드 `/api/ocr` 엔드포인트로 전송
+- 백엔드에서 **Google Vision API**로 이미지에서 텍스트 추출 처리
+- 추출된 텍스트를 사용자에게 표시
+- 사용자가 추출된 텍스트를 편집한 후 확정
 
-> OCR 실패/오인식을 전제로 UX 설계 필요
+> **주의**: tesseract.js는 프론트엔드에서 사용하지 않으며, OCR 처리는 **백엔드의 Google Vision API**에서 수행됩니다.
 
 ---
 
