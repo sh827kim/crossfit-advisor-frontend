@@ -14,7 +14,6 @@ Crossfit 초심자들을 위한 AI Agent 기반 프론트엔드 애플리케이�
 - **Language**: TypeScript 5
 - **UI**: React 19, TailwindCSS 4, shadcn/ui (예정)
 - **상태관리**: localStorage (인증 정보), Context API (예정)
-- **OCR**: tesseract.js (향후 구현)
 - **Backend 통신**: Fetch API with Bearer Token
 
 ## 개발 환경 설정
@@ -127,16 +126,24 @@ app/
 
 ## 주요 API 통신 패턴
 
+### OCR API 호출 (이미지 파일 업로드)
+
+```typescript
+import { sendImageToOCR } from '@/app/lib/api';
+
+// 이미지 파일을 백엔드로 전송하여 Google Vision API로 텍스트 추출
+const imageFile = /* File 객체 */;
+const extractedText = await sendImageToOCR(imageFile);
+// 반환값: 추출된 텍스트 문자열
+```
+
 ### 인증이 필요한 API 호출
 
 ```typescript
 import { authenticatedFetch } from '@/app/lib/api';
-import { getToken } from '@/app/lib/auth-storage';
 
-const token = getToken();
 const response = await authenticatedFetch(
   '/api/wod/analyze',
-  token!,
   {
     method: 'POST',
     body: JSON.stringify({ wodText: '...' })
@@ -165,10 +172,13 @@ const response = await authenticatedFetch(
 - CORS 정책 확인
 - 브라우저 쿠키 보안 설정 검토
 
+## 현재 구현된 기능
+
+- **WOD Input**: 텍스트 입력 또는 이미지 입력 (백엔드 Google Vision API로 OCR 처리)
+
 ## 향후 구현 예정 기능
 
 - **shadcn/ui**: UI 컴포넌트 라이브러리 추가
-- **WOD Input**: 텍스트/이미지(OCR) 입력 페이지
 - **AI Chat**: WebSocket 기반 실시간 대화
 - **User Preferences**: 사용자 설정 저장
 - **Personal Record**: 운동 기록 관리
