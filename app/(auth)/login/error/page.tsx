@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 function LoginErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
+  const backendMessage = searchParams.get('message');
 
   const errorMessages: Record<string, { title: string; description: string }> = {
     signin_failed: {
@@ -42,12 +43,16 @@ function LoginErrorContent() {
     },
   };
 
-  const errorInfo =
-    errorMessages[error as string] ||
-    errorMessages.unknown_error;
+  // 백엔드에서 보낸 메시지가 있으면 우선 사용
+  const errorInfo = backendMessage
+    ? {
+        title: '로그인 실패',
+        description: backendMessage,
+      }
+    : errorMessages[error as string] || errorMessages.unknown_error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-md px-4">
         <Card>
           <CardHeader className="text-center space-y-4">
@@ -64,8 +69,8 @@ function LoginErrorContent() {
                 <p className="text-center">
                   {errorInfo.description}
                 </p>
-                {/* 상세 오류 코드 */}
-                {error && (
+                {/* 백엔드 메시지가 없을 때만 상세 오류 코드 표시 */}
+                {!backendMessage && error && (
                   <p className="text-xs text-center mt-2 font-mono opacity-75">
                     오류 코드: {error}
                   </p>
@@ -103,7 +108,7 @@ function LoginErrorContent() {
  */
 export default function LoginErrorPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">로드 중...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background text-foreground">로드 중...</div>}>
       <LoginErrorContent />
     </Suspense>
   );
