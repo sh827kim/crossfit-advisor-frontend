@@ -14,6 +14,14 @@ export default function HomePage() {
     setIsClient(true);
   }, []);
 
+  // 메인 페이지 도착 시 히스토리 초기화
+  useEffect(() => {
+    if (isClient) {
+      // 현재 경로를 히스토리 스택의 맨 아래로 설정 (이전 히스토리 제거)
+      window.history.replaceState(null, '', '/');
+    }
+  }, [isClient]);
+
   const handleInputClick = (mode: 'wod' | 'goal' | 'part') => {
     resetInputState();
     setCurrentMode(mode);

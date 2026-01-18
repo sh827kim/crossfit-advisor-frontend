@@ -6,9 +6,10 @@ import { useApp } from '@/app/context/AppContext';
 
 /**
  * 뒤로가기 버튼 처리 컴포넌트
- * 1. 첫 랜딩 페이지 (OnboardingPage): 앱 종료
- * 2. 메인 페이지 (/): 앱 종료
- * 3. 나머지 화면: 메인페이지로 이동
+ * 메인 페이지에서 히스토리가 초기화되므로:
+ * 1. 메인 페이지 (/)에서 뒤로가기: 앱 종료
+ * 2. 첫 랜딩 페이지에서 뒤로가기: 앱 종료
+ * 3. 나머지 페이지에서 뒤로가기: 메인페이지로 이동
  */
 export function BackButtonHandler() {
   const router = useRouter();
@@ -17,17 +18,24 @@ export function BackButtonHandler() {
 
   useEffect(() => {
     const handlePopState = () => {
-      // 현재 경로 확인
       const currentPath = window.location.pathname;
 
-      // 첫 랜딩 페이지 또는 메인 페이지에서 뒤로가기 → 앱 종료 방지
-      if (!hasVisited || currentPath === '/') {
-        // 히스토리에 현재 경로 추가 (뒤로가기 방지)
+      // 첫 랜딩 페이지 (onboarding)에서 뒤로가기 → 앱 종료
+      if (!hasVisited) {
+        window.history.pushState(null, '', currentPath);
+        return;
+      }
+
+      // 메인 페이지(/)에서 뒤로가기 → 앱 종료
+      // (메인 페이지는 replaceState로 초기화되므로 실제 뒤로가기 발생)
+      if (currentPath === '/') {
         window.history.pushState(null, '', currentPath);
         return;
       }
 
       // 나머지 페이지에서 뒤로가기 → 메인페이지로 이동
+      // 메인 페이지에서 replaceState로 히스토리가 초기화되므로
+      // 다시 뒤로가기를 누르면 앱이 종료됨
       router.push('/');
     };
 
