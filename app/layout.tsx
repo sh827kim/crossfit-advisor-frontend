@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AppProvider } from "@/app/context/AppContext";
 import { Header } from "@/app/components/Header";
+import { PWAInitializer } from "@/app/components/PWAInitializer";
 
 export const metadata: Metadata = {
   title: "애프터와드 - 보강운동 추천",
@@ -40,12 +41,17 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="애프터와드" />
       </head>
       <body className="bg-gray-100 font-sans" style={{ fontFamily: "'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif" }}>
         <AppProvider>
+          <PWAInitializer />
           <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
             <Header />
             {children}

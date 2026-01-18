@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { Movement, WorkoutPlan, MuscleGroup } from '@/app/lib/types/workout.types';
 import { generateRandomNickname } from '@/app/lib/nickname-generator';
+import { cleanupAndSaveWorkoutRecords } from '@/app/lib/storage-manager';
 
 interface WorkoutRecord {
   date: string;
@@ -116,9 +117,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [userProfileImage]);
 
-  // 히스토리 저장
+  // 히스토리 저장 및 정리
   useEffect(() => {
-    localStorage.setItem('cf_workout_history', JSON.stringify(workoutHistory));
+    const cleanedHistory = cleanupAndSaveWorkoutRecords(workoutHistory);
+    localStorage.setItem('cf_workout_history', JSON.stringify(cleanedHistory));
   }, [workoutHistory]);
 
   const addWod = useCallback((movement: Movement) => {
