@@ -57,8 +57,13 @@ export function ProfilePage() {
 
   const confirmReset = () => {
     resetAllData();
+    // localStorage 추가로 확실하게 삭제
+    localStorage.clear();
     setShowResetPopup(false);
-    router.push('/');
+    // 상태 업데이트가 완료된 후 라우팅
+    setTimeout(() => {
+      router.push('/');
+    }, 100);
   };
 
   return (
