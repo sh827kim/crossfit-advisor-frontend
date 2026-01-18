@@ -56,14 +56,12 @@ export function ProfilePage() {
   };
 
   const confirmReset = () => {
-    resetAllData();
-    // localStorage 추가로 확실하게 삭제
+    // localStorage만 초기화하고 상태 업데이트 없이 바로 라우팅
+    // 이렇게 하면 UI에 중간 상태가 안 보이고 빠르게 로드됨
     localStorage.clear();
     setShowResetPopup(false);
-    // 상태 업데이트가 완료된 후 라우팅
-    setTimeout(() => {
-      router.push('/');
-    }, 100);
+    // 바로 라우팅 (페이지 새로 로드 시 초기화된 상태로 시작)
+    router.push('/');
   };
 
   return (
