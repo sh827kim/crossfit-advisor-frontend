@@ -123,7 +123,7 @@ export default function InputPage() {
       <button
         onClick={() => {
           resetInputState();
-          router.push('/');
+          router.replace('/');
         }}
         className="text-sm font-bold text-slate-400 mb-6 flex items-center w-fit hover:text-slate-800 transition mt-6"
       >

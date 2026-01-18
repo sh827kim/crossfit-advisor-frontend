@@ -64,7 +64,7 @@ export function HistoryPage() {
     <main className="px-6 pb-6 flex-grow flex flex-col">
       <div className="h-16 flex items-center mb-2 mt-6">
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.replace('/')}
           className="text-slate-400 hover:text-slate-800 transition mr-4"
         >
           <i className="fa-solid fa-arrow-left text-xl"></i>

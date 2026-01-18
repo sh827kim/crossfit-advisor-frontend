@@ -11,7 +11,7 @@ export function Header() {
     <header className="h-16 flex justify-between items-center px-6 bg-white z-20 sticky top-0 border-b border-gray-50">
       <div
         className="font-extrabold text-xl text-slate-800 tracking-tight cursor-pointer flex items-center hover:opacity-80 transition"
-        onClick={() => router.push('/')}
+        onClick={() => router.replace('/')}
       >
         <i className="fa-solid fa-dumbbell text-blue-600 mr-2.5"></i>애프터와드
       </div>
