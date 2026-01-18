@@ -12,38 +12,55 @@ export async function compressImage(
   maxHeight: number = 300,
   quality: number = 0.8
 ): Promise<string> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
+
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
+      try {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
 
-      // 비율 유지하면서 최대 크기 제한
-      if (width > height) {
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
+        // 비율 유지하면서 최대 크기 제한
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
         }
-      } else {
-        if (height > maxHeight) {
-          width = Math.round((width * maxHeight) / height);
-          height = maxHeight;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
         }
+
+        // JPEG 형식으로 압축
+        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedBase64);
+      } catch (error) {
+        reject(error);
       }
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.drawImage(img, 0, 0, width, height);
-      }
-
-      // JPEG 형식으로 압축
-      const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-      resolve(compressedBase64);
     };
+
+    img.onerror = () => {
+      reject(new Error('이미지 로드 실패'));
+    };
+
     img.src = base64String;
+
+    // 타임아웃 설정 (5초)
+    setTimeout(() => {
+      if (!img.complete) {
+        reject(new Error('이미지 로드 타임아웃'));
+      }
+    }, 5000);
   });
 }
