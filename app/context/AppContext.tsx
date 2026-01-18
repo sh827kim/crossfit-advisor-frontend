@@ -46,6 +46,14 @@ interface AppContextType {
   workoutHistory: WorkoutRecord[];
   addWorkoutRecord: (record: WorkoutRecord) => void;
 
+  // 사용자 프로필
+  hasVisited: boolean;
+  userNickname: string;
+  userProfileImage: string | null;
+  setUserNickname: (nickname: string) => void;
+  setUserProfileImage: (image: string | null) => void;
+  markAsVisited: () => void;
+
   // 리셋
   resetInputState: () => void;
 }
@@ -62,9 +70,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [totalTime, setTotalTime] = useState(10);
   const [generatedPlan, setGeneratedPlan] = useState<WorkoutPlan | null>(null);
   const [workoutHistory, setWorkoutHistory] = useState<WorkoutRecord[]>([]);
+  const [hasVisited, setHasVisited] = useState(false);
+  const [userNickname, setUserNickname] = useState('사용자');
+  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
 
-  // localStorage에서 히스토리 로드
+  // localStorage에서 데이터 로드 (초기화)
   useEffect(() => {
+    // 방문 이력, 닉네임, 프로필 사진 로드
+    const savedHasVisited = localStorage.getItem('cf_has_visited');
+    const savedNickname = localStorage.getItem('cf_user_nickname');
+    const savedProfileImage = localStorage.getItem('cf_user_profile_image');
+
+    if (savedHasVisited === 'true') {
+      setHasVisited(true);
+      if (savedNickname) setUserNickname(savedNickname);
+      if (savedProfileImage) setUserProfileImage(savedProfileImage);
+    } else {
+      setHasVisited(false);
+    }
+
+    // 히스토리 로드
     const savedHistory = localStorage.getItem('cf_workout_history');
     if (savedHistory) {
       try {
@@ -74,6 +99,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
     }
   }, []);
+
+  // 닉네임 저장
+  useEffect(() => {
+    localStorage.setItem('cf_user_nickname', userNickname);
+  }, [userNickname]);
+
+  // 프로필 이미지 저장
+  useEffect(() => {
+    if (userProfileImage) {
+      localStorage.setItem('cf_user_profile_image', userProfileImage);
+    } else {
+      localStorage.removeItem('cf_user_profile_image');
+    }
+  }, [userProfileImage]);
 
   // 히스토리 저장
   useEffect(() => {
@@ -123,6 +162,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCurrentMode(null);
   }, []);
 
+  const markAsVisited = useCallback(() => {
+    setHasVisited(true);
+    localStorage.setItem('cf_has_visited', 'true');
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -145,6 +189,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setGeneratedPlan,
         workoutHistory,
         addWorkoutRecord,
+        hasVisited,
+        userNickname,
+        userProfileImage,
+        setUserNickname,
+        setUserProfileImage,
+        markAsVisited,
         resetInputState
       }}
     >

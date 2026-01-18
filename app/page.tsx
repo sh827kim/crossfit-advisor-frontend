@@ -1,11 +1,18 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { OnboardingPage } from '@/app/components/OnboardingPage';
 
 export default function HomePage() {
   const router = useRouter();
-  const { setCurrentMode, resetInputState } = useApp();
+  const { setCurrentMode, resetInputState, hasVisited } = useApp();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleInputClick = (mode: 'wod' | 'goal' | 'part') => {
     resetInputState();
@@ -13,6 +20,21 @@ export default function HomePage() {
     router.push('/input');
   };
 
+  // 클라이언트 마운트 전까지 로딩 상태
+  if (!isClient) {
+    return (
+      <main className="px-6 pb-6 flex-grow flex flex-col justify-center">
+        <p className="text-center text-slate-400">로딩 중...</p>
+      </main>
+    );
+  }
+
+  // 첫 방문이 아니면 온보딩 페이지 표시
+  if (!hasVisited) {
+    return <OnboardingPage />;
+  }
+
+  // 일반 홈 페이지
   return (
     <main className="px-6 pb-6 flex-grow flex flex-col pt-6">
       <div className="mb-6 text-center">
