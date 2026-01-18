@@ -194,30 +194,22 @@ export function ResultPage() {
               </div>
 
               {/* 횟수 조절 */}
-              <div className="flex gap-2 ml-9">
-                <div className="flex items-center gap-1">
-                  <label className="text-xs font-bold text-slate-500">최소:</label>
+              <div className="flex gap-3 ml-9 items-center">
+                <div className="text-xs text-slate-500 font-medium min-w-fit">
+                  {exercise.minReps && exercise.maxReps ? `${exercise.minReps}-${exercise.maxReps}` : '-'} reps
+                </div>
+                <div className="flex items-center gap-2 ml-auto">
+                  <label className="text-xs font-bold text-slate-500">실제:</label>
                   <input
                     type="number"
                     value={exercise.currentMinReps ?? ''}
                     onChange={(e) => updateReps(index, 'min', e.target.value)}
-                    className="w-12 px-2 py-1 border border-gray-200 rounded text-sm text-center focus:outline-none focus:border-blue-500"
+                    className="w-16 px-2 py-1.5 border border-gray-200 rounded text-sm text-center focus:outline-none focus:border-blue-500"
                     placeholder="-"
                     disabled={exercise.isCompleted}
                   />
+                  <span className="text-xs text-slate-500">회</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <label className="text-xs font-bold text-slate-500">최대:</label>
-                  <input
-                    type="number"
-                    value={exercise.currentMaxReps ?? ''}
-                    onChange={(e) => updateReps(index, 'max', e.target.value)}
-                    className="w-12 px-2 py-1 border border-gray-200 rounded text-sm text-center focus:outline-none focus:border-blue-500"
-                    placeholder="-"
-                    disabled={exercise.isCompleted}
-                  />
-                </div>
-                <span className="ml-auto text-xs text-slate-500 py-1">회</span>
               </div>
             </div>
           ))}

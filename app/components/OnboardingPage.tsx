@@ -13,8 +13,34 @@ export function OnboardingPage() {
   const [showContent, setShowContent] = useState(false);
   const [nickname, setNickname] = useState(userNickname);
   const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
+  const [displayText, setDisplayText] = useState('');
+  const [subtitleText, setSubtitleText] = useState('');
+  const fullTitle = '애프터와드';
+  const fullSubtitle = 'Crossfit 초심자를 위한 보강운동 추천 서비스';
 
-  // 로딩 시뮬레이션 (재방문 시 2초 후 자동 전환)
+  // 텍스트 애니메이션 (한글자씩 나타나기)
+  useEffect(() => {
+    let titleIndex = 0;
+    let subtitleIndex = 0;
+    let animating = true;
+
+    const titleTimer = setInterval(() => {
+      if (titleIndex < fullTitle.length) {
+        setDisplayText(fullTitle.slice(0, titleIndex + 1));
+        titleIndex++;
+      } else if (subtitleIndex < fullSubtitle.length) {
+        setSubtitleText(fullSubtitle.slice(0, subtitleIndex + 1));
+        subtitleIndex++;
+      } else {
+        animating = false;
+        clearInterval(titleTimer);
+      }
+    }, 50); // 50ms마다 한글자씩 나타나기
+
+    return () => clearInterval(titleTimer);
+  }, []);
+
+  // 로딩 시뮬레이션 (재방문 시 2초 후 자동 전환, 첫 방문 시 표시 유지)
   useEffect(() => {
     if (hasVisited) {
       setShowContent(true);
@@ -70,11 +96,17 @@ export function OnboardingPage() {
         showContent ? 'opacity-100' : 'opacity-0'
       }`}>
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-black text-slate-800 mb-2">애프터와드</h1>
-          <p className="text-sm text-slate-500 font-medium">
-            Crossfit 초심자를 위한
-            <br />
-            보강운동 추천 서비스
+          <h1 className="text-4xl font-black text-slate-800 mb-2 min-h-12">
+            {displayText}
+            {displayText.length < fullTitle.length && (
+              <span className="animate-pulse">|</span>
+            )}
+          </h1>
+          <p className="text-sm text-slate-500 font-medium min-h-12">
+            {subtitleText}
+            {subtitleText.length < fullSubtitle.length && (
+              <span className="animate-pulse">|</span>
+            )}
           </p>
         </div>
 
