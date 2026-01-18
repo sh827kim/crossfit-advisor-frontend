@@ -7,7 +7,7 @@ import { compressImage } from '@/app/lib/image-utils';
 
 export function OnboardingPage() {
   const router = useRouter();
-  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited } = useApp();
+  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
@@ -68,10 +68,10 @@ export function OnboardingPage() {
     } else if (hasVisited === false) {
       // 첫 방문자: 스플래시 화면 표시
       setShowContent(true);
-      // 3초 후 프로필 설정 화면으로 전환
+      // 2초 후 프로필 설정 화면으로 전환
       const timer = setTimeout(() => {
         setShowProfile(true);
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [hasVisited, router]);
@@ -106,7 +106,9 @@ export function OnboardingPage() {
     if (profileImage) {
       setUserProfileImage(profileImage);
     }
-    markAsVisited();
+
+    // localStorage에 직접 저장하고 바로 라우팅 (AppContext 상태 변경 대기하지 않음)
+    localStorage.setItem('cf_has_visited', 'true');
     router.push('/');
   };
 
