@@ -63,12 +63,36 @@
   /* 기본 body 스타일 */
   body {
     @apply bg-white text-slate-800 antialiased;
+  }
+
+  /* 한글 줄바꿈 처리 - 기본 설정 */
+  html, body, * {
     word-break: keep-all;
     overflow-wrap: break-word;
   }
 
-  /* 모든 요소에 한글 줄바꿈 처리 */
-  * {
+  /* 텍스트 컨테이너 */
+  p, span, div, a, button, label {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  /* 제목 */
+  h1, h2, h3, h4, h5, h6 {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* 버튼 특수 처리 */
+  button {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  /* 입력 필드 */
+  input, textarea {
     word-break: keep-all;
     overflow-wrap: break-word;
   }
