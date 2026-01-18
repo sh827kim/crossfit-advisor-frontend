@@ -1,11 +1,17 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const { userProfileImage } = useApp();
+
+  // 온보딩 페이지에서는 Header 렌더링하지 않음
+  if (pathname === '/onboarding') {
+    return null;
+  }
 
   return (
     <header className="h-16 flex justify-between items-center px-6 bg-white z-20 sticky top-0 border-b border-gray-50">
