@@ -70,6 +70,10 @@ interface AppContextType {
   setUserProfileImage: (image: string | null) => void;
   markAsVisited: () => void;
 
+  // PWA 종료 팝업
+  showExitPopup: boolean;
+  setShowExitPopup: (show: boolean) => void;
+
   // 리셋
   resetInputState: () => void;
   resetAllData: () => void;
@@ -93,6 +97,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [hasVisited, setHasVisited] = useState(false);
   const [userNickname, setUserNickname] = useState(generateRandomNickname());
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
+  const [showExitPopup, setShowExitPopup] = useState(false);
 
   // Wrapper functions for setters that support both direct values and functions
   const setExercises = useCallback((value: ExerciseWithStatus[] | ((prev: ExerciseWithStatus[]) => ExerciseWithStatus[])) => {
@@ -408,6 +413,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setUserNickname,
         setUserProfileImage,
         markAsVisited,
+        showExitPopup,
+        setShowExitPopup,
         resetInputState,
         resetAllData
       }}

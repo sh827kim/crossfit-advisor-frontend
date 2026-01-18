@@ -3,6 +3,8 @@ import "./globals.css";
 import { AppProvider } from "@/app/context/AppContext";
 import { Header } from "@/app/components/Header";
 import { PWAInitializer } from "@/app/components/PWAInitializer";
+import { BackButtonHandler } from "@/app/components/BackButtonHandler";
+import { ExitPopup } from "@/app/components/ExitPopup";
 
 export const metadata: Metadata = {
   title: "애프터와드 - 보강운동 추천",
@@ -52,6 +54,8 @@ export default function RootLayout({
       <body className="bg-gray-100 font-sans" style={{ fontFamily: "'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif" }}>
         <AppProvider>
           <PWAInitializer />
+          <BackButtonHandler />
+          <ExitPopup />
           <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
             <Header />
             {children}
