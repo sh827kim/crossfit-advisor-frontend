@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
-import { OnboardingPage } from '@/app/components/OnboardingPage';
 
 export default function HomePage() {
   const router = useRouter();
@@ -14,16 +13,24 @@ export default function HomePage() {
     setIsClient(true);
   }, []);
 
+  // 첫 방문이면 onboarding 페이지로 리다이렉트
+  useEffect(() => {
+    if (isClient && !hasVisited) {
+      router.replace('/onboarding');
+      return;
+    }
+  }, [isClient, hasVisited, router]);
+
   // 메인 페이지 도착 시 히스토리 초기화
   useEffect(() => {
-    if (isClient && window.location.pathname === '/') {
+    if (isClient && hasVisited && window.location.pathname === '/') {
       // 메인 페이지의 히스토리를 깔끔하게 유지
       // 1. 현재 항목을 메인으로 설정 (이전 모든 히스토리 제거)
       window.history.replaceState({ page: 'home' }, '', '/');
       // 2. 뒤로가기 차단을 위해 추가 상태 추가
       window.history.pushState({ page: 'home-guard' }, '', '/');
     }
-  }, [isClient]);
+  }, [isClient, hasVisited]);
 
   const handleInputClick = (mode: 'wod' | 'goal' | 'part') => {
     resetInputState();
@@ -31,18 +38,9 @@ export default function HomePage() {
     router.push('/input');
   };
 
-  // 클라이언트 마운트 전까지 로딩 상태
-  if (!isClient) {
-    return (
-      <main className="px-6 pb-6 flex-grow flex flex-col justify-center">
-        <p className="text-center text-slate-400">로딩 중...</p>
-      </main>
-    );
-  }
-
-  // 첫 방문이 아니면 온보딩 페이지 표시
-  if (!hasVisited) {
-    return <OnboardingPage />;
+  // 클라이언트 마운트 전 또는 리다이렉트 중
+  if (!isClient || !hasVisited) {
+    return null;
   }
 
   // 일반 홈 페이지
