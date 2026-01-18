@@ -11,6 +11,7 @@ export function OnboardingPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [nickname, setNickname] = useState(userNickname);
   const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
   const [displayText, setDisplayText] = useState('');
@@ -28,10 +29,16 @@ export function OnboardingPage() {
     }
   }, []);
 
-  // 텍스트 애니메이션 (한글자씩 나타나기)
+  // 텍스트 애니메이션 (프로필 설정 화면에서만 시작)
   useEffect(() => {
+    if (!showProfile) return;
+
     let titleIndex = 0;
     let subtitleIndex = 0;
+
+    // 프로필 화면 진입 시 텍스트 리셋
+    setDisplayText('');
+    setSubtitleText('');
 
     const titleTimer = setInterval(() => {
       if (titleIndex < fullTitle.length) {
@@ -46,9 +53,9 @@ export function OnboardingPage() {
     }, 50); // 50ms마다 한글자씩 나타나기
 
     return () => clearInterval(titleTimer);
-  }, []);
+  }, [showProfile]);
 
-  // 로딩 시뮬레이션 (재방문 시 2초 후 자동 전환, 첫 방문 시 표시 유지)
+  // 로딩 시뮬레이션
   useEffect(() => {
     if (hasVisited === true) {
       // 재방문자: 환영메시지 표시
@@ -59,9 +66,13 @@ export function OnboardingPage() {
       }, 2500); // 2.5초 동안 환영메시지 표시
       return () => clearTimeout(timer);
     } else if (hasVisited === false) {
-      // 첫 방문자: 온보딩 페이지 표시
-      setIsLoading(false);
+      // 첫 방문자: 스플래시 화면 표시
       setShowContent(true);
+      // 3초 후 프로필 설정 화면으로 전환
+      const timer = setTimeout(() => {
+        setShowProfile(true);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [hasVisited, router]);
 
@@ -101,9 +112,92 @@ export function OnboardingPage() {
 
   // 첫 방문: 온보딩 페이지
   if (!hasVisited) {
+    // 스플래시 화면
+    if (!showProfile) {
+      return (
+        <main className={`px-6 pb-6 flex-grow flex flex-col justify-center items-center transition-opacity duration-500 ${
+          showContent ? 'opacity-100' : 'opacity-0'
+        }`}>
+          {/* 배경 그래디언트 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-white to-slate-50 -z-10"></div>
+
+          <div className="w-full flex flex-col items-center justify-center">
+            {/* 로고 애니메이션 */}
+            <div className="mb-8 animate-bounce">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i className="fa-solid fa-dumbbell text-white text-5xl"></i>
+              </div>
+            </div>
+
+            {/* 앱 제목 */}
+            <h1 className="text-5xl font-black text-slate-800 mb-2">
+              애프터와드
+            </h1>
+
+            {/* 영문 서브 타이틀 */}
+            <p className="text-sm text-slate-400 font-medium mb-6 tracking-wider">
+              Afterwod
+            </p>
+
+            {/* 슬로건 */}
+            <div className="text-center mb-12">
+              <p className="text-lg font-bold text-slate-700 mb-1">
+                당신을 위한
+              </p>
+              <p className="text-lg font-bold text-slate-700 mb-1">
+                보강운동 추천 서비스
+              </p>
+              <p className="text-sm text-slate-500 mt-3">
+                Crossfit 초심자를 위한 맞춤형 워크아웃 추천
+              </p>
+            </div>
+
+            {/* 특징 아이콘 */}
+            <div className="grid grid-cols-3 gap-4 mb-12 w-full max-w-xs">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                  <i className="fa-solid fa-brain text-blue-600"></i>
+                </div>
+                <p className="text-xs text-slate-600 font-medium">AI 추천</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+                  <i className="fa-solid fa-chart-line text-green-600"></i>
+                </div>
+                <p className="text-xs text-slate-600 font-medium">기록 관리</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                  <i className="fa-solid fa-zap text-purple-600"></i>
+                </div>
+                <p className="text-xs text-slate-600 font-medium">맞춤형</p>
+              </div>
+            </div>
+
+            {/* 로딩 인디케이터 */}
+            <div className="flex items-center justify-center gap-1 mb-4">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+            </div>
+            <p className="text-xs text-slate-400 font-medium">준비 중입니다...</p>
+
+            {/* 스킵 버튼 */}
+            <button
+              onClick={() => setShowProfile(true)}
+              className="mt-8 text-xs font-medium text-slate-400 hover:text-blue-600 transition"
+            >
+              또는 시작하기 →
+            </button>
+          </div>
+        </main>
+      );
+    }
+
+    // 프로필 설정 화면
     return (
       <main className={`px-6 pb-6 flex-grow flex flex-col justify-center transition-opacity duration-500 ${
-        showContent ? 'opacity-100' : 'opacity-0'
+        showProfile ? 'opacity-100' : 'opacity-0'
       }`}>
         <div className="text-center mb-8">
           <h1 className="text-4xl font-black text-slate-800 mb-2 min-h-12">
