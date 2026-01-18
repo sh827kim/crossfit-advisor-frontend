@@ -246,7 +246,7 @@ export function ResultPage() {
           {formatTime(timerSeconds)}
         </div>
 
-        <div id="timer-controls" className={!allCompleted && isRunning ? '' : 'hidden'}>
+        <div id="timer-controls" className={!allCompleted && isRunning ? 'mb-5' : 'hidden mb-5'}>
           <button
             onClick={() => setIsRunning(false)}
             className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-orange-900/20 text-lg"
