@@ -6,19 +6,9 @@ import { useApp } from '@/app/context/AppContext';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory } = useApp();
-  const [nickName, setNickName] = useState('크로스핏 애호가');
+  const { workoutHistory, userNickname, setUserNickname } = useApp();
   const [isEditing, setIsEditing] = useState(false);
-  const [tempName, setTempName] = useState(nickName);
-
-  // localStorage에서 닉네임 로드
-  useEffect(() => {
-    const savedName = localStorage.getItem('cf_user_nickname');
-    if (savedName) {
-      setNickName(savedName);
-      setTempName(savedName);
-    }
-  }, []);
+  const [tempName, setTempName] = useState(userNickname);
 
   // 현재 월의 기록 개수 계산
   const currentDate = new Date();
@@ -32,14 +22,13 @@ export function ProfilePage() {
 
   const handleSaveName = () => {
     if (tempName.trim()) {
-      setNickName(tempName.trim());
-      localStorage.setItem('cf_user_nickname', tempName.trim());
+      setUserNickname(tempName.trim());
       setIsEditing(false);
     }
   };
 
   const handleCancel = () => {
-    setTempName(nickName);
+    setTempName(userNickname);
     setIsEditing(false);
   };
 
@@ -85,7 +74,7 @@ export function ProfilePage() {
         ) : (
           <div className="mb-4">
             <div className="flex items-center justify-center gap-2">
-              <h2 className="text-xl font-black text-slate-800">{nickName}</h2>
+              <h2 className="text-xl font-black text-slate-800">{userNickname}</h2>
               <button
                 onClick={() => setIsEditing(true)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition text-gray-400 hover:text-blue-600"
