@@ -9,13 +9,13 @@ export function HistoryPage() {
   const { workoutHistory } = useApp();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [today] = useState(() => new Date());
 
   // 초기 로드 시 오늘 날짜를 선택
   useEffect(() => {
-    const today = new Date();
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     setSelectedDate(todayStr);
-  }, []);
+  }, [today]);
 
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -41,6 +41,15 @@ export function HistoryPage() {
   const hasRecord = (day: number) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     return workoutHistory.some(record => record.date === dateStr);
+  };
+
+  // 오늘 날짜인지 확인
+  const isToday = (day: number) => {
+    return (
+      day === today.getDate() &&
+      month === today.getMonth() &&
+      year === today.getFullYear()
+    );
   };
 
   const modeDisplay: Record<string, string> = {
@@ -96,6 +105,8 @@ export function HistoryPage() {
                     ? 'text-transparent'
                     : hasRecord(day)
                     ? 'bg-blue-600 text-white cursor-pointer hover:bg-blue-700'
+                    : isToday(day)
+                    ? 'bg-orange-100 text-slate-800 border-2 border-orange-500 hover:bg-orange-200'
                     : 'text-slate-400 hover:bg-gray-100'
                 }`}
               >

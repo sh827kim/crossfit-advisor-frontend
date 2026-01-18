@@ -1,0 +1,32 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- 그라데이션 배경 -->
+  <rect width="512" height="512" fill="url(#blueGrad)"/>
+
+  <!-- 덤벨 그룹 -->
+  <g filter="url(#shadow)">
+    <!-- 왼쪽 바깥쪽 원판 (더 작음) -->
+    <rect x="78.84799999999998" y="199.68" width="40.96" height="112.64" fill="white" rx="10.24"/>
+
+    <!-- 왼쪽 안쪽 원판 (더 큼) -->
+    <rect x="121.344" y="192" width="61.44" height="128" fill="white" rx="10.24"/>
+
+    <!-- 중앙 손잡이 -->
+    <rect x="184.32" y="238.07999999999998" width="143.36" height="35.84" fill="white" rx="17.92"/>
+
+    <!-- 오른쪽 안쪽 원판 (더 큼) -->
+    <rect x="329.216" y="192" width="61.44" height="128" fill="white" rx="10.24"/>
+
+    <!-- 오른쪽 바깥쪽 원판 (더 작음) -->
+    <rect x="392.192" y="199.68" width="40.96" height="112.64" fill="white" rx="10.24"/>
+  </g>
+</svg>

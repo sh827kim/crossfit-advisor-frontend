@@ -42,14 +42,16 @@ export function OnboardingPage() {
 
   // 로딩 시뮬레이션 (재방문 시 2초 후 자동 전환, 첫 방문 시 표시 유지)
   useEffect(() => {
-    if (hasVisited) {
+    if (hasVisited === true) {
+      // 재방문자: 환영메시지 표시
       setShowContent(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
         setTimeout(() => router.push('/'), 500); // 페이드아웃 후 전환
-      }, 2000);
+      }, 2500); // 2.5초 동안 환영메시지 표시
       return () => clearTimeout(timer);
-    } else {
+    } else if (hasVisited === false) {
+      // 첫 방문자: 온보딩 페이지 표시
       setIsLoading(false);
       setShowContent(true);
     }

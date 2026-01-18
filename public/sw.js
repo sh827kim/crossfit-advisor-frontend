@@ -43,6 +43,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // http/https 요청만 처리 (chrome-extension 등 다른 프로토콜 제외)
+  if (!request.url.startsWith('http://') && !request.url.startsWith('https://')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   event.respondWith(
     caches.match(request).then(response => {
       // 캐시에 있으면 캐시에서 반환
