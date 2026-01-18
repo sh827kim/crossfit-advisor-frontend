@@ -118,12 +118,12 @@ export function OnboardingPage() {
             <input
               type="text"
               value={nickname}
-              onChange={(e) => setNickname(e.target.value.slice(0, 20))}
+              onChange={(e) => setNickname(e.target.value.slice(0, 10))}
               placeholder="닉네임을 입력하세요"
-              maxLength={20}
+              maxLength={10}
               className="w-full px-4 py-3 border border-gray-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
-            <p className="text-xs text-slate-400 mt-1">{nickname.length}/20</p>
+            <p className="text-xs text-slate-400 mt-1">{nickname.length}/10</p>
           </div>
 
           {/* 소개 문구 */}

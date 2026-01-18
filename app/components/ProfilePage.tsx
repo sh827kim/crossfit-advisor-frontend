@@ -104,7 +104,8 @@ export function ProfilePage() {
             <input
               type="text"
               value={tempName}
-              onChange={(e) => setTempName(e.target.value)}
+              onChange={(e) => setTempName(e.target.value.slice(0, 10))}
+              maxLength={10}
               className="w-full px-4 py-2 border-2 border-blue-500 rounded-xl text-center font-bold text-lg text-slate-800 focus:outline-none"
               autoFocus
             />

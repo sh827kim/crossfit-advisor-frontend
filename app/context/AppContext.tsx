@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { Movement, WorkoutPlan, MuscleGroup } from '@/app/lib/types/workout.types';
+import { generateRandomNickname } from '@/app/lib/nickname-generator';
 
 interface WorkoutRecord {
   date: string;
@@ -72,7 +73,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [generatedPlan, setGeneratedPlan] = useState<WorkoutPlan | null>(null);
   const [workoutHistory, setWorkoutHistory] = useState<WorkoutRecord[]>([]);
   const [hasVisited, setHasVisited] = useState(false);
-  const [userNickname, setUserNickname] = useState('사용자');
+  const [userNickname, setUserNickname] = useState(generateRandomNickname());
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
 
   // localStorage에서 데이터 로드 (초기화)
@@ -171,7 +172,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const resetAllData = useCallback(() => {
     // 모든 상태 초기화
     setHasVisited(false);
-    setUserNickname('사용자');
+    setUserNickname(generateRandomNickname());
     setUserProfileImage(null);
     setWorkoutHistory([]);
     resetInputState();
