@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { compressImage } from '@/app/lib/image-utils';
 
 export function OnboardingPage() {
   const router = useRouter();
@@ -28,13 +29,20 @@ export function OnboardingPage() {
     }
   }, [hasVisited, router]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         const base64 = event.target?.result as string;
-        setProfileImage(base64);
+        try {
+          // 이미지 압축
+          const compressedBase64 = await compressImage(base64, 300, 300, 0.8);
+          setProfileImage(compressedBase64);
+        } catch (error) {
+          console.error('이미지 압축 실패:', error);
+          setProfileImage(base64);
+        }
       };
       reader.readAsDataURL(file);
     }
