@@ -14,10 +14,16 @@ import { useApp } from '@/app/context/AppContext';
 export function BackButtonHandler() {
   const pathname = usePathname();
   const router = useRouter();
-  const { hasVisited, setShowExitPopup } = useApp();
+  const { hasVisited, setShowExitPopup, forceExit, setForceExit } = useApp();
 
   useEffect(() => {
     const handlePopState = () => {
+      // 강제 종료 상태면 실제 뒤로가기 수행
+      if (forceExit) {
+        setForceExit(false);
+        return;
+      }
+
       // 첫 랜딩 페이지: onboarding 중 뒤로가기
       if (!hasVisited) {
         setShowExitPopup(true);
@@ -47,7 +53,7 @@ export function BackButtonHandler() {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [pathname, hasVisited, router, setShowExitPopup]);
+  }, [pathname, hasVisited, router, setShowExitPopup, forceExit, setForceExit]);
 
   return null;
 }
