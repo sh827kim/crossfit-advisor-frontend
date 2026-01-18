@@ -59,9 +59,12 @@ next-env.d.ts
 .claude
 
 # PWA files
-**/public/sw.js
+**/public/sw.jsß
 **/public/workbox-*.js
 **/public/worker-*.js
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+crossfit_planner_v10.html
+openapi.yaml
+TABLES.md
