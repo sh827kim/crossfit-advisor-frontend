@@ -16,7 +16,7 @@ export function OnboardingPage() {
   const [displayText, setDisplayText] = useState('');
   const [subtitleText, setSubtitleText] = useState('');
   const fullTitle = '애프터와드';
-  const fullSubtitle = 'Crossfit 초심자를 위한 보강운동 추천 서비스';
+  const fullSubtitle = '당신을 위한 보강운동 추천 서비스';
 
   // 텍스트 애니메이션 (한글자씩 나타나기)
   useEffect(() => {

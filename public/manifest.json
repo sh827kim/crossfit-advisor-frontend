@@ -1,7 +1,7 @@
 {
   "name": "애프터와드",
   "short_name": "애프터와드",
-  "description": "Crossfit 초심자를 위한 보강운동 추천 및 기록 관리 서비스",
+  "description": "크로스핏터를 위한 보강운동 추천 및 기록 관리 서비스",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
