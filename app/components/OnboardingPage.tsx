@@ -120,7 +120,7 @@ export function OnboardingPage() {
     // 스플래시 화면
     if (!showProfile) {
       return (
-        <main className={`px-6 pb-6 flex-grow flex flex-col justify-center items-center transition-opacity duration-500 ${
+        <main className={`px-6 pb-6 pt-8 flex-grow flex flex-col justify-center items-center transition-opacity duration-500 ${
           showContent ? 'opacity-100' : 'opacity-0'
         }`}>
           {/* 배경 그래디언트 */}
@@ -201,7 +201,7 @@ export function OnboardingPage() {
 
     // 프로필 설정 화면
     return (
-      <main className={`px-6 pb-6 flex-grow flex flex-col justify-center transition-opacity duration-500 ${
+      <main className={`px-6 pb-6 pt-8 flex-grow flex flex-col justify-center transition-opacity duration-500 ${
         showProfile ? 'opacity-100' : 'opacity-0'
       }`}>
         <div className="text-center mb-8">
