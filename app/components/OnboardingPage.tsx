@@ -165,7 +165,7 @@ export function OnboardingPage() {
             <p className="text-sm text-slate-700 font-medium">
               <span className="text-blue-600 font-bold"> 계획 추천</span> →
               <span className="text-blue-600 font-bold"> 운동 진행</span> →
-              <span className="text-blue-600 font-bold"> 기록 저장</span>
+              <span className="text-blue-600 font-bold"> 기록</span>
             </p>
             <p className="text-xs text-slate-500 mt-2">
               당신의 보강운동을 도와드려요!
