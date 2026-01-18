@@ -34,20 +34,21 @@ export function ProfilePage() {
     setIsEditing(false);
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = async (event) => {
+      reader.onload = (event) => {
         const base64 = event.target?.result as string;
-        try {
-          // 이미지 압축
-          const compressedBase64 = await compressImage(base64, 300, 300, 0.8);
-          setUserProfileImage(compressedBase64);
-        } catch (error) {
-          console.error('이미지 압축 실패:', error);
-          setUserProfileImage(base64);
-        }
+        // Promise 체인으로 비동기 처리
+        compressImage(base64, 300, 300, 0.8)
+          .then(compressedBase64 => {
+            setUserProfileImage(compressedBase64);
+          })
+          .catch(error => {
+            console.error('이미지 압축 실패:', error);
+            setUserProfileImage(base64);
+          });
       };
       reader.readAsDataURL(file);
     }
