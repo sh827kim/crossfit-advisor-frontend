@@ -1,16 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 
-export default function HomePage() {
-  const router = useRouter();
-  const { setCurrentMode, resetInputState } = useApp();
+export function HomePage() {
+  const { setCurrentPage, setCurrentMode, resetInputState } = useApp();
 
   const handleInputClick = (mode: 'wod' | 'goal' | 'part') => {
     resetInputState();
     setCurrentMode(mode);
-    router.push('/input');
+    setCurrentPage('input');
   };
 
   return (

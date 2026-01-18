@@ -1,0 +1,13 @@
+{
+  "movements": [
+    {"id": "snatch", "name": "스내치", "muscleGroups": ["LEGS", "BACK", "CHEST"], "equipment": "BARBELL", "minReps": 3, "maxReps": 5},
+    {"id": "clean", "name": "클린", "muscleGroups": ["LEGS", "BACK", "CHEST"], "equipment": "BARBELL", "minReps": 3, "maxReps": 5},
+    {"id": "pullup", "name": "풀업", "muscleGroups": ["BACK"], "equipment": "BAR", "minReps": 5, "maxReps": 12},
+    {"id": "rowing", "name": "로잉", "muscleGroups": ["CARDIO", "BACK"], "equipment": "ROWING", "minReps": null, "maxReps": null},
+    {"id": "double_under", "name": "더블언더", "muscleGroups": ["CARDIO"], "equipment": "BODYWEIGHT", "minReps": 30, "maxReps": 50},
+    {"id": "wall_walk", "name": "월워크", "muscleGroups": ["CHEST"], "equipment": "WALL", "minReps": 5, "maxReps": 10},
+    {"id": "box_jump", "name": "박스점프", "muscleGroups": ["LEGS", "CARDIO"], "equipment": "BOX", "minReps": 5, "maxReps": 10},
+    {"id": "burpee", "name": "버피", "muscleGroups": ["CARDIO", "CHEST"], "equipment": "BODYWEIGHT", "minReps": 10, "maxReps": 15},
+    {"id": "burpee_box_jump", "name": "버피박점", "muscleGroups": ["CARDIO", "CHEST", "LEGS"], "equipment": "BOX", "minReps": 8, "maxReps": 12}
+  ]
+}

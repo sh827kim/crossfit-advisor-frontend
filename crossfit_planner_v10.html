@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrossFit Accessory Planner V10</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background-color: #f1f5f9; }
+        
+        /* Mobile Wrapper */
+        .mobile-container { 
+            max-width: 430px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            min-height: 100vh; 
+            position: relative; 
+            box-shadow: 0 0 25px rgba(0,0,0,0.08); 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        .hide { display: none !important; }
+        .fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- UI Components --- */
+        .main-card-btn {
+            @apply w-full flex flex-col items-center justify-center p-6 mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 text-center h-44 relative overflow-hidden;
+        }
+        .main-card-btn:active { transform: scale(0.98); background-color: #f8fafc; }
+        .accent-top { @apply absolute top-0 left-0 right-0 h-1.5; }
+
+        .clean-btn {
+            @apply w-full py-4 px-4 border border-gray-200 rounded-xl text-sm font-medium text-gray-500 bg-white transition-all duration-200 shadow-sm text-center;
+        }
+        .clean-btn.active {
+            @apply border-blue-600 text-blue-600 font-bold bg-blue-50 ring-1 ring-blue-600 shadow-md;
+        }
+
+        .wod-list-item {
+            @apply w-full flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-xl mb-2 shadow-sm;
+        }
+        .wod-text { @apply text-blue-900 font-bold text-sm truncate mr-2; }
+        .wod-delete-btn { @apply text-gray-400 hover:text-red-500 transition p-1 flex-shrink-0; }
+
+        .frequent-wod-box { @apply bg-slate-100 rounded-2xl p-4 mb-4 border border-slate-200; }
+        .chip-btn { @apply bg-white text-slate-600 text-xs font-bold py-2.5 px-1 rounded-lg shadow-sm border border-slate-200 hover:border-slate-400 active:bg-slate-200 transition; }
+
+        .time-btn { @apply flex items-center justify-center h-12 border border-gray-200 rounded-xl text-sm font-bold text-gray-400 bg-white transition-all duration-200 shadow-sm; }
+        .time-btn.active { @apply bg-slate-800 text-white border-slate-800 shadow-md transform scale-105; }
+
+        /* Login Buttons */
+        .google-btn {
+            @apply w-full flex items-center justify-center py-4 bg-white border border-gray-300 rounded-xl text-gray-700 font-bold shadow-sm hover:bg-gray-50 transition active:scale-95;
+        }
+
+        /* Autocomplete */
+        .autocomplete-list {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: white; border: 1px solid #e2e8f0; border-radius: 0 0 16px 16px;
+            max-height: 220px; overflow-y: auto; z-index: 50; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .autocomplete-item { padding: 14px 16px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #334155; }
+        
+        /* Calendar */
+        .calendar-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; border-radius: 50%; }
+        .has-record { background-color: #2563eb; color: white; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    
+    <header class="h-16 flex justify-between items-center px-6 bg-white z-20 sticky top-0 border-b border-gray-50">
+        <div class="font-extrabold text-xl text-slate-800 tracking-tight cursor-pointer flex items-center" onclick="goHome()">
+            <i class="fa-solid fa-dumbbell text-blue-600 mr-2.5"></i>Planner
+        </div>
+        <div class="flex gap-3">
+            <button onclick="checkHistoryAccess()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition">
+                <i class="fa-solid fa-calendar-days text-lg"></i>
+            </button>
+            <button onclick="handleUserIconClick()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition relative">
+                <i class="fa-solid fa-user text-lg"></i>
+                <div id="login-dot" class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white hide"></div>
+            </button>
+        </div>
+    </header>
+
+    <main id="page-home" class="px-6 pb-6 flex-grow flex flex-col pt-6 fade-in z-0">
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl font-black text-slate-800 leading-tight mb-2">오늘의 운동 목표는?</h2>
+            <p class="text-sm text-slate-500 font-medium">상황에 맞는 최적의 루틴을 추천해드려요.</p>
+        </div>
+        
+        <div class="flex flex-col w-full gap-3">
+            <button onclick="goToInput('wod')" class="main-card-btn group">
+                <div class="accent-top bg-green-500"></div>
+                <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-battery-full text-green-600 text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg">부족한 부위 채우기</h3>
+                <p class="text-xs text-slate-400 font-medium mt-1">오늘 WOD에서 안 쓴 근육 위주</p>
+            </button>
+
+            <button onclick="goToInput('goal')" class="main-card-btn group">
+                <div class="accent-top bg-purple-500"></div>
+                <div class="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-trophy text-purple-600 text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg">나의 달성 목표</h3>
+                <p class="text-xs text-slate-400 font-medium mt-1">머슬업, 핸드스탠드 등 스킬</p>
+            </button>
+
+            <button onclick="goToInput('part')" class="main-card-btn group">
+                <div class="accent-top bg-blue-500"></div>
+                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-bullseye text-blue-600 text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg">타겟 부위 선택</h3>
+                <p class="text-xs text-slate-400 font-medium mt-1">원하는 부위 집중 공략</p>
+            </button>
+        </div>
+    </main>
+
+    <main id="page-login" class="px-6 pb-6 flex-grow flex flex-col justify-center hide fade-in">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-lock text-3xl text-blue-600"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-800 mb-2">로그인</h2>
+            <p class="text-slate-500 text-sm">운동 기록을 저장하고 관리하려면<br>로그인이 필요합니다.</p>
+        </div>
+        
+        <button onclick="simulateGoogleLogin()" class="google-btn mb-4">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-3" alt="Google">
+            Google 계정으로 계속하기
+        </button>
+        
+        <button onclick="goHome()" class="text-sm text-slate-400 mt-4 underline">다음에 하기</button>
+    </main>
+
+    <main id="page-profile" class="px-6 pb-6 flex-grow flex flex-col hide fade-in">
+        <button onclick="goHome()" class="text-sm font-bold text-slate-400 mb-6 flex items-center w-fit hover:text-slate-800 transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> 메인으로
+        </button>
+        
+        <div class="bg-white rounded-3xl p-8 shadow-lg shadow-gray-100 text-center border border-gray-50 mt-10">
+            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-blue-600 border-4 border-white shadow-sm">
+                <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+            <h2 class="text-xl font-black text-slate-800 mb-1" id="profile-name">사용자</h2>
+            <p class="text-sm text-slate-400 mb-6" id="profile-email">user@example.com</p>
+            
+            <div class="bg-blue-50 rounded-xl p-4 mb-6">
+                <p class="text-blue-800 text-sm font-bold">이번 달 운동 횟수</p>
+                <p class="text-3xl font-black text-blue-600 mt-1" id="profile-count">0회</p>
+            </div>
+
+            <button onclick="logout()" class="w-full py-3 border border-red-200 text-red-500 rounded-xl font-bold hover:bg-red-50 transition">
+                로그아웃
+            </button>
+        </div>
+    </main>
+
+    <main id="page-input" class="px-6 pb-6 flex-grow flex flex-col hide fade-in">
+        <button onclick="goHome()" class="text-sm font-bold text-slate-400 mb-6 flex items-center w-fit hover:text-slate-800 transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> 이전으로
+        </button>
+
+        <div class="mb-6">
+            <h2 id="input-title" class="text-2xl font-black text-slate-800 mb-1">제목</h2>
+            <p id="input-desc" class="text-sm text-slate-500 font-medium">설명</p>
+        </div>
+
+        <div id="section-wod" class="input-section hide">
+            <div class="relative mb-6 z-30">
+                <div class="flex gap-2 shadow-sm rounded-xl">
+                    <input type="text" id="wod-input" placeholder="운동 검색 (초성: ㅅㄴㅊ)" 
+                           class="flex-grow bg-white border border-gray-200 rounded-xl p-4 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 font-bold text-slate-700 placeholder-gray-300 transition" autocomplete="off">
+                    <button onclick="addWodMove()" class="bg-slate-800 text-white px-5 rounded-xl text-sm font-bold hover:bg-slate-700 transition shadow-md">추가</button>
+                </div>
+                <div id="autocomplete-list" class="autocomplete-list hide"></div>
+            </div>
+
+            <div class="frequent-wod-box">
+                <p class="text-xs font-bold text-slate-400 mb-3 flex items-center uppercase tracking-wide">
+                    <i class="fa-solid fa-bolt text-yellow-500 mr-1.5"></i> 자주 나오는 WOD
+                </p>
+                <div class="grid grid-cols-3 gap-2" id="frequent-wod-list">
+                    </div>
+            </div>
+
+            <div id="selected-list-container" class="hide mt-2">
+                <p class="text-xs font-bold text-blue-500 mb-2 ml-1">오늘 한 운동 목록</p>
+                <div id="selected-moves" class="flex flex-col w-full"></div>
+            </div>
+        </div>
+
+        <div id="section-goal" class="input-section hide mb-8">
+            <div class="flex flex-col gap-3" id="goal-list-container"></div>
+        </div>
+
+        <div id="section-part" class="input-section hide mb-8">
+            <div class="flex flex-col gap-3">
+                <button onclick="togglePart(this, 'core')" class="clean-btn part-btn" data-part="core">복근 / 코어</button>
+                <button onclick="togglePart(this, 'legs')" class="clean-btn part-btn" data-part="legs">하체 / 힙</button>
+                <button onclick="togglePart(this, 'back')" class="clean-btn part-btn" data-part="back">등 / 광배</button>
+                <button onclick="togglePart(this, 'chest')" class="clean-btn part-btn" data-part="chest">가슴 / 어깨</button>
+                <button onclick="togglePart(this, 'cardio')" class="clean-btn part-btn" data-part="cardio">유산소</button>
+            </div>
+        </div>
+
+        <div class="mt-auto pt-6 border-t border-gray-100">
+            <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center">
+                <div class="w-1 h-4 bg-slate-800 mr-2 rounded-full"></div> 운동 시간 설정
+            </label>
+            <div class="grid grid-cols-5 gap-2 mb-6">
+                <button onclick="selectTime(this, 1)" class="time-btn" data-val="5">5분</button>
+                <button onclick="selectTime(this, 10)" class="time-btn" data-val="10">10분</button>
+                <button onclick="selectTime(this, 15)" class="time-btn" data-val="15">15분</button>
+                <button onclick="selectTime(this, 20)" class="time-btn" data-val="20">20분</button>
+                <button onclick="selectTime(this, 25)" class="time-btn" data-val="25">25분</button>
+                <button onclick="selectTime(this, 30)" class="time-btn" data-val="30">30분</button>
+            </div>
+
+            <button onclick="generateWorkout()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-2xl shadow-xl shadow-slate-200 transition transform active:scale-[0.98] flex justify-center items-center text-lg">
+                <span id="btn-generate-text">10분 운동 계획 생성하기</span>
+            </button>
+        </div>
+    </main>
+
+    <main id="page-result" class="px-6 pb-6 flex-grow flex flex-col hide fade-in">
+        <div class="pt-6 mb-6 text-center">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Workout Plan</p>
+            <h1 id="result-headline" class="text-3xl font-black text-slate-800">Result</h1>
+            <p id="target-time-per-round" class="text-sm font-bold text-blue-600 mt-2 bg-blue-50 inline-block px-3 py-1 rounded-full"></p>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-lg shadow-gray-100 mb-6 flex-grow overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+                <span id="result-mode-text" class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-full">Mode</span>
+                <span id="result-time-display" class="text-slate-800 font-bold flex items-center"><i class="fa-regular fa-clock mr-1.5 text-slate-400"></i> 10분</span>
+            </div>
+            <ul id="workout-list" class="space-y-4"></ul>
+        </div>
+
+        <div class="bg-slate-900 text-white rounded-3xl p-6 text-center shadow-xl shadow-slate-200">
+            <div id="timer-display" class="text-6xl font-mono font-bold mb-6 tracking-tighter">00:00</div>
+            <div id="timer-controls">
+                <button onclick="startTimer()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-green-900/20 text-lg">
+                    운동 시작 <i class="fa-solid fa-play ml-2 text-sm"></i>
+                </button>
+            </div>
+            <button id="btn-complete" onclick="saveRecord()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition hide shadow-lg shadow-blue-900/20 text-lg">
+                오늘 운동 기록하기 <i class="fa-solid fa-pen-to-square ml-2"></i>
+            </button>
+        </div>
+        <button onclick="goHome()" class="mt-6 text-center text-slate-400 text-sm font-medium hover:text-slate-600">처음으로 돌아가기</button>
+    </main>
+
+    <main id="page-history" class="px-6 pb-6 flex-grow flex flex-col hide fade-in">
+        <div class="h-16 flex items-center mb-2">
+            <button onclick="goHome()" class="text-slate-400 hover:text-slate-800 transition mr-4"><i class="fa-solid fa-arrow-left text-xl"></i></button>
+            <h2 class="text-2xl font-black text-slate-800">운동 기록</h2>
+        </div>
+        <div class="bg-white rounded-3xl shadow-lg shadow-gray-100 border border-gray-50 p-6 mb-6">
+            <div class="text-center font-bold text-lg mb-6 text-slate-800" id="cal-header"></div>
+            <div class="grid grid-cols-7 gap-2 text-center mb-2 text-xs font-bold text-slate-300">
+                <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+            </div>
+            <div id="calendar-grid" class="grid grid-cols-7 gap-2"></div>
+        </div>
+        <div id="history-detail" class="bg-slate-50 rounded-2xl p-6 flex-grow overflow-y-auto border border-slate-100"></div>
+    </main>
+
+</div>
+
+<script>
+    // --- 0. Auth & State ---
+    let state = {
+        currentUser: null, // { name: '...', email: '...' }
+        mode: '',
+        wodList: [],
+        selectedGoal: '',
+        selectedParts: [],
+        totalTime: 10,
+        workout: []
+    };
+    let timerInterval;
+
+    // --- 1. Auth Logic ---
+    function handleUserIconClick() {
+        if(state.currentUser) {
+            updateProfileUI();
+            showPage('profile');
+        } else {
+            showPage('login');
+        }
+    }
+
+    function simulateGoogleLogin() {
+        // Mock Login Process
+        const btn = document.querySelector('.google-btn');
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> 로그인 중...`;
+        
+        setTimeout(() => {
+            state.currentUser = {
+                name: '김크로스핏',
+                email: 'crossfitter@gmail.com'
+            };
+            document.getElementById('login-dot').classList.remove('hide');
+            alert(`환영합니다, ${state.currentUser.name}님!`);
+            goHome();
+            // Reset button for next time
+            btn.innerHTML = `<img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-3" alt="Google">Google 계정으로 계속하기`;
+        }, 1000);
+    }
+
+    function logout() {
+        if(confirm('로그아웃 하시겠습니까?')) {
+            state.currentUser = null;
+            document.getElementById('login-dot').classList.add('hide');
+            goHome();
+        }
+    }
+
+    function checkHistoryAccess() {
+        if(!state.currentUser) {
+            if(confirm('운동 기록을 보려면 로그인이 필요합니다.\n로그인 페이지로 이동할까요?')) {
+                showPage('login');
+            }
+        } else {
+            showPage('history');
+            renderCalendar();
+        }
+    }
+
+    function updateProfileUI() {
+        if(state.currentUser) {
+            document.getElementById('profile-name').innerText = state.currentUser.name;
+            document.getElementById('profile-email').innerText = state.currentUser.email;
+            
+            // Calculate Count
+            const history = JSON.parse(localStorage.getItem('cf_history_v10')) || [];
+            // Simple logic: count all records (in real app, filter by this month/user)
+            document.getElementById('profile-count').innerText = `${history.length}회`;
+        }
+    }
+
+    // --- 2. Data & Init ---
+    const allCrossFitMovements = [
+        "스내치", "파워 스내치", "스쿼트 스내치", "행 스내치", "덤벨 스내치",
+        "클린", "파워 클린", "스쿼트 클린", "행 클린", "클린 앤 저크",
+        "저크", "푸쉬 저크", "스플릿 저크",
+        "데드리프트", "스모 데드리프트",
+        "스쿼트", "백 스쿼트", "프론트 스쿼트", "오버헤드 스쿼트", "에어 스쿼트",
+        "런지", "오버헤드 런지", "덤벨 런지",
+        "쓰러스터", "덤벨 쓰러스터",
+        "월볼 샷", "월워크",
+        "풀업", "키핑 풀업", "버터플라이 풀업", "체스트 투 바", 
+        "머슬업", "바 머슬업", "링 머슬업",
+        "토투바", "니투엘보",
+        "푸쉬업", "핸드스탠드 푸쉬업", "링 딥스", "바 딥스",
+        "로잉", "어썰트 바이크", "더블언더", "박스 점프", "버피", "버피 박스 점프"
+    ];
+
+    const frequentWodKeywords = ["스내치", "클린", "풀업", "로잉", "더블언더", "월워크", "박스점프", "버피", "버피박점"];
+
+    const goalsList = ["키핑 풀업", "스트릭 풀업", "버터플라이 풀업", "토투바", "체스트 투 바", "바 머슬업", "링 머슬업", "핸드스탠드 워크"];
+
+    const db = [
+        { name: "할로우 락", parts: ["core"], tools: ["맨몸"] },
+        { name: "플랭크", parts: ["core"], tools: ["맨몸"] },
+        { name: "GHD 싯업", parts: ["core"], tools: ["GHD"] }, 
+        { name: "행잉 레그레이즈", parts: ["core"], tools: ["철봉"] },
+        { name: "V-up", parts: ["core"], tools: ["맨몸"] },
+        { name: "밴드 풀다운", parts: ["back", "lats"], tools: ["밴드"] },
+        { name: "링 로우", parts: ["back"], tools: ["링"] },
+        { name: "스캐풀라 풀업", parts: ["back"], tools: ["철봉"] },
+        { name: "네거티브 풀업", parts: ["back"], tools: ["철봉"] },
+        { name: "벤트오버 바벨로우", parts: ["back"], tools: ["바벨"] },
+        { name: "링 딥스", parts: ["chest", "arm"], tools: ["링"] },
+        { name: "푸쉬업", parts: ["chest", "arm"], tools: ["맨몸"] },
+        { name: "박스 딥스", parts: ["arm"], tools: ["박스"] },
+        { name: "덤벨 벤치프레스", parts: ["chest"], tools: ["덤벨"] },
+        { name: "불가리안 스플릿 스쿼트", parts: ["legs"], tools: ["맨몸", "덤벨"] },
+        { name: "덤벨 런지", parts: ["legs"], tools: ["덤벨"] },
+        { name: "고블릿 스쿼트", parts: ["legs"], tools: ["케틀벨"] },
+        { name: "월볼 샷", parts: ["legs", "cardio"], tools: ["월볼"] },
+        { name: "박스 점프", parts: ["legs", "cardio"], tools: ["박스"] },
+        { name: "핸드스탠드 홀드", parts: ["shoulder"], tools: ["벽"] },
+        { name: "파이크 푸쉬업", parts: ["shoulder"], tools: ["박스"] },
+        { name: "덤벨 숄더 프레스", parts: ["shoulder"], tools: ["덤벨"] },
+        { name: "어썰트 바이크 (인터벌)", parts: ["cardio", "legs"], tools: ["어썰트 바이크"] },
+        { name: "로잉 머신 (인터벌)", parts: ["cardio", "back"], tools: ["로잉"] },
+        { name: "버피", parts: ["cardio", "full"], tools: ["맨몸"] }
+    ];
+
+    // --- Init ---
+    document.addEventListener('DOMContentLoaded', () => {
+        renderFrequentWod();
+        renderGoals();
+        const defaultTimeBtn = document.querySelector('.time-btn[data-val="10"]');
+        if(defaultTimeBtn) selectTime(defaultTimeBtn, 10);
+        setupAutocomplete();
+    });
+
+    // --- Navigation ---
+    function hideAllPages() {
+        document.querySelectorAll('main').forEach(el => el.classList.add('hide'));
+    }
+
+    function goHome() {
+        hideAllPages();
+        document.getElementById('page-home').classList.remove('hide');
+        resetState();
+    }
+
+    function showPage(pageId) {
+        hideAllPages();
+        document.getElementById(`page-${pageId}`).classList.remove('hide');
+    }
+
+    function goToInput(mode) {
+        state.mode = mode;
+        hideAllPages();
+        document.getElementById('page-input').classList.remove('hide');
+
+        document.querySelectorAll('.input-section').forEach(el => el.classList.add('hide'));
+        const title = document.getElementById('input-title');
+        const desc = document.getElementById('input-desc');
+
+        if(mode === 'wod') {
+            document.getElementById('section-wod').classList.remove('hide');
+            title.innerText = "오늘의 WOD";
+            desc.innerText = "오늘 수행한 운동을 입력해주세요.";
+        } else if(mode === 'goal') {
+            document.getElementById('section-goal').classList.remove('hide');
+            title.innerText = "나의 달성 목표";
+            desc.innerText = "연습하고 싶은 스킬을 선택해주세요.";
+        } else if(mode === 'part') {
+            document.getElementById('section-part').classList.remove('hide');
+            title.innerText = "타겟 부위";
+            desc.innerText = "집중적으로 운동할 부위를 선택하세요.";
+        }
+    }
+
+    // --- Rendering ---
+    function renderFrequentWod() {
+        const container = document.getElementById('frequent-wod-list');
+        if(container) {
+            container.innerHTML = frequentWodKeywords.map(k => 
+                `<button onclick="addWodMove('${k}')" class="chip-btn">${k}</button>`
+            ).join('');
+        }
+    }
+
+    function renderGoals() {
+        const container = document.getElementById('goal-list-container');
+        if(container) {
+            container.innerHTML = goalsList.map(g => 
+                `<button onclick="selectGoal(this, '${g}')" class="clean-btn goal-btn">${g}</button>`
+            ).join('');
+        }
+    }
+
+    // --- Autocomplete ---
+    function getChosung(str) {
+        const cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+        let result = "";
+        for(let i=0; i<str.length; i++) {
+            const code = str.charCodeAt(i) - 44032;
+            if(code > -1 && code < 11172) result += cho[Math.floor(code/588)];
+            else result += str.charAt(i);
+        }
+        return result;
+    }
+
+    function setupAutocomplete() {
+        const input = document.getElementById('wod-input');
+        const list = document.getElementById('autocomplete-list');
+
+        input.addEventListener('input', function() {
+            const val = this.value;
+            list.innerHTML = '';
+            if(!val) { list.classList.add('hide'); return; }
+            list.classList.remove('hide');
+
+            const valChosung = getChosung(val);
+            const matches = allCrossFitMovements.filter(item => {
+                return item.includes(val) || getChosung(item).includes(valChosung);
+            });
+
+            if(matches.length === 0) { list.classList.add('hide'); return; }
+
+            matches.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'autocomplete-item';
+                div.innerHTML = m.replace(val, `<span class='font-bold text-blue-600'>${val}</span>`);
+                div.onclick = () => { input.value = ''; addWodMove(m); list.classList.add('hide'); };
+                list.appendChild(div);
+            });
+        });
+        document.addEventListener('click', (e) => { if(e.target !== input) list.classList.add('hide'); });
+    }
+
+    // --- Logic: Select ---
+    function selectGoal(el, goal) {
+        state.selectedGoal = goal;
+        document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function togglePart(el, part) {
+        if(state.selectedParts.includes(part)) {
+            state.selectedParts = state.selectedParts.filter(p => p !== part);
+            el.classList.remove('active');
+        } else {
+            state.selectedParts.push(part);
+            el.classList.add('active');
+        }
+    }
+
+    function selectTime(el, val) {
+        state.totalTime = val;
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        const btnText = document.getElementById('btn-generate-text');
+        if(btnText) btnText.innerText = `${val}분 운동 계획 생성하기`;
+    }
+
+    // --- Logic: WOD List ---
+    const wodInput = document.getElementById('wod-input');
+    function addWodMove(val) {
+        const v = val || wodInput.value.trim();
+        if(!v) return;
+        if(!state.wodList.includes(v)) {
+            state.wodList.push(v);
+            renderWodList();
+        }
+        wodInput.value = '';
+        document.getElementById('autocomplete-list').classList.add('hide');
+    }
+
+    function removeWodMove(idx) {
+        state.wodList.splice(idx, 1);
+        renderWodList();
+    }
+
+    function renderWodList() {
+        const container = document.getElementById('selected-moves');
+        const wrapper = document.getElementById('selected-list-container');
+        if(state.wodList.length === 0) { wrapper.classList.add('hide'); return; }
+        wrapper.classList.remove('hide');
+        
+        container.innerHTML = state.wodList.map((m, i) => 
+            `<div class="wod-list-item">
+                <span class="wod-text">${m}</span>
+                <button onclick="removeWodMove(${i})" class="wod-delete-btn"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>`
+        ).join('');
+    }
+
+    // --- Algorithm ---
+    function generateWorkout() {
+        if(state.mode === 'wod' && state.wodList.length === 0) { if(!confirm("입력된 WOD가 없습니다. 전신 보조운동을 추천할까요?")) return; }
+        if(state.mode === 'goal' && !state.selectedGoal) { alert('목표를 선택해주세요.'); return; }
+        if(state.mode === 'part' && state.selectedParts.length === 0) { alert('타겟 부위를 하나 이상 선택해주세요.'); return; }
+
+        let candidates = [];
+        if(state.mode === 'part') candidates = db.filter(ex => ex.parts.some(p => state.selectedParts.includes(p)));
+        else if(state.mode === 'goal') {
+            const g = state.selectedGoal;
+            if(g.includes("풀업") || g.includes("토투바") || g.includes("체스트")) candidates = db.filter(ex => ex.parts.includes('back') || ex.parts.includes('core'));
+            else if(g.includes("머슬업")) candidates = db.filter(ex => ex.name.includes("딥스") || ex.parts.includes('back') || ex.parts.includes('chest'));
+            else if(g.includes("핸드스탠드")) candidates = db.filter(ex => ex.parts.includes('shoulder') || ex.parts.includes('core'));
+            else candidates = db; 
+        } else { // WOD
+            const wodStr = state.wodList.join('');
+            const avoidLegs = wodStr.match(/스쿼트|런지|쓰러스터|박스|월볼|클린|스내치/);
+            const avoidPush = wodStr.match(/프레스|푸쉬|저크|버피|월볼|핸드스탠드/);
+            const avoidPull = wodStr.match(/풀업|로잉|클린|스내치|토투바|머슬업/);
+            candidates = db.filter(ex => {
+                if(avoidLegs && ex.parts.includes('legs')) return false;
+                if(avoidPush && (ex.parts.includes('chest') || ex.parts.includes('shoulder'))) return false;
+                if(avoidPull && (ex.parts.includes('back'))) return false;
+                return true;
+            });
+            if(candidates.length === 0) candidates = db.filter(ex => ex.parts.includes('core'));
+        }
+
+        let count = Math.ceil(state.totalTime / 10) + 1; 
+        if(count > 4) count = 4;
+        
+        state.workout = [];
+        const pool = [...candidates];
+        pool.sort(() => Math.random() - 0.5);
+        for(let i=0; i<count; i++) { if(pool[i]) state.workout.push(pool[i]); }
+        if(state.workout.length === 0) state.workout = [db[0], db[1]];
+
+        renderResult();
+        showPage('result');
+    }
+
+    function renderResult() {
+        document.getElementById('result-time-display').innerHTML = `<i class="fa-regular fa-clock mr-1.5 text-slate-400"></i> ${state.totalTime}분`;
+        let modeTxt = "";
+        if(state.mode === 'wod') modeTxt = "부족 부위 채우기"; 
+        else if(state.mode === 'goal') modeTxt = "목표 달성";
+        else modeTxt = "타겟 집중";
+        document.getElementById('result-mode-text').innerText = modeTxt;
+
+        const rounds = Math.max(3, Math.floor(state.totalTime / 3));
+        const timePerRoundSeconds = (state.totalTime * 60) / rounds;
+        const tprMin = Math.floor(timePerRoundSeconds / 60);
+        const tprSec = Math.floor(timePerRoundSeconds % 60);
+        
+        document.getElementById('result-headline').innerText = `${rounds} Rounds Quality`;
+        document.getElementById('target-time-per-round').innerText = `1라운드당 목표: ${tprMin}분 ${tprSec}초`;
+        
+        const list = document.getElementById('workout-list');
+        list.innerHTML = state.workout.map(ex => `
+            <li class="flex items-start p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                <div class="bg-white p-2.5 rounded-xl mr-3 text-blue-600 shadow-sm border border-gray-100"><i class="fa-solid fa-dumbbell"></i></div>
+                <div>
+                    <div class="font-bold text-slate-800 text-lg">${ex.name}</div>
+                    <div class="text-sm text-slate-500 mt-1 font-medium">
+                        <span class="bg-white border px-2 py-0.5 rounded text-xs">10-15 reps</span>
+                        <span class="text-xs ml-1 text-slate-400">(${ex.tools.join(', ')})</span>
+                    </div>
+                </div>
+            </li>
+        `).join('');
+
+        if(timerInterval) clearInterval(timerInterval);
+        document.getElementById('timer-display').innerText = `${state.totalTime}:00`;
+        document.getElementById('timer-controls').classList.remove('hide');
+        document.getElementById('btn-complete').classList.add('hide');
+    }
+
+    function startTimer() {
+        let seconds = state.totalTime * 60;
+        document.getElementById('timer-controls').classList.add('hide');
+        const display = document.getElementById('timer-display');
+        timerInterval = setInterval(() => {
+            seconds--;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            display.innerText = `${m}:${s<10?'0'+s:s}`;
+            if(seconds <= 0) {
+                clearInterval(timerInterval);
+                display.innerText = "DONE!";
+                document.getElementById('btn-complete').classList.remove('hide');
+            }
+        }, 1000); 
+    }
+
+    function saveRecord() {
+        if(!state.currentUser) {
+            if(confirm('기록을 저장하려면 로그인이 필요합니다.\n로그인 화면으로 이동할까요?')) { showPage('login'); return; }
+        }
+        const history = JSON.parse(localStorage.getItem('cf_history_v10')) || [];
+        const record = {
+            date: new Date().toISOString().split('T')[0],
+            mode: state.mode,
+            time: state.totalTime,
+            exercises: state.workout.map(e => e.name)
+        };
+        history.push(record);
+        localStorage.setItem('cf_history_v10', JSON.stringify(history));
+        alert('운동 기록 저장 완료! 🔥');
+        showPage('history');
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = today.getMonth();
+        document.getElementById('cal-header').innerText = `${y}년 ${m+1}월`;
+        const firstDay = new Date(y, m, 1).getDay();
+        const daysInMonth = new Date(y, m+1, 0).getDate();
+        const history = JSON.parse(localStorage.getItem('cf_history_v10')) || [];
+        const dates = history.map(h => h.date);
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+        for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
+        for(let i=1; i<=daysInMonth; i++) {
+            const dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const has = dates.includes(dStr);
+            grid.innerHTML += `<div class="calendar-day ${has?'has-record':''}" onclick="viewHistory('${dStr}')">${i}</div>`;
+        }
+    }
+
+    function viewHistory(date) {
+        const history = JSON.parse(localStorage.getItem('cf_history_v10')) || [];
+        const recs = history.filter(h => h.date === date);
+        const con = document.getElementById('history-detail');
+        if(recs.length === 0) { con.innerHTML = `<p class="text-gray-400 text-center mt-4 text-sm font-bold">기록이 없습니다.</p>`; return; }
+        con.innerHTML = `<h3 class="font-black mb-4 sticky top-0 bg-slate-50 pb-2 border-b border-slate-200 text-slate-800">${date}</h3>` + recs.map(r => `
+            <div class="bg-white p-5 rounded-2xl mb-3 shadow-sm border border-slate-100">
+                <div class="flex justify-between mb-3 items-center">
+                    <span class="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">${r.mode==='wod'?'부족부위':(r.mode==='goal'?'목표':'타겟')}</span>
+                    <span class="text-sm font-bold text-blue-600">${r.time}분</span>
+                </div>
+                <div class="text-sm text-slate-700 leading-relaxed font-medium">${r.exercises.join(', ')}</div>
+            </div>
+        `).join('');
+    }
+
+    function resetState() {
+        state.wodList = [];
+        state.selectedGoal = '';
+        state.selectedParts = [];
+        state.totalTime = 10;
+        document.getElementById('wod-input').value = '';
+        renderWodList();
+        document.querySelectorAll('.clean-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+        const defBtn = document.querySelector('.time-btn[data-val="10"]');
+        if(defBtn) defBtn.classList.add('active');
+        const btnText = document.getElementById('btn-generate-text');
+        if(btnText) btnText.innerText = `10분 운동 계획 생성하기`;
+    }
+</script>
+</body>
+</html>
