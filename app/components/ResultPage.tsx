@@ -3,13 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
-import { Exercise } from '@/app/lib/types/workout.types';
-
-interface ExerciseWithStatus extends Exercise {
-  isCompleted: boolean;
-  currentMinReps: number | null;
-  currentMaxReps: number | null;
-}
 
 export function ResultPage() {
   const router = useRouter();
@@ -18,18 +11,21 @@ export function ResultPage() {
     resetInputState,
     addWorkoutRecord,
     currentMode,
-    totalTime
+    totalTime,
+    exercises,
+    setExercises,
+    timerSeconds,
+    setTimerSeconds,
+    isRunning,
+    setIsRunning
   } = useApp();
 
-  const [timerSeconds, setTimerSeconds] = useState<number>(0);
-  const [isRunning, setIsRunning] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [exercises, setExercises] = useState<ExerciseWithStatus[]>([]);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
-  // 초기화
+  // 초기화 - exercises가 비어있을 때만 초기화 (새로운 운동 계획일 때)
   useEffect(() => {
-    if (generatedPlan) {
+    if (generatedPlan && exercises.length === 0) {
       setTimerSeconds(generatedPlan.duration * 60);
       // 각 운동마다 상태 초기화
       setExercises(
@@ -41,7 +37,7 @@ export function ResultPage() {
         }))
       );
     }
-  }, [generatedPlan]);
+  }, [generatedPlan, exercises.length, setTimerSeconds, setExercises]);
 
   // 타이머 진행
   useEffect(() => {
