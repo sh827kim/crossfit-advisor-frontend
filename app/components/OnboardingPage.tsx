@@ -74,7 +74,7 @@ export function OnboardingPage() {
           <p className="text-sm text-slate-500 font-medium">
             Crossfit 초심자를 위한
             <br />
-            보강운동 추천 및 기록 관리 서비스
+            보강운동 추천 서비스
           </p>
         </div>
 
@@ -129,13 +129,12 @@ export function OnboardingPage() {
           {/* 소개 문구 */}
           <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6">
             <p className="text-sm text-slate-700 font-medium">
-              <span className="text-blue-600 font-bold">운동 시간 선택</span> →
               <span className="text-blue-600 font-bold"> 맞춤형 계획</span> →
               <span className="text-blue-600 font-bold"> 실시간 진행</span> →
               <span className="text-blue-600 font-bold"> 기록 저장</span>
             </p>
             <p className="text-xs text-slate-500 mt-2">
-              모든 과정이 이 앱 한 곳에서 가능합니다!
+              당신의 보강운동을 도와드려요!
             </p>
           </div>
         </div>
