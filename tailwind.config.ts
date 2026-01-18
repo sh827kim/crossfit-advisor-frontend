@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss"
 import defaultTheme from "tailwindcss/defaultTheme"
 
 const config = {
-  darkMode: ["selector", "[data-theme='dark']"],
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,26 +9,19 @@ const config = {
   theme: {
     extend: {
       colors: {
-        // 다크톤 테마 - 오렌지 포인트
-        background: "#0f0f0f",        // 거의 검정색 배경
-        foreground: "#f5f5f5",        // 밝은 흰색 텍스트
-        card: "#1a1a1a",              // 진한 회색 카드
-        "card-foreground": "#f5f5f5", // 밝은 텍스트
-        popover: "#1a1a1a",           // 진한 회색 팝오버
-        "popover-foreground": "#f5f5f5",
-        muted: "#2a2a2a",             // 중간 회색 (비활성 배경)
-        "muted-foreground": "#a0a0a0", // 회색 텍스트
-        accent: "#d97706",            // amber-600 (차분한 오렌지)
-        "accent-foreground": "#ffffff",
-        destructive: "#ef4444",       // 빨간색 (에러)
-        "destructive-foreground": "#ffffff",
-        border: "#2a2a2a",            // 진한 회색 테두리
-        input: "#1a1a1a",             // 진한 회색 입력 필드
-        ring: "#d97706",              // amber-600 포커스 링
-        primary: "#d97706",           // amber-600 주색
-        "primary-foreground": "#ffffff",
-        secondary: "#b45309",         // amber-700 (진한 오렌지)
-        "secondary-foreground": "#ffffff",
+        // CSS 변수 기반의 시맨틱 색상 (Figma 적용 용이)
+        primary: "hsl(var(--color-primary) / <alpha-value>)",
+        "primary-foreground": "hsl(var(--color-primary-foreground) / <alpha-value>)",
+        secondary: "hsl(var(--color-secondary) / <alpha-value>)",
+        "secondary-foreground": "hsl(var(--color-secondary-foreground) / <alpha-value>)",
+        accent: "hsl(var(--color-accent) / <alpha-value>)",
+        "accent-foreground": "hsl(var(--color-accent-foreground) / <alpha-value>)",
+        success: "hsl(var(--color-success) / <alpha-value>)",
+        warning: "hsl(var(--color-warning) / <alpha-value>)",
+        destructive: "hsl(var(--color-destructive) / <alpha-value>)",
+        "destructive-foreground": "hsl(var(--color-destructive-foreground) / <alpha-value>)",
+        muted: "hsl(var(--color-muted) / <alpha-value>)",
+        "muted-foreground": "hsl(var(--color-muted-foreground) / <alpha-value>)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -37,8 +29,8 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...defaultTheme.fontFamily.sans],
-        mono: ["var(--font-geist-mono)", ...defaultTheme.fontFamily.mono],
+        sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
+        mono: ["var(--font-mono)", ...defaultTheme.fontFamily.mono],
       },
       keyframes: {
         "accordion-down": {
@@ -53,6 +45,13 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      spacing: {
+        xs: "0.25rem",
+        sm: "0.5rem",
+        md: "1rem",
+        lg: "1.5rem",
+        xl: "2rem",
       },
     },
   },

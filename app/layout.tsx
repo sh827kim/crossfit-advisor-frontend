@@ -1,45 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { AppProvider } from "@/app/context/AppContext";
+import { Header } from "@/app/components/Header";
 
 export const metadata: Metadata = {
-  title: "또와드 - AI 기반 Crossfit 보강운동 추천",
-  description: "WOD 분석 후 맞춤형 보강운동을 추천하는 AI 서비스. 당신의 약점을 파악하고 최적의 운동을 제안합니다.",
-  applicationName: "또와드",
+  title: "애프터와드 - 보강운동 추천",
+  description: "Crossfit WOD 후 맞춤형 보강운동을 추천하는 앱",
+  applicationName: "애프터와드",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "또와드",
+    statusBarStyle: "black-translucent",
+    title: "애프터와드",
   },
   formatDetection: {
     telephone: false,
   },
-  manifest: "/manifest.json",
-  openGraph: {
-    type: "website",
-    siteName: "또와드",
-    title: "또와드 - AI 기반 Crossfit 보강운동 추천",
-    description: "WOD 분석 후 맞춤형 보강운동을 추천하는 AI 서비스",
-  },
-  twitter: {
-    card: "summary",
-    title: "또와드 - AI 기반 Crossfit 보강운동 추천",
-    description: "WOD 분석 후 맞춤형 보강운동을 추천하는 AI 서비스",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#d97706",
+  themeColor: "#0f172a",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -55,12 +40,17 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="bg-gray-100 font-sans" style={{ fontFamily: "'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif" }}>
+        <AppProvider>
+          <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
+            <Header />
+            {children}
+          </div>
+        </AppProvider>
       </body>
     </html>
   );

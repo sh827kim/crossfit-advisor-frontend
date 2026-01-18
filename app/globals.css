@@ -2,37 +2,72 @@
 
 @layer base {
   :root {
-    --radius: 0.5rem;
-    color-scheme: dark;
+    /* 기본 레이아웃 토큰 */
+    --radius: 1rem;
+
+    /* 폰트 토큰 */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+
+    /* 현재 파란색 계열 색상 (Figma 디자인 적용 시 수정) */
+    --color-primary: 220 90% 56%; /* blue-600 */
+    --color-primary-foreground: 0 0% 100%; /* white */
+
+    --color-secondary: 215 20% 45%; /* slate-600 */
+    --color-secondary-foreground: 0 0% 100%; /* white */
+
+    --color-accent: 142 76% 36%; /* green-600 */
+    --color-accent-foreground: 0 0% 100%; /* white */
+
+    --color-success: 142 76% 36%; /* green-600 */
+    --color-warning: 39 84% 58%; /* amber-500 */
+    --color-destructive: 0 84% 60%; /* red-500 */
+    --color-destructive-foreground: 0 0% 100%; /* white */
+
+    --color-muted: 220 14% 96%; /* slate-100 */
+    --color-muted-foreground: 215 20% 65%; /* slate-400 */
   }
 
-  html {
-    color-scheme: dark;
+  /* 다크 모드 (향후 지원) */
+  [data-theme="dark"] {
+    --color-primary: 220 90% 56%;
+    --color-primary-foreground: 0 0% 100%;
+
+    --color-secondary: 215 20% 45%;
+    --color-secondary-foreground: 0 0% 100%;
+
+    --color-accent: 142 76% 36%;
+    --color-accent-foreground: 0 0% 100%;
+
+    --color-success: 142 76% 36%;
+    --color-warning: 39 84% 58%;
+    --color-destructive: 0 84% 60%;
+    --color-destructive-foreground: 0 0% 100%;
+
+    --color-muted: 220 14% 96%;
+    --color-muted-foreground: 215 20% 65%;
   }
 
-  body {
-    background-color: #0f0f0f;
-    color: #f5f5f5;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  * {
-    border-color: #2a2a2a;
-  }
-
-  /* 텍스트 선택 스타일 - 다크톤 하이라이트 */
+  /* 텍스트 선택 스타일 */
   ::selection {
-    background-color: #3a3a3a;
-    color: #d97706;
+    background-color: hsl(var(--color-primary));
+    color: hsl(var(--color-primary-foreground));
   }
 
-  input::selection {
-    background-color: #3a3a3a;
-    color: #d97706;
-  }
-
+  input::selection,
   textarea::selection {
-    background-color: #3a3a3a;
-    color: #d97706;
+    background-color: hsl(var(--color-primary));
+    color: hsl(var(--color-primary-foreground));
+  }
+
+  /* 기본 body 스타일 */
+  body {
+    @apply bg-white text-slate-800 antialiased;
+  }
+
+  /* 공통 포커스 스타일 */
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--color-primary));
   }
 }
