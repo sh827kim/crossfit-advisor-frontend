@@ -1,5 +1,5 @@
 // Service Worker for PWA
-const CACHE_NAME = 'afterword-v1';
+const CACHE_NAME = 'afterwod-v1';
 const urlsToCache = [
   '/',
   '/manifest.json',
