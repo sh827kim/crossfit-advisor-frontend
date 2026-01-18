@@ -6,17 +6,18 @@ import { useApp } from '@/app/context/AppContext';
  * PWA 종료 팝업
  */
 export function ExitPopup() {
-  const { showExitPopup, setShowExitPopup } = useApp();
+  const { showExitPopup, setShowExitPopup, setForceExit } = useApp();
 
   const handleExit = () => {
-    // PWA 앱 종료 (메인 화면으로 돌아감)
-    const nav = window.navigator as any;
-    if (nav.app && nav.app.exitApp) {
-      nav.app.exitApp();
-    } else {
-      // 일반 웹에서는 현재 탭 종료 불가능하므로 팝업 닫음
-      setShowExitPopup(false);
-    }
+    // PWA 앱 종료
+    // 강제 종료 상태 활성화
+    setForceExit(true);
+    setShowExitPopup(false);
+
+    // 뒤로가기 수행
+    setTimeout(() => {
+      window.history.back();
+    }, 0);
   };
 
   const handleCancel = () => {
