@@ -1,9 +1,11 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useApp } from '@/app/context/AppContext';
 
 export function Header() {
   const router = useRouter();
+  const { userNickname, userProfileImage } = useApp();
 
   return (
     <header className="h-16 flex justify-between items-center px-6 bg-white z-20 sticky top-0 border-b border-gray-50">
@@ -13,7 +15,7 @@ export function Header() {
       >
         <i className="fa-solid fa-dumbbell text-blue-600 mr-2.5"></i>애프터와드
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         <button
           onClick={() => router.push('/history')}
           className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition"
@@ -23,10 +25,23 @@ export function Header() {
         </button>
         <button
           onClick={() => router.push('/profile')}
-          className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition relative"
+          className="flex items-center gap-2 hover:opacity-80 transition"
           title="프로필"
         >
-          <i className="fa-solid fa-user text-lg"></i>
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-bold border border-blue-200 overflow-hidden flex-shrink-0">
+            {userProfileImage ? (
+              <img
+                src={userProfileImage}
+                alt="프로필"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <i className="fa-solid fa-user text-lg"></i>
+            )}
+          </div>
+          <span className="text-sm font-bold text-slate-700 max-w-20 truncate hidden sm:inline">
+            {userNickname}
+          </span>
         </button>
       </div>
     </header>
