@@ -84,27 +84,48 @@ export function WodInputSection() {
     <div className="mb-8">
       {/* 검색 입력 */}
       <div className="relative mb-6 z-30">
-        <div className="flex gap-2">
+        <div className="flex flex-nowrap items-stretch gap-2">
           <input
             type="text"
             placeholder="운동 검색 (초성: ㅅㄴㅊ)"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onFocus={() => searchInput && setShowAutocomplete(true)}
-            className="flex-grow bg-white border border-gray-200 rounded-xl p-4 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 font-bold text-slate-700 placeholder-gray-300 transition"
             autoComplete="off"
+            className="
+              flex-grow min-w-0
+              bg-white border border-gray-200 rounded-xl
+              px-4 py-4
+              text-sm font-bold text-slate-700
+              placeholder-gray-300
+              focus:outline-none focus:border-blue-500
+              focus:ring-2 focus:ring-blue-100
+              transition
+            "
           />
+
           <button
             onClick={() => {
               if (searchInput.trim()) {
-                // 정확히 일치하는 운동이 있으면 추가
-                const found = allMovements.find(m => m.name === searchInput);
+                const found = allMovements.find(
+                  (m) => m.name === searchInput
+                );
                 if (found) {
                   handleAddMovement(found);
                 }
               }
             }}
-            className="bg-slate-800 text-white px-5 rounded-xl text-sm font-bold hover:bg-slate-700 transition shadow-md"
+            className="
+              shrink-0
+              bg-slate-800 text-white
+              px-3 sm:px-5
+              py-4
+              rounded-xl
+              text-sm font-bold
+              hover:bg-slate-700
+              transition shadow-md
+              whitespace-nowrap
+            "
           >
             추가
           </button>
@@ -112,12 +133,23 @@ export function WodInputSection() {
 
         {/* 자동완성 리스트 */}
         {showAutocomplete && filteredMovements.length > 0 && (
-          <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-2xl shadow-lg z-50 max-h-56 overflow-y-auto">
-            {filteredMovements.map(movement => (
+          <div className="
+            absolute top-full left-0 right-0
+            bg-white border border-gray-200
+            rounded-b-2xl shadow-lg
+            z-50 max-h-56 overflow-y-auto
+          ">
+            {filteredMovements.map((movement) => (
               <div
                 key={movement.id}
                 onClick={() => handleAddMovement(movement)}
-                className="px-4 py-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 text-sm text-slate-700"
+                className="
+                  px-4 py-3
+                  border-b border-gray-100
+                  cursor-pointer
+                  hover:bg-gray-50
+                  text-sm text-slate-700
+                "
               >
                 {movement.name}
               </div>
@@ -125,6 +157,7 @@ export function WodInputSection() {
           </div>
         )}
       </div>
+
 
       {/* 자주 나오는 운동 */}
       {frequentMovements.length > 0 && (
