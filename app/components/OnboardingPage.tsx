@@ -29,6 +29,11 @@ export function OnboardingPage() {
     }
   }, [hasVisited, router]);
 
+  // userProfileImage 변경 감지
+  useEffect(() => {
+    setProfileImage(userProfileImage);
+  }, [userProfileImage]);
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -78,9 +83,9 @@ export function OnboardingPage() {
           <div className="flex justify-center mb-6">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="relative group"
+              className="group"
             >
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-blue-300 flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 transition"
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-blue-300 flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 group-hover:brightness-75 transition"
               >
                 {profileImage ? (
                   <img
@@ -95,7 +100,6 @@ export function OnboardingPage() {
                   </div>
                 )}
               </div>
-              <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-20 transition"></div>
             </button>
             <input
               ref={fileInputRef}

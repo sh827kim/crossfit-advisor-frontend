@@ -66,9 +66,9 @@ export function ProfilePage() {
       <div className="bg-white rounded-3xl p-8 shadow-lg shadow-gray-100 text-center border border-gray-50 flex-grow flex flex-col items-center justify-center">
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="relative group"
+          className="group"
         >
-          <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-blue-600 border-4 border-white shadow-sm overflow-hidden cursor-pointer group-hover:border-blue-600 transition">
+          <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-blue-600 border-4 border-white shadow-sm overflow-hidden cursor-pointer group-hover:border-blue-600 group-hover:brightness-75 transition">
             {userProfileImage ? (
               <img
                 src={userProfileImage}
@@ -79,8 +79,7 @@ export function ProfilePage() {
               <i className="fa-solid fa-user-astronaut"></i>
             )}
           </div>
-          <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-20 transition mx-auto w-24 h-24 mt-4"></div>
-          <div className="text-xs text-slate-400 text-center group-hover:text-blue-600 transition font-medium">
+          <div className="text-xs text-slate-400 text-center group-hover:text-blue-600 transition font-medium mt-2">
             사진 변경
           </div>
         </button>
