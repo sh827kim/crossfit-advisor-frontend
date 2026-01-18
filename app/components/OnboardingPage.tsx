@@ -163,8 +163,8 @@ export function OnboardingPage() {
           {/* 소개 문구 */}
           <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6">
             <p className="text-sm text-slate-700 font-medium">
-              <span className="text-blue-600 font-bold"> 맞춤형 계획</span> →
-              <span className="text-blue-600 font-bold"> 실시간 진행</span> →
+              <span className="text-blue-600 font-bold"> 계획 추천</span> →
+              <span className="text-blue-600 font-bold"> 운동 진행</span> →
               <span className="text-blue-600 font-bold"> 기록 저장</span>
             </p>
             <p className="text-xs text-slate-500 mt-2">
