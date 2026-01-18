@@ -61,8 +61,8 @@ export function ProfilePage() {
     // AppContext 상태 초기화 (localStorage도 함께 초기화됨)
     resetAllData();
 
-    // 온보딩 페이지로 이동
-    router.push('/onboarding');
+    // 온보딩 페이지로 이동 (replace로 현재 history 교체)
+    router.replace('/onboarding');
   };
 
   return (

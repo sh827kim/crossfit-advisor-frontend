@@ -18,11 +18,20 @@ export function OnboardingPage() {
   const fullTitle = '애프터와드';
   const fullSubtitle = '당신을 위한 보강운동 추천 서비스';
 
+  // 온보딩 페이지 도착 시 history 정리
+  useEffect(() => {
+    if (window.location.pathname === '/onboarding') {
+      // 현재 항목을 onboarding으로 설정 (이전 모든 히스토리 제거)
+      window.history.replaceState({ page: 'onboarding' }, '', '/onboarding');
+      // 뒤로가기 차단을 위해 추가 상태 추가
+      window.history.pushState({ page: 'onboarding-guard' }, '', '/onboarding');
+    }
+  }, []);
+
   // 텍스트 애니메이션 (한글자씩 나타나기)
   useEffect(() => {
     let titleIndex = 0;
     let subtitleIndex = 0;
-    let animating = true;
 
     const titleTimer = setInterval(() => {
       if (titleIndex < fullTitle.length) {
@@ -32,7 +41,6 @@ export function OnboardingPage() {
         setSubtitleText(fullSubtitle.slice(0, subtitleIndex + 1));
         subtitleIndex++;
       } else {
-        animating = false;
         clearInterval(titleTimer);
       }
     }, 50); // 50ms마다 한글자씩 나타나기
