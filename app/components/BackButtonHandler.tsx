@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 
@@ -12,38 +11,39 @@ import { useApp } from '@/app/context/AppContext';
  * 3. 나머지 화면: 메인페이지로 이동
  */
 export function BackButtonHandler() {
-  const pathname = usePathname();
   const router = useRouter();
   const { hasVisited } = useApp();
+  const isInitialized = useRef(false);
 
   useEffect(() => {
     const handlePopState = () => {
-      // 첫 랜딩 페이지: onboarding 중 뒤로가기 → 앱 종료
-      if (!hasVisited) {
-        window.history.back();
+      // 현재 경로 확인
+      const currentPath = window.location.pathname;
+
+      // 첫 랜딩 페이지 또는 메인 페이지에서 뒤로가기 → 앱 종료 방지
+      if (!hasVisited || currentPath === '/') {
+        // 히스토리에 현재 경로 추가 (뒤로가기 방지)
+        window.history.pushState(null, '', currentPath);
         return;
       }
 
-      // 메인 페이지: 뒤로가기 → 앱 종료
-      if (pathname === '/') {
-        window.history.back();
-        return;
-      }
-
-      // 나머지 페이지: 메인페이지로 이동
+      // 나머지 페이지에서 뒤로가기 → 메인페이지로 이동
       router.push('/');
     };
 
     // 뒤로가기 감지
     window.addEventListener('popstate', handlePopState);
 
-    // 초기 히스토리 상태 설정
-    window.history.pushState(null, '', window.location.pathname);
+    // 초기 히스토리 상태 설정 (한 번만)
+    if (!isInitialized.current) {
+      window.history.pushState(null, '', window.location.pathname);
+      isInitialized.current = true;
+    }
 
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [pathname, hasVisited, router]);
+  }, [hasVisited, router]);
 
   return null;
 }

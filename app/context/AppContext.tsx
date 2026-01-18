@@ -371,15 +371,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const resetAllData = useCallback(() => {
+    // localStorage 먼저 삭제
+    localStorage.clear();
+
     // 모든 상태 초기화
     setHasVisited(false);
     setUserNickname(generateRandomNickname());
     setUserProfileImage(null);
     setWorkoutHistory([]);
     resetInputState();
-
-    // localStorage 전체 삭제
-    localStorage.clear();
+    setShowExitPopup(false);
+    setForceExit(false);
   }, [resetInputState]);
 
   return (
