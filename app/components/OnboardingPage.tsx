@@ -7,7 +7,7 @@ import { compressImage } from '@/app/lib/image-utils';
 
 export function OnboardingPage() {
   const router = useRouter();
-  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage } = useApp();
+  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
@@ -19,15 +19,22 @@ export function OnboardingPage() {
   const fullTitle = '애프터와드';
   const fullSubtitle = '당신을 위한 보강운동 추천 서비스';
 
-  // 온보딩 페이지 도착 시 history 정리
+  // 온보딩 페이지 도착 시 history 정리 및 재방문자 리다이렉트
   useEffect(() => {
+    // 재방문자는 메인 페이지로 리다이렉트
+    if (hasVisited === true) {
+      router.replace('/');
+      return;
+    }
+
+    // 첫 방문자는 history 정리
     if (window.location.pathname === '/onboarding') {
       // 현재 항목을 onboarding으로 설정 (이전 모든 히스토리 제거)
       window.history.replaceState({ page: 'onboarding' }, '', '/onboarding');
       // 뒤로가기 차단을 위해 추가 상태 추가
       window.history.pushState({ page: 'onboarding-guard' }, '', '/onboarding');
     }
-  }, []);
+  }, [hasVisited, router]);
 
   // 텍스트 애니메이션 (프로필 설정 화면에서만 시작)
   useEffect(() => {
@@ -55,17 +62,9 @@ export function OnboardingPage() {
     return () => clearInterval(titleTimer);
   }, [showProfile]);
 
-  // 로딩 시뮬레이션
+  // 온보딩 화면 로딩 시뮬레이션
   useEffect(() => {
-    if (hasVisited === true) {
-      // 재방문자: 환영메시지 표시
-      setShowContent(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-        setTimeout(() => router.push('/'), 500); // 페이드아웃 후 전환
-      }, 2500); // 2.5초 동안 환영메시지 표시
-      return () => clearTimeout(timer);
-    } else if (hasVisited === false) {
+    if (hasVisited === false) {
       // 첫 방문자: 스플래시 화면 표시
       setShowContent(true);
       // 2초 후 프로필 설정 화면으로 전환
@@ -74,7 +73,7 @@ export function OnboardingPage() {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [hasVisited, router]);
+  }, [hasVisited]);
 
   // userProfileImage 변경 감지
   useEffect(() => {
@@ -107,9 +106,13 @@ export function OnboardingPage() {
       setUserProfileImage(profileImage);
     }
 
-    // localStorage에 직접 저장하고 바로 라우팅 (AppContext 상태 변경 대기하지 않음)
-    localStorage.setItem('cf_has_visited', 'true');
-    router.push('/');
+    // AppContext와 localStorage 모두 업데이트
+    markAsVisited();
+
+    // 상태 업데이트 완료 후 라우팅
+    setTimeout(() => {
+      router.push('/');
+    }, 50);
   };
 
   // 첫 방문: 온보딩 페이지
@@ -288,27 +291,6 @@ export function OnboardingPage() {
     );
   }
 
-  // 재방문: 환영 메시지
-  return (
-    <div className={`fixed inset-0 bg-white flex items-center justify-center transition-all duration-500 ${
-      isLoading ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none'
-    }`}>
-      <div className="text-center px-6">
-        <div className="mb-6">
-          <div className="text-6xl mb-4 animate-bounce">
-            <i className="fa-solid fa-fire text-orange-500"></i>
-          </div>
-          <h2 className="text-3xl font-black text-slate-800 mb-2">
-            다시 오셨네요!
-          </h2>
-          <p className="text-slate-500 font-medium">
-            {userNickname}님, 환영합니다! 🎉
-          </p>
-        </div>
-        <div className="mt-8 text-sm text-slate-400 font-medium">
-          조금만 기다려주세요...
-        </div>
-      </div>
-    </div>
-  );
+  // 재방문자는 렌더링하지 않음 (메인 페이지로 자동 리다이렉트됨)
+  return null;
 }
