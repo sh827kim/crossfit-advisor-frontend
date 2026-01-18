@@ -7,9 +7,10 @@ import { compressImage } from '@/app/lib/image-utils';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage } = useApp();
+  const { workoutHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage, resetAllData } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
+  const [showResetPopup, setShowResetPopup] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 현재 월의 기록 개수 계산
@@ -52,6 +53,12 @@ export function ProfilePage() {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const confirmReset = () => {
+    resetAllData();
+    setShowResetPopup(false);
+    router.push('/');
   };
 
   return (
@@ -141,7 +148,42 @@ export function ProfilePage() {
         {workoutHistory.length === 0 && (
           <p className="text-sm text-slate-400">아직 기록된 운동이 없습니다.</p>
         )}
+
+        <div className="mt-auto pt-6 border-t border-gray-100 w-full">
+          <button
+            onClick={() => setShowResetPopup(true)}
+            className="text-xs font-medium text-slate-400 hover:text-red-500 transition"
+          >
+            <i className="fa-solid fa-trash mr-1"></i> 데이터 초기화
+          </button>
+        </div>
       </div>
+
+      {/* 초기화 확인 팝업 */}
+      {showResetPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6">
+          <div className="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full">
+            <h3 className="text-lg font-black text-slate-800 mb-2 text-center">정말로 초기화 하시겠어요?</h3>
+            <p className="text-sm text-slate-500 text-center mb-6">
+              지금까지의 운동 기록과 닉네임, 프로필 정보가 모두 사라집니다.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowResetPopup(false)}
+                className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 rounded-2xl transition"
+              >
+                취소
+              </button>
+              <button
+                onClick={confirmReset}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-2xl transition"
+              >
+                초기화
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

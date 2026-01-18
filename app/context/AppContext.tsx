@@ -56,6 +56,7 @@ interface AppContextType {
 
   // 리셋
   resetInputState: () => void;
+  resetAllData: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -167,6 +168,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('cf_has_visited', 'true');
   }, []);
 
+  const resetAllData = useCallback(() => {
+    // 모든 상태 초기화
+    setHasVisited(false);
+    setUserNickname('사용자');
+    setUserProfileImage(null);
+    setWorkoutHistory([]);
+    resetInputState();
+
+    // localStorage 전체 삭제
+    localStorage.clear();
+  }, [resetInputState]);
+
   return (
     <AppContext.Provider
       value={{
@@ -195,7 +208,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setUserNickname,
         setUserProfileImage,
         markAsVisited,
-        resetInputState
+        resetInputState,
+        resetAllData
       }}
     >
       {children}
