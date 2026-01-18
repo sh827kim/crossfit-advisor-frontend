@@ -56,17 +56,13 @@ export function ProfilePage() {
   };
 
   const confirmReset = () => {
-    // localStorage 초기화
-    localStorage.clear();
-
-    // hasVisited를 명시적으로 false로 설정해서
-    // 페이지 로드 시 초기화면(OnboardingPage)으로 표시되도록
-    localStorage.setItem('cf_has_visited', 'false');
-
     setShowResetPopup(false);
 
-    // 바로 라우팅
-    router.push('/');
+    // AppContext 상태 초기화 (localStorage도 함께 초기화됨)
+    resetAllData();
+
+    // 온보딩 페이지로 이동
+    router.push('/onboarding');
   };
 
   return (
