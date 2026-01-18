@@ -111,7 +111,7 @@ export function ResultPage() {
   const confirmExit = () => {
     setShowConfirmPopup(false);
     resetInputState();
-    router.push('/');
+    router.replace('/');
   };
 
   const cancelExit = () => {

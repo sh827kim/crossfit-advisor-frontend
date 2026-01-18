@@ -56,18 +56,23 @@ export function ProfilePage() {
   };
 
   const confirmReset = () => {
-    // localStorage만 초기화하고 상태 업데이트 없이 바로 라우팅
-    // 이렇게 하면 UI에 중간 상태가 안 보이고 빠르게 로드됨
+    // localStorage 초기화
     localStorage.clear();
+
+    // hasVisited를 명시적으로 false로 설정해서
+    // 페이지 로드 시 초기화면(OnboardingPage)으로 표시되도록
+    localStorage.setItem('cf_has_visited', 'false');
+
     setShowResetPopup(false);
-    // 바로 라우팅 (페이지 새로 로드 시 초기화된 상태로 시작)
+
+    // 바로 라우팅
     router.push('/');
   };
 
   return (
     <main className="px-6 pb-6 flex-grow flex flex-col">
       <button
-        onClick={() => router.push('/')}
+        onClick={() => router.replace('/')}
         className="text-sm font-bold text-slate-400 mb-6 flex items-center w-fit hover:text-slate-800 transition mt-6"
       >
         <i className="fa-solid fa-arrow-left mr-2"></i> 메인으로

@@ -16,9 +16,12 @@ export default function HomePage() {
 
   // 메인 페이지 도착 시 히스토리 초기화
   useEffect(() => {
-    if (isClient) {
-      // 현재 경로를 히스토리 스택의 맨 아래로 설정 (이전 히스토리 제거)
-      window.history.replaceState(null, '', '/');
+    if (isClient && window.location.pathname === '/') {
+      // 메인 페이지의 히스토리를 깔끔하게 유지
+      // 1. 현재 항목을 메인으로 설정 (이전 모든 히스토리 제거)
+      window.history.replaceState({ page: 'home' }, '', '/');
+      // 2. 뒤로가기 차단을 위해 추가 상태 추가
+      window.history.pushState({ page: 'home-guard' }, '', '/');
     }
   }, [isClient]);
 
