@@ -6,16 +6,15 @@ import { useApp } from '@/app/context/AppContext';
 
 export function HistoryPage() {
   const router = useRouter();
-  const { workoutHistory, isLoadingHistory } = useApp();
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [today] = useState(() => new Date());
+  const { workoutHistory, isLoadingHistory, historyError } = useApp();
 
-  // 초기 로드 시 오늘 날짜를 선택
-  useEffect(() => {
-    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    setSelectedDate(todayStr);
-  }, [today]);
+  // 오늘 날짜를 초기값으로 설정 (lazy initialization)
+  const [today] = useState(() => new Date());
+  const [selectedDate, setSelectedDate] = useState<string>(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  });
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -58,7 +57,7 @@ export function HistoryPage() {
     'PART': '타겟'
   };
 
-  const selectedDateRecords = selectedDate ? getRecordsForDate(selectedDate) : [];
+  const selectedDateRecords = getRecordsForDate(selectedDate);
 
   // 로딩 중일 때
   if (isLoadingHistory) {
@@ -71,6 +70,18 @@ export function HistoryPage() {
 
   return (
     <main className="px-6 pb-6 flex-grow flex flex-col">
+      {/* 에러 메시지 */}
+      {historyError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 mt-6">
+          <p className="text-sm text-red-700 mb-2">{historyError}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="text-xs text-red-600 underline hover:text-red-800"
+          >
+            다시 시도
+          </button>
+        </div>
+      )}
       <div className="h-16 flex items-center mb-2 mt-6">
         <button
           onClick={() => router.replace('/')}
@@ -128,11 +139,7 @@ export function HistoryPage() {
 
       {/* 기록 상세 */}
       <div className="bg-slate-50 rounded-2xl p-6 flex-grow overflow-y-auto border border-slate-100">
-        {!selectedDate ? (
-          <p className="text-center text-slate-400 text-sm py-8">
-            날짜를 선택하여 기록을 확인하세요.
-          </p>
-        ) : selectedDateRecords.length === 0 ? (
+        {selectedDateRecords.length === 0 ? (
           <p className="text-center text-slate-400 text-sm py-8">
             이 날짜에 기록된 운동이 없습니다.
           </p>

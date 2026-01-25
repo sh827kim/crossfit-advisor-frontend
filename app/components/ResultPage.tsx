@@ -111,8 +111,13 @@ export function ResultPage() {
       exercises: exercises.map(ex => `${ex.name} ${ex.currentMinReps ? `${ex.currentMinReps}-${ex.currentMaxReps}` : ''}`)
     };
 
-    await addWorkoutRecord(record);
-    setShowSuccessPopup(true);
+    try {
+      await addWorkoutRecord(record);
+      setShowSuccessPopup(true);
+    } catch (error) {
+      console.error('Save record error:', error);
+      alert('운동 기록 저장에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handleSuccessConfirm = () => {

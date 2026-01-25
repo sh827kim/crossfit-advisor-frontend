@@ -7,6 +7,7 @@ import { WodInputSection } from '@/app/components/input-sections/WodInputSection
 import { GoalInputSection } from '@/app/components/input-sections/GoalInputSection';
 import { PartInputSection } from '@/app/components/input-sections/PartInputSection';
 import { TimeSelector } from '@/app/components/input-sections/TimeSelector';
+import type { WorkoutGenerateWodRequest, WorkoutGenerateGoalRequest, WorkoutGeneratePartRequest } from '@/app/lib/types/workout.types';
 
 const MODE_TITLES: Record<'wod' | 'goal' | 'part', { title: string; description: string }> = {
   wod: {
@@ -68,13 +69,13 @@ export default function InputPage() {
     setError(null);
 
     try {
-      let requestBody: any;
+      let requestBody: WorkoutGenerateWodRequest | WorkoutGenerateGoalRequest | WorkoutGeneratePartRequest;
 
       if (currentMode === 'wod') {
         requestBody = {
           duration: totalTime,
           wodMovementIds: wodList.map(m => m.id)
-        };
+        } satisfies WorkoutGenerateWodRequest;
       } else if (currentMode === 'goal') {
         if (!selectedGoal) {
           setError('목표를 선택해주세요.');
@@ -84,7 +85,7 @@ export default function InputPage() {
         requestBody = {
           duration: totalTime,
           goalMovementId: selectedGoal.id
-        };
+        } satisfies WorkoutGenerateGoalRequest;
       } else {
         // part mode
         if (selectedParts.length === 0) {
@@ -95,7 +96,7 @@ export default function InputPage() {
         requestBody = {
           duration: totalTime,
           targetMuscleGroups: selectedParts
-        };
+        } satisfies WorkoutGeneratePartRequest;
       }
 
       const endpoint = `/api/v1/workouts/generate/${currentMode}`;

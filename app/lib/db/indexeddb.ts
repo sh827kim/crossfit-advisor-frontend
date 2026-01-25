@@ -20,6 +20,7 @@ export interface WorkoutRecordDB {
 const DB_NAME = 'AfterWOD_DB';
 const DB_VERSION = 1;
 const STORE_NAME = 'workout_records';
+const MAX_MONTHLY_RECORDS = 100; // 당월 최대 보관 기록 수
 
 /**
  * IndexedDB 데이터베이스 연결 및 스키마 생성
@@ -216,13 +217,13 @@ export async function cleanupMonthlyRecords(): Promise<void> {
     }
   });
 
-  // 이번달 기록이 100건 초과하면 오래된 기록 삭제
-  if (thisMonthRecords.length > 100) {
+  // 이번달 기록이 MAX_MONTHLY_RECORDS건 초과하면 오래된 기록 삭제
+  if (thisMonthRecords.length > MAX_MONTHLY_RECORDS) {
     // createdAt 기준 내림차순 정렬 (최신순)
     thisMonthRecords.sort((a, b) => b.createdAt - a.createdAt);
 
-    // 100건 이후의 기록은 삭제 대상
-    for (let i = 100; i < thisMonthRecords.length; i++) {
+    // MAX_MONTHLY_RECORDS건 이후의 기록은 삭제 대상
+    for (let i = MAX_MONTHLY_RECORDS; i < thisMonthRecords.length; i++) {
       const recordId = thisMonthRecords[i].id;
       if (recordId !== undefined) {
         idsToDelete.push(recordId);
@@ -230,29 +231,26 @@ export async function cleanupMonthlyRecords(): Promise<void> {
     }
   }
 
-  // 삭제 실행
+  // 삭제 실행 (트랜잭션 최적화)
   if (idsToDelete.length > 0) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const transaction = db.transaction(STORE_NAME, 'readwrite');
       const objectStore = transaction.objectStore(STORE_NAME);
 
-      let deletedCount = 0;
-      const totalToDelete = idsToDelete.length;
-
+      // 모든 삭제 작업 예약 (트랜잭션에 일괄 추가)
       idsToDelete.forEach(id => {
-        const request = objectStore.delete(id);
-
-        request.onsuccess = () => {
-          deletedCount++;
-          if (deletedCount === totalToDelete) {
-            resolve();
-          }
-        };
-
-        request.onerror = () => {
-          reject(request.error);
-        };
+        objectStore.delete(id);
       });
+
+      // 트랜잭션 완료/에러 이벤트만 감지
+      transaction.oncomplete = () => {
+        console.log(`🗑️ ${idsToDelete.length}건의 오래된 기록을 삭제했습니다.`);
+        resolve();
+      };
+
+      transaction.onerror = () => {
+        reject(transaction.error);
+      };
     });
   }
 }
