@@ -33,7 +33,7 @@ export function Header() {
       >
         <i
           className={`fa-solid fa-dumbbell mr-2.5 ${
-            isHomePage ? 'text-blue-400' : 'text-blue-600'
+            isHomePage ? 'text-[#f43000]' : 'text-blue-600'
           }`}
         ></i>
         애프터와드
@@ -43,7 +43,7 @@ export function Header() {
           onClick={() => router.push('/history')}
           className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
             isHomePage
-              ? 'bg-gray-900 text-gray-500 hover:text-blue-400 hover:bg-gray-800'
+              ? 'bg-gray-900 text-gray-500 hover:text-[#f43000] hover:bg-gray-800'
               : 'bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50'
           }`}
           title="운동 기록"
@@ -52,10 +52,10 @@ export function Header() {
         </button>
         <button
           onClick={() => router.push('/profile')}
-          className={`w-10 h-10 rounded-full relative flex items-center justify-center text-sm font-bold overflow-hidden hover:opacity-80 transition ${
+          className={`w-10 h-10 rounded-full relative flex items-center justify-center text-sm font-bold overflow-hidden border transition ${
             isHomePage
-              ? 'bg-blue-600 text-white border border-blue-500'
-              : 'bg-blue-100 text-blue-600 border border-blue-200'
+              ? 'bg-gray-900 border-gray-700 hover:border-gray-600 hover:opacity-80'
+              : 'bg-blue-100 text-blue-600 border-blue-200 hover:opacity-80'
           }`}
           title="프로필"
         >
@@ -69,7 +69,7 @@ export function Header() {
               unoptimized
             />
           ) : (
-            <i className="fa-solid fa-user text-lg"></i>
+            <i className={`fa-solid fa-user text-lg ${isHomePage ? 'text-gray-400' : 'text-blue-600'}`}></i>
           )}
         </button>
       </div>
