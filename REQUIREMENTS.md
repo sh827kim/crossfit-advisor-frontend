@@ -1,4 +1,4 @@
-# 애프터와드 (Afterword) Frontend
+# 애프터와드 (Afterwod) Frontend
 
 Crossfit **초심자**를 위한
 보강운동 추천 및 운동 기록 관리를 제공하는 **프론트엔드 애플리케이션**이다.

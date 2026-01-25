@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
 export function OnboardingPage() {
   const router = useRouter();
-  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited } = useApp();
+  const searchParams = useSearchParams();
+  const shouldReset = searchParams.get('reset') === 'true';
+  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited, resetAllData } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
@@ -19,8 +21,26 @@ export function OnboardingPage() {
   const fullTitle = '애프터와드';
   const fullSubtitle = '당신을 위한 보강운동 추천 서비스';
 
+  // 초기화 요청 시 데이터 초기화
+  useEffect(() => {
+    if (shouldReset) {
+      // URL에서 reset 파라미터 제거
+      window.history.replaceState(null, '', '/onboarding');
+      // 모든 데이터 초기화
+      resetAllData();
+    }
+  }, [shouldReset, resetAllData]);
+
   // 온보딩 페이지 도착 시 history 정리 및 재방문자 리다이렉트
   useEffect(() => {
+    // 초기화 요청인 경우 리다이렉트하지 않음
+    if (shouldReset) {
+      // history 정리
+      window.history.replaceState({ page: 'onboarding' }, '', '/onboarding');
+      window.history.pushState({ page: 'onboarding-guard' }, '', '/onboarding');
+      return;
+    }
+
     // 재방문자는 메인 페이지로 리다이렉트
     if (hasVisited === true) {
       router.replace('/');
@@ -34,7 +54,7 @@ export function OnboardingPage() {
       // 뒤로가기 차단을 위해 추가 상태 추가
       window.history.pushState({ page: 'onboarding-guard' }, '', '/onboarding');
     }
-  }, [hasVisited, router]);
+  }, [hasVisited, router, shouldReset]);
 
   // 텍스트 애니메이션 (프로필 설정 화면에서만 시작)
   useEffect(() => {
@@ -64,8 +84,9 @@ export function OnboardingPage() {
 
   // 온보딩 화면 로딩 시뮬레이션
   useEffect(() => {
-    if (hasVisited === false) {
-      // 첫 방문자: 스플래시 화면 표시
+    // 초기화 요청이거나 첫 방문인 경우
+    if (hasVisited === false || shouldReset) {
+      // 스플래시 화면 표시
       setShowContent(true);
       // 2초 후 프로필 설정 화면으로 전환
       const timer = setTimeout(() => {
@@ -73,7 +94,7 @@ export function OnboardingPage() {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [hasVisited]);
+  }, [hasVisited, shouldReset]);
 
   // userProfileImage 변경 감지
   useEffect(() => {
@@ -115,8 +136,8 @@ export function OnboardingPage() {
     }, 50);
   };
 
-  // 첫 방문: 온보딩 페이지
-  if (!hasVisited) {
+  // 첫 방문이거나 초기화 요청: 온보딩 페이지
+  if (!hasVisited || shouldReset) {
     // 스플래시 화면
     if (!showProfile) {
       return (

@@ -7,7 +7,7 @@ import { compressImage } from '@/app/lib/image-utils';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage, resetAllData } = useApp();
+  const { workoutHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
   const [showResetPopup, setShowResetPopup] = useState(false);
@@ -58,11 +58,12 @@ export function ProfilePage() {
   const confirmReset = () => {
     setShowResetPopup(false);
 
-    // AppContext 상태 초기화 (localStorage도 함께 초기화됨)
-    resetAllData();
+    // hasVisited만 먼저 false로 설정하여 온보딩 페이지 진입 가능하게 함
+    localStorage.removeItem('cf_has_visited');
 
-    // 온보딩 페이지로 이동 (replace로 현재 history 교체)
-    router.replace('/onboarding');
+    // 온보딩 페이지로 이동 (reset 플래그 전달)
+    // 데이터 초기화는 온보딩 페이지가 로드된 후 수행됨
+    router.replace('/onboarding?reset=true');
   };
 
   return (

@@ -1,4 +1,4 @@
-# 애프터와드 (Afterword) - Crossfit 운동 기록 관리 앱
+# 애프터와드 (Afterwod) - Crossfit 운동 기록 관리 앱
 
 Crossfit 초심자들을 위한 **보강운동 추천 및 운동 기록 관리** 애플리케이션입니다.
 
