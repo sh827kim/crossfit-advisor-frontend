@@ -58,17 +58,26 @@ export async function migrateFromLocalStorage(): Promise<void> {
       exercises: string[];
     }>;
 
-    // IndexedDB에 저장 (일괄 처리)
-    const migrationPromises = oldRecords.map(record => {
-      const recordWithTimestamp: Omit<WorkoutRecordDB, 'id'> = {
-        date: record.date,
-        mode: record.mode,
-        duration: record.duration,
-        exercises: record.exercises,
-        createdAt: new Date(record.date).getTime() // 날짜를 timestamp로 변환
-      };
+    // IndexedDB에 저장 (개별 에러 처리)
+    let successCount = 0;
+    let failCount = 0;
 
-      return addWorkoutRecord(recordWithTimestamp);
+    const migrationPromises = oldRecords.map(async (record) => {
+      try {
+        const recordWithTimestamp: Omit<WorkoutRecordDB, 'id'> = {
+          date: record.date,
+          mode: record.mode,
+          duration: record.duration,
+          exercises: record.exercises,
+          createdAt: new Date(record.date).getTime() // 날짜를 timestamp로 변환
+        };
+
+        await addWorkoutRecord(recordWithTimestamp);
+        successCount++;
+      } catch (error) {
+        console.error('마이그레이션 실패:', record, error);
+        failCount++;
+      }
     });
 
     // 모든 기록이 저장될 때까지 대기
@@ -80,7 +89,11 @@ export async function migrateFromLocalStorage(): Promise<void> {
     // 마이그레이션 완료 플래그 설정
     localStorage.setItem(MIGRATION_FLAG_KEY, 'true');
 
-    console.log(`✅ 마이그레이션 완료: ${oldRecords.length}건의 기록을 IndexedDB로 이전했습니다.`);
+    if (failCount > 0) {
+      console.warn(`⚠️ 마이그레이션 일부 실패: 성공 ${successCount}건, 실패 ${failCount}건`);
+    } else {
+      console.log(`✅ 마이그레이션 완료: ${successCount}건의 기록을 IndexedDB로 이전했습니다.`);
+    }
   } catch (error) {
     console.error('❌ 마이그레이션 실패:', error);
     // 실패 시 localStorage 데이터는 유지 (다음 실행 시 재시도)

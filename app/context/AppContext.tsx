@@ -54,6 +54,7 @@ interface AppContextType {
   // 운동 기록
   workoutHistory: WorkoutRecord[];
   isLoadingHistory: boolean;
+  historyError: string | null;
   addWorkoutRecord: (record: WorkoutRecord) => Promise<void>;
 
   // 사용자 프로필
@@ -79,21 +80,113 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentPage, setCurrentPage] = useState<AppContextType['currentPage']>('home');
-  const [currentMode, setCurrentMode] = useState<AppContextType['currentMode']>(null);
 
-  const [wodList, setWodList] = useState<Movement[]>([]);
-  const [selectedGoal, setSelectedGoal] = useState<Movement | null>(null);
-  const [selectedParts, setSelectedParts] = useState<MuscleGroup[]>([]);
-  const [totalTime, setTotalTime] = useState(10);
-  const [generatedPlan, setGeneratedPlan] = useState<WorkoutPlan | null>(null);
-  const [exercises, setExercisesState] = useState<ExerciseWithStatus[]>([]);
-  const [timerSeconds, setTimerSecondsState] = useState(0);
-  const [isRunning, setIsRunningState] = useState(false);
+  // localStorage에서 초기값 로드 (lazy initialization) - 입력 상태
+  const [currentMode, setCurrentMode] = useState<AppContextType['currentMode']>(() => {
+    if (typeof window === 'undefined') return null;
+    const saved = localStorage.getItem('cf_current_mode');
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [wodList, setWodList] = useState<Movement[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const saved = localStorage.getItem('cf_wod_list');
+    try {
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [selectedGoal, setSelectedGoal] = useState<Movement | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const saved = localStorage.getItem('cf_selected_goal');
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [selectedParts, setSelectedParts] = useState<MuscleGroup[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const saved = localStorage.getItem('cf_selected_parts');
+    try {
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [totalTime, setTotalTime] = useState(() => {
+    if (typeof window === 'undefined') return 10;
+    const saved = localStorage.getItem('cf_total_time');
+    try {
+      return saved ? parseInt(saved) : 10;
+    } catch {
+      return 10;
+    }
+  });
+
+  const [generatedPlan, setGeneratedPlan] = useState<WorkoutPlan | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const saved = localStorage.getItem('cf_generated_plan');
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [exercises, setExercisesState] = useState<ExerciseWithStatus[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const saved = localStorage.getItem('cf_exercises');
+    try {
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [timerSeconds, setTimerSecondsState] = useState(() => {
+    if (typeof window === 'undefined') return 0;
+    const saved = localStorage.getItem('cf_timer_seconds');
+    try {
+      return saved ? parseInt(saved) : 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  const [isRunning, setIsRunningState] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('cf_is_running');
+    return saved === 'true';
+  });
   const [workoutHistory, setWorkoutHistory] = useState<WorkoutRecord[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
-  const [hasVisited, setHasVisited] = useState(false);
-  const [userNickname, setUserNickname] = useState(generateRandomNickname());
-  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
+  const [historyError, setHistoryError] = useState<string | null>(null);
+
+  // localStorage에서 초기값 로드 (lazy initialization)
+  const [hasVisited, setHasVisited] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('cf_has_visited') === 'true';
+  });
+
+  const [userNickname, setUserNickname] = useState(() => {
+    if (typeof window === 'undefined') return generateRandomNickname();
+    return localStorage.getItem('cf_user_nickname') || generateRandomNickname();
+  });
+
+  const [userProfileImage, setUserProfileImage] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('cf_user_profile_image');
+  });
+
   const [showExitPopup, setShowExitPopup] = useState(false);
   const [forceExit, setForceExit] = useState(false);
 
@@ -119,12 +212,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
-  // localStorage에서 데이터 로드 (초기화)
+  // 비동기 스토리지 초기화 (IndexedDB 또는 LocalStorage)
   useEffect(() => {
-    // 비동기 초기화 함수
     async function initializeStorage() {
       try {
-        // Storage Adapter 생성 (IndexedDB 또는 LocalStorage)
         const storage = await createWorkoutStorage();
         await storage.initialize(); // 마이그레이션 실행
 
@@ -133,113 +224,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         storageRef.current = storage;
         setWorkoutHistory(records);
-        setIsLoadingHistory(false);
+        setHistoryError(null);
       } catch (error) {
         console.error('Failed to initialize storage:', error);
+        setHistoryError('운동 기록을 불러오지 못했습니다.');
+      } finally {
         setIsLoadingHistory(false);
       }
     }
 
-    // 방문 이력, 닉네임, 프로필 사진 로드
-    const savedHasVisited = localStorage.getItem('cf_has_visited');
-    const savedNickname = localStorage.getItem('cf_user_nickname');
-    const savedProfileImage = localStorage.getItem('cf_user_profile_image');
-
-    if (savedHasVisited === 'true') {
-      setHasVisited(true);
-      if (savedNickname) setUserNickname(savedNickname);
-      if (savedProfileImage) setUserProfileImage(savedProfileImage);
-    } else {
-      setHasVisited(false);
-    }
-
-    // 비동기 스토리지 초기화
     initializeStorage();
-
-    // 생성된 계획 로드
-    const savedPlan = localStorage.getItem('cf_generated_plan');
-    if (savedPlan) {
-      try {
-        setGeneratedPlan(JSON.parse(savedPlan));
-      } catch (error) {
-        console.error('Failed to load generated plan:', error);
-      }
-    }
-
-    // 운동 상태 로드
-    const savedExercises = localStorage.getItem('cf_exercises');
-    if (savedExercises) {
-      try {
-        setExercisesState(JSON.parse(savedExercises));
-      } catch (error) {
-        console.error('Failed to load exercises:', error);
-      }
-    }
-
-    // 타이머 상태 로드
-    const savedTimerSeconds = localStorage.getItem('cf_timer_seconds');
-    if (savedTimerSeconds) {
-      try {
-        setTimerSecondsState(parseInt(savedTimerSeconds));
-      } catch (error) {
-        console.error('Failed to load timer seconds:', error);
-      }
-    }
-
-    const savedIsRunning = localStorage.getItem('cf_is_running');
-    if (savedIsRunning) {
-      try {
-        setIsRunningState(savedIsRunning === 'true');
-      } catch (error) {
-        console.error('Failed to load is running:', error);
-      }
-    }
-
-    // 입력 상태 로드 (모드, WOD 목록, 목표, 부위, 시간)
-    const savedCurrentMode = localStorage.getItem('cf_current_mode');
-    if (savedCurrentMode) {
-      try {
-        setCurrentMode(JSON.parse(savedCurrentMode));
-      } catch (error) {
-        console.error('Failed to load current mode:', error);
-      }
-    }
-
-    const savedWodList = localStorage.getItem('cf_wod_list');
-    if (savedWodList) {
-      try {
-        setWodList(JSON.parse(savedWodList));
-      } catch (error) {
-        console.error('Failed to load wod list:', error);
-      }
-    }
-
-    const savedSelectedGoal = localStorage.getItem('cf_selected_goal');
-    if (savedSelectedGoal) {
-      try {
-        setSelectedGoal(JSON.parse(savedSelectedGoal));
-      } catch (error) {
-        console.error('Failed to load selected goal:', error);
-      }
-    }
-
-    const savedSelectedParts = localStorage.getItem('cf_selected_parts');
-    if (savedSelectedParts) {
-      try {
-        setSelectedParts(JSON.parse(savedSelectedParts));
-      } catch (error) {
-        console.error('Failed to load selected parts:', error);
-      }
-    }
-
-    const savedTotalTime = localStorage.getItem('cf_total_time');
-    if (savedTotalTime) {
-      try {
-        setTotalTime(parseInt(savedTotalTime));
-      } catch (error) {
-        console.error('Failed to load total time:', error);
-      }
-    }
   }, []);
 
   // 닉네임 저장
@@ -357,18 +351,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const addWorkoutRecord = useCallback(async (record: WorkoutRecord) => {
     if (!storageRef.current) {
-      console.error('Storage adapter가 초기화되지 않았습니다.');
-      return;
+      const errorMsg = 'Storage adapter가 초기화되지 않았습니다.';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
     }
 
     try {
       // Storage Adapter를 통해 저장 (IndexedDB 또는 LocalStorage)
       await storageRef.current.add(record);
 
-      // 상태 업데이트
-      setWorkoutHistory(prev => [...prev, record]);
+      // IndexedDB에 저장 후 실제 저장된 데이터를 다시 조회 (id, createdAt 자동 추가되므로)
+      const updatedRecords = await storageRef.current.getAll();
+      setWorkoutHistory(updatedRecords);
     } catch (error) {
       console.error('Failed to add workout record:', error);
+      throw error; // 에러를 호출자에게 전파
     }
   }, []);
 
@@ -448,6 +445,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsRunning,
         workoutHistory,
         isLoadingHistory,
+        historyError,
         addWorkoutRecord,
         hasVisited,
         userNickname,
