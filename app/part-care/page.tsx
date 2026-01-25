@@ -87,25 +87,6 @@ export default function PartCarePage() {
         <p className="text-xs text-gray-500 font-medium mt-2">집중적으로 운동할 부위를 선택하세요</p>
       </div>
 
-      {/* 선택된 부위 칩 */}
-      {selectedParts.length > 0 && (
-        <div className="flex-shrink-0 px-4 pb-4 flex gap-2 overflow-x-auto flex-wrap">
-          {selectedParts.map(partId => {
-            const part = MUSCLE_GROUPS.find(g => g.id === partId);
-            return part ? (
-              <button
-                key={partId}
-                onClick={() => togglePart(partId)}
-                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-white text-black rounded-lg text-xs font-semibold whitespace-nowrap hover:opacity-80 transition"
-              >
-                <span>{part.label}</span>
-                <span className="text-lg leading-none">×</span>
-              </button>
-            ) : null;
-          })}
-        </div>
-      )}
-
       {/* 부위 선택 */}
       <div className="flex-1 overflow-y-auto px-4 pb-4">
         <div className="flex flex-col gap-3">
@@ -115,7 +96,7 @@ export default function PartCarePage() {
               onClick={() => togglePart(group.id)}
               className={`w-full py-4 px-4 border rounded-xl text-sm font-semibold transition-all ${
                 selectedParts.includes(group.id)
-                  ? 'bg-gray-800 border-gray-700 text-white shadow-lg'
+                  ? 'bg-white border-white text-black shadow-lg'
                   : 'bg-gray-900 border-gray-800 text-gray-300 hover:border-gray-700'
               }`}
             >
@@ -135,7 +116,7 @@ export default function PartCarePage() {
               onClick={() => setSelectedTime(time)}
               className={`flex-shrink-0 px-4 py-2 rounded-lg font-bold transition-all ${
                 selectedTime === time
-                  ? 'bg-cyan-500 text-black text-base'
+                  ? 'bg-gray-400 text-black text-base'
                   : 'bg-gray-700 text-gray-300 text-sm hover:bg-gray-600'
               }`}
             >
@@ -157,7 +138,7 @@ export default function PartCarePage() {
         <button
           onClick={handleGenerateWorkout}
           disabled={isLoading}
-          className="w-full bg-cyan-500 text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+          className="w-full bg-[#f43000] text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
         >
           {isLoading ? (
             <>
