@@ -1,21 +1,14 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { Movement, WorkoutPlan, MuscleGroup, Exercise } from '@/app/lib/types/workout.types';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { Movement, WorkoutPlan, MuscleGroup, Exercise, WorkoutRecord } from '@/app/lib/types/workout.types';
 import { generateRandomNickname } from '@/app/lib/nickname-generator';
-import { cleanupAndSaveWorkoutRecords } from '@/app/lib/storage-manager';
+import { createWorkoutStorage, WorkoutStorageAdapter } from '@/app/lib/db/storage-adapter';
 
 interface ExerciseWithStatus extends Exercise {
   isCompleted: boolean;
   currentMinReps: number | null;
   currentMaxReps: number | null;
-}
-
-interface WorkoutRecord {
-  date: string;
-  mode: 'WOD' | 'GOAL' | 'PART';
-  duration: number;
-  exercises: string[];
 }
 
 interface AppContextType {
@@ -60,7 +53,8 @@ interface AppContextType {
 
   // 운동 기록
   workoutHistory: WorkoutRecord[];
-  addWorkoutRecord: (record: WorkoutRecord) => void;
+  isLoadingHistory: boolean;
+  addWorkoutRecord: (record: WorkoutRecord) => Promise<void>;
 
   // 사용자 프로필
   hasVisited: boolean;
@@ -96,11 +90,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [timerSeconds, setTimerSecondsState] = useState(0);
   const [isRunning, setIsRunningState] = useState(false);
   const [workoutHistory, setWorkoutHistory] = useState<WorkoutRecord[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const [hasVisited, setHasVisited] = useState(false);
   const [userNickname, setUserNickname] = useState(generateRandomNickname());
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
   const [showExitPopup, setShowExitPopup] = useState(false);
   const [forceExit, setForceExit] = useState(false);
+
+  // Storage Adapter 참조 (IndexedDB 또는 LocalStorage)
+  const storageRef = useRef<WorkoutStorageAdapter | null>(null);
 
   // Wrapper functions for setters that support both direct values and functions
   const setExercises = useCallback((value: ExerciseWithStatus[] | ((prev: ExerciseWithStatus[]) => ExerciseWithStatus[])) => {
@@ -123,6 +121,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // localStorage에서 데이터 로드 (초기화)
   useEffect(() => {
+    // 비동기 초기화 함수
+    async function initializeStorage() {
+      try {
+        // Storage Adapter 생성 (IndexedDB 또는 LocalStorage)
+        const storage = await createWorkoutStorage();
+        await storage.initialize(); // 마이그레이션 실행
+
+        // 운동 기록 로드
+        const records = await storage.getAll();
+
+        storageRef.current = storage;
+        setWorkoutHistory(records);
+        setIsLoadingHistory(false);
+      } catch (error) {
+        console.error('Failed to initialize storage:', error);
+        setIsLoadingHistory(false);
+      }
+    }
+
     // 방문 이력, 닉네임, 프로필 사진 로드
     const savedHasVisited = localStorage.getItem('cf_has_visited');
     const savedNickname = localStorage.getItem('cf_user_nickname');
@@ -136,15 +153,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setHasVisited(false);
     }
 
-    // 히스토리 로드
-    const savedHistory = localStorage.getItem('cf_workout_history');
-    if (savedHistory) {
-      try {
-        setWorkoutHistory(JSON.parse(savedHistory));
-      } catch (error) {
-        console.error('Failed to load workout history:', error);
-      }
-    }
+    // 비동기 스토리지 초기화
+    initializeStorage();
 
     // 생성된 계획 로드
     const savedPlan = localStorage.getItem('cf_generated_plan');
@@ -313,11 +323,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('cf_total_time', totalTime.toString());
   }, [totalTime]);
 
-  // 히스토리 저장 및 정리
-  useEffect(() => {
-    const cleanedHistory = cleanupAndSaveWorkoutRecords(workoutHistory);
-    localStorage.setItem('cf_workout_history', JSON.stringify(cleanedHistory));
-  }, [workoutHistory]);
+  // 히스토리는 Storage Adapter가 자동으로 저장 (IndexedDB 또는 LocalStorage)
 
   const addWod = useCallback((movement: Movement) => {
     setWodList(prev => {
@@ -349,8 +355,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setSelectedParts([]);
   }, []);
 
-  const addWorkoutRecord = useCallback((record: WorkoutRecord) => {
-    setWorkoutHistory(prev => [...prev, record]);
+  const addWorkoutRecord = useCallback(async (record: WorkoutRecord) => {
+    if (!storageRef.current) {
+      console.error('Storage adapter가 초기화되지 않았습니다.');
+      return;
+    }
+
+    try {
+      // Storage Adapter를 통해 저장 (IndexedDB 또는 LocalStorage)
+      await storageRef.current.add(record);
+
+      // 상태 업데이트
+      setWorkoutHistory(prev => [...prev, record]);
+    } catch (error) {
+      console.error('Failed to add workout record:', error);
+    }
   }, []);
 
   const resetInputState = useCallback(() => {
@@ -370,9 +389,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('cf_has_visited', 'true');
   }, []);
 
-  const resetAllData = useCallback(() => {
+  const resetAllData = useCallback(async () => {
     // localStorage 먼저 삭제
     localStorage.clear();
+
+    // IndexedDB 데이터베이스 삭제
+    if (typeof window !== 'undefined' && 'indexedDB' in window) {
+      try {
+        await new Promise<void>((resolve, reject) => {
+          const request = indexedDB.deleteDatabase('AfterWOD_DB');
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+        console.log('✅ IndexedDB 데이터베이스가 삭제되었습니다.');
+      } catch (error) {
+        console.error('❌ IndexedDB 삭제 실패:', error);
+      }
+    }
+
+    // Storage Adapter 재초기화
+    storageRef.current = null;
 
     // 모든 상태 초기화
     setHasVisited(false);
@@ -411,6 +447,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         isRunning,
         setIsRunning,
         workoutHistory,
+        isLoadingHistory,
         addWorkoutRecord,
         hasVisited,
         userNickname,

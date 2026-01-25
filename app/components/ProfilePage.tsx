@@ -7,7 +7,7 @@ import { compressImage } from '@/app/lib/image-utils';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage } = useApp();
+  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
   const [showResetPopup, setShowResetPopup] = useState(false);
@@ -18,7 +18,7 @@ export function ProfilePage() {
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
 
-  const thisMonthCount = workoutHistory.filter(record => {
+  const thisMonthCount = isLoadingHistory ? 0 : workoutHistory.filter(record => {
     const recordDate = new Date(record.date);
     return recordDate.getFullYear() === currentYear && recordDate.getMonth() + 1 === currentMonth;
   }).length;
@@ -148,7 +148,9 @@ export function ProfilePage() {
 
         <div className="bg-blue-50 rounded-xl p-4 mb-6 w-full">
           <p className="text-blue-800 text-sm font-bold">이번 달 운동 횟수</p>
-          <p className="text-3xl font-black text-blue-600 mt-1">{thisMonthCount}회</p>
+          <p className="text-3xl font-black text-blue-600 mt-1">
+            {isLoadingHistory ? '...' : `${thisMonthCount}회`}
+          </p>
         </div>
 
         {workoutHistory.length === 0 && (
