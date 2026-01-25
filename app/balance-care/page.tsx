@@ -109,10 +109,10 @@ export default function BalanceCarePage() {
             <button
               key={exercise.id}
               onClick={() => handleExerciseSelect(exercise.id)}
-              className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all active:scale-95 border min-h-32 ${
+              className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all active:scale-95 border min-h-32 font-semibold ${
                 selectedExercises.includes(exercise.id)
-                  ? 'bg-blue-600 border-blue-500'
-                  : 'bg-gray-900 border-gray-800 hover:border-gray-700'
+                  ? 'bg-blue-600 border-blue-500 shadow-lg shadow-blue-500/20'
+                  : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md'
               }`}
             >
               <i className={`fa-solid ${exercise.icon} text-2xl mb-2 text-white`}></i>
