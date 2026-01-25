@@ -68,3 +68,6 @@ next-env.d.ts
 crossfit_planner_v10.html
 openapi.yaml
 TABLES.md
+
+.playwright-mcp
+opencode.json
