@@ -89,12 +89,12 @@ export default function PartCarePage() {
 
       {/* 부위 선택 */}
       <div className="flex-1 overflow-y-auto px-4 pb-4">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           {MUSCLE_GROUPS.map(group => (
             <button
               key={group.id}
               onClick={() => togglePart(group.id)}
-              className={`w-full py-4 px-4 border rounded-xl text-sm font-semibold transition-all ${
+              className={`w-full py-3 px-4 border rounded-xl text-sm font-semibold transition-all ${
                 selectedParts.includes(group.id)
                   ? 'bg-white border-white text-black shadow-lg'
                   : 'bg-gray-900 border-gray-800 text-gray-300 hover:border-gray-700'
@@ -109,14 +109,14 @@ export default function PartCarePage() {
       {/* 운동 시간 선택 (수평 스크롤) */}
       <div className="flex-shrink-0 px-4 py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
         <p className="text-xs font-bold text-gray-400 mb-4 text-center uppercase tracking-wider">운동 시간</p>
-        <div className="flex gap-3 justify-center overflow-x-auto pb-2">
+        <div className="flex gap-3 justify-center overflow-x-auto pb-2 hide-scrollbar">
           {[10, 15, 20, 25, 30, 35, 40].map(time => (
             <button
               key={time}
               onClick={() => setSelectedTime(time)}
               className={`flex-shrink-0 px-4 py-2 rounded-lg font-bold transition-all ${
                 selectedTime === time
-                  ? 'bg-gray-400 text-black text-base'
+                  ? 'bg-white text-black text-base'
                   : 'bg-gray-700 text-gray-300 text-sm hover:bg-gray-600'
               }`}
             >
