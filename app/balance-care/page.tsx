@@ -8,18 +8,17 @@ import type { Movement, MuscleGroup, Equipment } from '@/app/lib/types/workout.t
 interface ExerciseData {
   id: string;
   name: string;
-  icon: string;
   muscleGroups: MuscleGroup[];
   equipment: Equipment;
 }
 
 const BALANCE_CARE_EXERCISES: ExerciseData[] = [
-  { id: 'snatch', name: 'Snatch', icon: 'fa-dumbbell', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
-  { id: 'clean', name: 'Clean', icon: 'fa-dumbbell', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
-  { id: 'toes-to-bar', name: 'Toes-to-bar', icon: 'fa-person', muscleGroups: ['CORE', 'BACK'], equipment: 'BODYWEIGHT' },
-  { id: 'pull-up', name: 'Pull-up', icon: 'fa-person', muscleGroups: ['BACK', 'CHEST'], equipment: 'BODYWEIGHT' },
-  { id: 'rowing', name: 'Rowing', icon: 'fa-water', muscleGroups: ['CARDIO', 'BACK'], equipment: 'ROWING' },
-  { id: 'wall-walk', name: 'Wall Walk', icon: 'fa-arrows', muscleGroups: ['CORE', 'CHEST'], equipment: 'WALL' },
+  { id: 'snatch', name: '스내치', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
+  { id: 'clean', name: '클린', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
+  { id: 'toes-to-bar', name: '토우-투-바', muscleGroups: ['CORE', 'BACK'], equipment: 'BODYWEIGHT' },
+  { id: 'pull-up', name: '풀업', muscleGroups: ['BACK', 'CHEST'], equipment: 'BODYWEIGHT' },
+  { id: 'rowing', name: '로잉', muscleGroups: ['CARDIO', 'BACK'], equipment: 'ROWING' },
+  { id: 'wall-walk', name: '월 워크', muscleGroups: ['CORE', 'CHEST'], equipment: 'WALL' },
 ];
 
 export default function BalanceCarePage() {
@@ -76,7 +75,7 @@ export default function BalanceCarePage() {
   return (
     <main className="flex flex-col h-screen bg-black text-white">
       {/* 헤더 섹션 */}
-      <div className="flex-shrink-0 px-4 pt-4 pb-8">
+      <div className="flex-shrink-0 px-4 pt-4 pb-6">
         <button
           onClick={handleBack}
           className="text-xs font-bold text-gray-400 mb-4 flex items-center hover:text-gray-200 transition uppercase tracking-wide"
@@ -88,81 +87,91 @@ export default function BalanceCarePage() {
         <p className="text-xs text-gray-500 font-medium mt-2">오늘 수행한 운동을 알려주세요</p>
       </div>
 
+      {/* 선택된 운동 칩 */}
+      {selectedExercises.length > 0 && (
+        <div className="flex-shrink-0 px-4 pb-4 flex gap-2 overflow-x-auto">
+          {selectedExercises.map(exerciseId => {
+            const exercise = BALANCE_CARE_EXERCISES.find(e => e.id === exerciseId);
+            return exercise ? (
+              <button
+                key={exerciseId}
+                onClick={() => handleExerciseSelect(exerciseId)}
+                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-white text-black rounded-lg text-xs font-semibold whitespace-nowrap hover:opacity-80 transition"
+              >
+                <span>{exercise.name}</span>
+                <span className="text-lg leading-none">×</span>
+              </button>
+            ) : null;
+          })}
+        </div>
+      )}
+
       {/* 검색 입력 */}
-      <div className="flex-shrink-0 px-4 pb-6">
+      <div className="flex-shrink-0 px-4 pb-4">
         <div className="relative">
           <input
             type="text"
             placeholder="운동 검색"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition border border-gray-800"
+            className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 pl-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-700 transition border border-gray-800"
           />
-          <i className="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+          <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
         </div>
       </div>
 
       {/* 운동 카드 그리드 */}
       <div className="flex-1 overflow-y-auto px-4 pb-4">
-        <div className="grid grid-cols-2 gap-3">
-          {filteredExercises.map(exercise => (
+        {filteredExercises.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-gray-500">
+            <p className="text-sm">검색 결과가 없습니다</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {filteredExercises.map(exercise => (
+              <button
+                key={exercise.id}
+                onClick={() => handleExerciseSelect(exercise.id)}
+                className={`p-4 rounded-xl flex items-center justify-center transition-all active:scale-95 border min-h-32 font-semibold ${
+                  selectedExercises.includes(exercise.id)
+                    ? 'bg-gray-800 border-gray-700 shadow-lg'
+                    : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md'
+                }`}
+              >
+                <span className="text-sm text-center leading-tight">{exercise.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* 운동 시간 선택 (수평 스크롤) */}
+      <div className="flex-shrink-0 px-4 py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
+        <p className="text-xs font-bold text-gray-400 mb-4 text-center uppercase tracking-wider">운동 시간</p>
+        <div className="flex gap-3 justify-center overflow-x-auto pb-2">
+          {[10, 15, 20, 25, 30, 35, 40].map(time => (
             <button
-              key={exercise.id}
-              onClick={() => handleExerciseSelect(exercise.id)}
-              className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all active:scale-95 border min-h-32 font-semibold ${
-                selectedExercises.includes(exercise.id)
-                  ? 'bg-blue-600 border-blue-500 shadow-lg shadow-blue-500/20'
-                  : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md'
+              key={time}
+              onClick={() => setSelectedTime(time)}
+              className={`flex-shrink-0 px-4 py-2 rounded-lg font-bold transition-all ${
+                selectedTime === time
+                  ? 'bg-gray-400 text-black text-base'
+                  : 'bg-gray-700 text-gray-300 text-sm hover:bg-gray-600'
               }`}
             >
-              <i className={`fa-solid ${exercise.icon} text-2xl mb-2 text-white`}></i>
-              <span className="text-xs font-semibold text-center leading-tight">{exercise.name}</span>
+              {time}분
             </button>
           ))}
         </div>
       </div>
 
-      {/* 시간 선택 및 진행 버튼 */}
-      <div className="flex-shrink-0 px-4 pb-6 space-y-4">
-        <div>
-          <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">운동 시간</p>
-          <button
-            onClick={() => setShowTimePicker(!showTimePicker)}
-            className="w-full bg-gray-900 rounded-xl px-4 py-3 text-white font-semibold flex items-center justify-between transition border border-gray-800 hover:border-gray-700 text-sm"
-          >
-            <span>{selectedTime}분</span>
-            <i className={`fa-solid fa-chevron-down transition-transform text-xs ${showTimePicker ? 'rotate-180' : ''}`}></i>
-          </button>
-
-          {showTimePicker && (
-            <div className="mt-2 bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-              <div className="max-h-48 overflow-y-auto">
-                {[10, 15, 20, 25, 30, 35, 40].map((time, idx) => (
-                  <button
-                    key={time}
-                    onClick={() => {
-                      setSelectedTime(time);
-                      setShowTimePicker(false);
-                    }}
-                    className={`w-full px-4 py-3 text-left text-sm transition ${
-                      selectedTime === time
-                        ? 'bg-blue-600 text-white font-semibold'
-                        : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800'
-                    } ${idx < 6 ? 'border-b border-gray-800' : ''}`}
-                  >
-                    {time}분
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
+      {/* 진행 버튼 */}
+      <div className="flex-shrink-0 px-4 pb-6">
         <button
           onClick={handleProceed}
-          className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl transition-all active:scale-95 text-sm hover:bg-blue-700"
+          className="w-full bg-[#f43000] text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90"
         >
-          계속하기
+          나만의 밸런스 운동 생성하기
         </button>
       </div>
     </main>
