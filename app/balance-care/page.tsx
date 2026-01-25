@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 import type { Movement, MuscleGroup, Equipment } from '@/app/lib/types/workout.types';
@@ -12,6 +12,7 @@ interface ExerciseData {
   equipment: Equipment;
 }
 
+// 기본 제공 운동들
 const BALANCE_CARE_EXERCISES: ExerciseData[] = [
   { id: 'snatch', name: '스내치', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
   { id: 'clean', name: '클린', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
@@ -21,24 +22,70 @@ const BALANCE_CARE_EXERCISES: ExerciseData[] = [
   { id: 'wall-walk', name: '월 워크', muscleGroups: ['CORE', 'CHEST'], equipment: 'WALL' },
 ];
 
+// 한글 초성 추출 함수
+function getChosung(str: string): string {
+  const cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+  let result = "";
+  for(let i=0; i<str.length; i++) {
+    const code = str.charCodeAt(i) - 44032;
+    if(code > -1 && code < 11172) result += cho[Math.floor(code/588)];
+    else result += str.charAt(i);
+  }
+  return result;
+}
+
 export default function BalanceCarePage() {
   const router = useRouter();
   const { setCurrentMode, setTotalTime, resetInputState, addWod } = useApp();
   const [searchInput, setSearchInput] = useState('');
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
-  const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(20);
+  const [allMovements, setAllMovements] = useState<Movement[]>([]);
+  const [frequentMovements, setFrequentMovements] = useState<Movement[]>([]);
 
-  const filteredExercises = BALANCE_CARE_EXERCISES.filter(ex =>
-    ex.name.toLowerCase().includes(searchInput.toLowerCase())
-  );
+  // API에서 운동 데이터 로드
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [movementsRes, frequentRes] = await Promise.all([
+          fetch('/api/v1/movements'),
+          fetch('/api/v1/movements/frequent')
+        ]);
 
-  const handleExerciseSelect = (exerciseId: string) => {
+        const movementsData = await movementsRes.json();
+        const frequentData = await frequentRes.json();
+
+        setAllMovements(movementsData.data?.movements || []);
+        setFrequentMovements(frequentData.data?.movements || []);
+      } catch (error) {
+        console.error('Failed to fetch movements:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // 검색 필터링 (초성 검색 포함)
+  const filteredMovements = searchInput.trim()
+    ? allMovements.filter(movement => {
+        const nameMatch = movement.name.includes(searchInput);
+        const chosungMatch = getChosung(movement.name).includes(getChosung(searchInput));
+        return nameMatch || chosungMatch;
+      })
+    : [];
+
+  const handleExerciseSelect = (movementId: string) => {
     setSelectedExercises(prev =>
-      prev.includes(exerciseId)
-        ? prev.filter(id => id !== exerciseId)
-        : [...prev, exerciseId]
+      prev.includes(movementId)
+        ? prev.filter(id => id !== movementId)
+        : [...prev, movementId]
     );
+  };
+
+  const handleAddFrequent = (movement: Movement) => {
+    if (!selectedExercises.includes(movement.id)) {
+      setSelectedExercises(prev => [...prev, movement.id]);
+    }
   };
 
   const handleProceed = () => {
@@ -51,15 +98,10 @@ export default function BalanceCarePage() {
     setCurrentMode('wod');
     setTotalTime(selectedTime);
 
+    // 선택된 운동들을 Context에 추가
     selectedExercises.forEach(exerciseId => {
-      const exercise = BALANCE_CARE_EXERCISES.find(e => e.id === exerciseId);
-      if (exercise) {
-        const movement: Movement = {
-          id: exercise.id,
-          name: exercise.name,
-          muscleGroups: exercise.muscleGroups,
-          equipment: exercise.equipment,
-        };
+      const movement = allMovements.find(m => m.id === exerciseId);
+      if (movement) {
         addWod(movement);
       }
     });
@@ -91,14 +133,14 @@ export default function BalanceCarePage() {
       {selectedExercises.length > 0 && (
         <div className="flex-shrink-0 px-4 pb-4 flex gap-2 overflow-x-auto">
           {selectedExercises.map(exerciseId => {
-            const exercise = BALANCE_CARE_EXERCISES.find(e => e.id === exerciseId);
-            return exercise ? (
+            const movement = allMovements.find(m => m.id === exerciseId);
+            return movement ? (
               <button
                 key={exerciseId}
                 onClick={() => handleExerciseSelect(exerciseId)}
                 className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-white text-black rounded-lg text-xs font-semibold whitespace-nowrap hover:opacity-80 transition"
               >
-                <span>{exercise.name}</span>
+                <span>{movement.name}</span>
                 <span className="text-lg leading-none">×</span>
               </button>
             ) : null;
@@ -111,7 +153,7 @@ export default function BalanceCarePage() {
         <div className="relative">
           <input
             type="text"
-            placeholder="운동 검색"
+            placeholder="운동 검색 (초성: ㅅㄴㅊ)"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 pl-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-700 transition border border-gray-800"
@@ -120,29 +162,51 @@ export default function BalanceCarePage() {
         </div>
       </div>
 
-      {/* 운동 카드 그리드 */}
+      {/* 자주하는 운동 */}
+      {frequentMovements.length > 0 && !searchInput.trim() && (
+        <div className="flex-shrink-0 px-4 pb-4">
+          <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">자주하는 운동</p>
+          <div className="grid grid-cols-3 gap-2">
+            {frequentMovements.map(movement => (
+              <button
+                key={movement.id}
+                onClick={() => handleAddFrequent(movement)}
+                className={`px-2 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  selectedExercises.includes(movement.id)
+                    ? 'bg-gray-800 text-white border border-gray-700'
+                    : 'bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700'
+                }`}
+              >
+                {movement.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 운동 카드 그리드 (검색 결과) */}
       <div className="flex-1 overflow-y-auto px-4 pb-4">
-        {filteredExercises.length === 0 ? (
+        {searchInput.trim() && filteredMovements.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-500">
             <p className="text-sm">검색 결과가 없습니다</p>
           </div>
-        ) : (
+        ) : searchInput.trim() ? (
           <div className="grid grid-cols-2 gap-3">
-            {filteredExercises.map(exercise => (
+            {filteredMovements.map(movement => (
               <button
-                key={exercise.id}
-                onClick={() => handleExerciseSelect(exercise.id)}
-                className={`p-4 rounded-xl flex items-center justify-center transition-all active:scale-95 border min-h-32 font-semibold ${
-                  selectedExercises.includes(exercise.id)
+                key={movement.id}
+                onClick={() => handleExerciseSelect(movement.id)}
+                className={`p-4 rounded-xl flex items-center justify-center transition-all active:scale-95 border font-semibold text-sm ${
+                  selectedExercises.includes(movement.id)
                     ? 'bg-gray-800 border-gray-700 shadow-lg'
                     : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md'
                 }`}
               >
-                <span className="text-sm text-center leading-tight">{exercise.name}</span>
+                <span className="text-center leading-tight">{movement.name}</span>
               </button>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* 운동 시간 선택 (수평 스크롤) */}
