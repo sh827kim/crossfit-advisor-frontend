@@ -33,59 +33,34 @@ export function Header() {
     return null;
   }
 
-  // 홈페이지 여부 (검은 배경 적용)
-  const isHomePage = pathname === '/';
-
   return (
-    <header
-      className={`h-16 flex justify-between items-center px-6 z-20 sticky top-0 ${
-        isHomePage
-          ? 'bg-black border-b border-gray-800'
-          : 'bg-white border-b border-gray-50'
-      }`}
-    >
+    <header className="h-16 flex justify-between items-center px-6 z-20 sticky top-0 bg-black">
       <div
-        className={`font-extrabold text-lg tracking-tight cursor-pointer flex items-center hover:opacity-80 transition italic ${
-          isHomePage ? 'text-white' : 'text-slate-800'
-        }`}
+        className="font-extrabold text-lg tracking-tight cursor-pointer flex items-center hover:opacity-80 transition italic text-white"
         onClick={() => router.replace('/')}
         style={{ fontFamily: 'SF Pro, sans-serif', fontWeight: 900, letterSpacing: '-0.02em' }}
       >
-        <i
-          className={`fa-solid fa-dumbbell mr-2.5 ${
-            isHomePage ? 'text-[#f43000]' : 'text-blue-600'
-          }`}
-        ></i>
+        <i className="fa-solid fa-dumbbell mr-2.5 text-[#f43000]"></i>
         AFTERWOD
       </div>
       <div className="flex gap-3 items-center">
         <button
           onClick={() => router.push('/history')}
-          className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
-            isHomePage
-              ? 'bg-gray-900 text-gray-500 hover:text-[#f43000] hover:bg-gray-800'
-              : 'bg-gray-50 text-gray-400 hover:text-blue-600 hover:bg-blue-50'
-          }`}
+          className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-500 hover:text-[#f43000] hover:bg-gray-800 transition"
           title="운동 기록"
         >
           <i className="fa-solid fa-calendar-days text-lg"></i>
         </button>
         <button
           onClick={() => router.push('/profile')}
-          className={`w-10 h-10 rounded-full relative flex items-center justify-center text-xs font-bold overflow-hidden border transition ${
-            isHomePage
-              ? 'border-gray-700 hover:border-gray-600 hover:opacity-80'
-              : 'border-blue-200 hover:opacity-80'
-          }`}
+          className="w-10 h-10 rounded-full relative flex items-center justify-center text-xs font-bold overflow-hidden border border-gray-700 hover:border-gray-600 hover:opacity-80 transition"
           style={
             !userProfileImage && userNickname
               ? {
                   backgroundColor: getRandomColor(userNickname),
                   color: '#000000',
                 }
-              : isHomePage
-              ? { backgroundColor: '#1F1F1F', color: '#9CA3AF' }
-              : { backgroundColor: '#DBEAFE', color: '#2563EB' }
+              : { backgroundColor: '#1F1F1F', color: '#9CA3AF' }
           }
           title="프로필"
         >
