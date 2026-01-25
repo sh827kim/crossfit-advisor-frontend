@@ -238,12 +238,12 @@ export function OnboardingPage() {
         }`}>
           <div className="flex flex-col items-center justify-center">
             {/* AFTERWOD 로고 */}
-            <div className="mb-8">
+            <div className="mb-8 px-8 max-w-sm">
               <div className="bg-[#f43000] px-16 py-6 flex flex-col items-center rounded-lg">
                 <h1 className="text-5xl font-black text-black mb-3 italic" style={{ fontFamily: 'SF Pro, sans-serif', fontWeight: 900, letterSpacing: '-0.02em' }}>
                   AFTERWOD
                 </h1>
-                <div className="flex items-center gap-3 w-full px-4">
+                <div className="flex items-center gap-3 w-full">
                   {/* 왼쪽 선 */}
                   <div className="flex-1 h-1 bg-black"></div>
                   <p className="text-xl font-bold text-black whitespace-nowrap">CLUB</p>
@@ -263,7 +263,7 @@ export function OnboardingPage() {
         <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6 overflow-y-auto">
           <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
-            <div className="mb-8">
+            <div className="mb-8 animate-fadeIn" style={{ animation: 'fadeIn 0.8s ease-out' }}>
               <p className="text-lg font-bold text-[#f43000] mb-2">
                 애프터 와드는
               </p>
@@ -317,7 +317,7 @@ export function OnboardingPage() {
               className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-8 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn text-lg"
             >
               <span>Next</span>
-              <span>→</span>
+              <i className="fa-solid fa-arrow-right"></i>
             </button>
           )}
         </main>
@@ -418,16 +418,14 @@ export function OnboardingPage() {
 
               {/* 로고 */}
               <div className="flex flex-col items-center justify-center pt-6 border-t border-gray-700">
-                <div className="mt-4 opacity-40">
-                  <div className="bg-gray-800 px-16 py-2 flex flex-col items-center rounded" style={{ border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                    <p className="text-xs font-bold text-white tracking-wide italic mb-2" style={{ fontSize: '9px', letterSpacing: '0.08em' }}>
-                      AFTERWOD
-                    </p>
-                    <div className="flex items-center gap-2 w-full">
-                      <div className="flex-1 h-0.5 bg-white"></div>
-                      <p className="text-xs font-bold text-white whitespace-nowrap">CLUB</p>
-                      <div className="flex-1 h-0.5 bg-white"></div>
-                    </div>
+                <div className="mt-4 opacity-40 flex flex-col items-center">
+                  <p className="text-sm font-bold text-white tracking-wide italic mb-2" style={{ fontSize: '14px', letterSpacing: '0.08em' }}>
+                    AFTERWOD
+                  </p>
+                  <div className="flex items-center gap-2 w-full">
+                    <div className="flex-1 h-0.5 bg-white"></div>
+                    <p className="text-xs font-bold text-white whitespace-nowrap" style={{ fontSize: '10px' }}>CLUB</p>
+                    <div className="flex-1 h-0.5 bg-white"></div>
                   </div>
                 </div>
               </div>
