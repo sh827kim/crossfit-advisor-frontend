@@ -22,6 +22,7 @@ export function ResultPage() {
 
   const [isCompleted, setIsCompleted] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   // 초기화 - exercises가 비어있을 때만 초기화 (새로운 운동 계획일 때)
   useEffect(() => {
@@ -66,9 +67,22 @@ export function ResultPage() {
   };
 
   const toggleExerciseComplete = (index: number) => {
-    setExercises(prev =>
-      prev.map((ex, i) => (i === index ? { ...ex, isCompleted: !ex.isCompleted } : ex))
-    );
+    setExercises(prev => {
+      const updated = prev.map((ex, i) => (i === index ? { ...ex, isCompleted: !ex.isCompleted } : ex));
+
+      // 체크박스를 눌렀을 때, 타이머가 시작되지 않았으면 자동으로 시작
+      if (!isRunning && !updated[index].isCompleted) {
+        setIsRunning(true);
+      }
+
+      // 모든 운동이 완료되었는지 확인
+      const allCompleted = updated.every(ex => ex.isCompleted);
+      if (allCompleted && isRunning) {
+        setIsRunning(false);
+      }
+
+      return updated;
+    });
   };
 
   const updateReps = (index: number, type: 'min' | 'max', value: string) => {
@@ -98,8 +112,11 @@ export function ResultPage() {
     };
 
     await addWorkoutRecord(record);
-    alert('운동 기록 저장 완료! 🔥');
+    setShowSuccessPopup(true);
+  };
 
+  const handleSuccessConfirm = () => {
+    setShowSuccessPopup(false);
     resetInputState();
     router.push('/history');
   };
@@ -292,6 +309,29 @@ export function ResultPage() {
                 그만하기
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 저장 완료 팝업 */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6">
+          <div className="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full">
+            <div className="text-center mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <i className="fa-solid fa-check text-3xl text-green-600"></i>
+              </div>
+              <h3 className="text-xl font-black text-slate-800 mb-2">운동 기록 저장 완료!</h3>
+              <p className="text-sm text-slate-500">
+                오늘도 멋진 운동이었어요 🔥
+              </p>
+            </div>
+            <button
+              onClick={handleSuccessConfirm}
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-2xl transition"
+            >
+              기록 확인하기
+            </button>
           </div>
         </div>
       )}
