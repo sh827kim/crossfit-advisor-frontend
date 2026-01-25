@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useApp } from '@/app/context/AppContext';
 
 /**
  * 뒤로가기 버튼 처리 컴포넌트

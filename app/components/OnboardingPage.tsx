@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
@@ -11,7 +12,7 @@ export function OnboardingPage() {
   const shouldReset = searchParams.get('reset') === 'true';
   const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited, resetAllData } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const hasHandledResetRef = useRef(false);
   const [showContent, setShowContent] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [nickname, setNickname] = useState(userNickname);
@@ -23,13 +24,26 @@ export function OnboardingPage() {
 
   // 초기화 요청 시 데이터 초기화
   useEffect(() => {
-    if (shouldReset) {
-      // URL에서 reset 파라미터 제거
-      window.history.replaceState(null, '', '/onboarding');
-      // 모든 데이터 초기화
-      resetAllData();
+    if (!shouldReset || hasHandledResetRef.current) {
+      return;
     }
-  }, [shouldReset, resetAllData]);
+
+    hasHandledResetRef.current = true;
+    let isActive = true;
+
+    async function runReset() {
+      // 모든 데이터 초기화 (상태 초기화까지 완료된 뒤 URL 정리)
+      await resetAllData();
+      if (!isActive) return;
+      router.replace('/onboarding');
+    }
+
+    void runReset();
+
+    return () => {
+      isActive = false;
+    };
+  }, [shouldReset, resetAllData, router]);
 
   // 온보딩 페이지 도착 시 history 정리 및 재방문자 리다이렉트
   useEffect(() => {
@@ -100,6 +114,11 @@ export function OnboardingPage() {
   useEffect(() => {
     setProfileImage(userProfileImage);
   }, [userProfileImage]);
+
+  // userNickname 변경 감지 (데이터 초기화 후 입력값 동기화)
+  useEffect(() => {
+    setNickname(userNickname);
+  }, [userNickname]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -247,13 +266,16 @@ export function OnboardingPage() {
               onClick={() => fileInputRef.current?.click()}
               className="group"
             >
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-blue-300 flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 group-hover:brightness-75 transition"
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-blue-300 relative flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 group-hover:brightness-75 transition"
               >
                 {profileImage ? (
-                  <img
+                  <Image
                     src={profileImage}
                     alt="프로필"
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="96px"
+                    className="object-cover"
+                    unoptimized
                   />
                 ) : (
                   <div className="text-center">

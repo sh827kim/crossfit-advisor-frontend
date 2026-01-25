@@ -10,6 +10,7 @@ export default function HomePage() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration mismatch 방지를 위해 클라이언트 마운트 이후에만 렌더링
     setIsClient(true);
   }, []);
 

@@ -22,14 +22,21 @@ export function registerServiceWorker() {
 /**
  * 설치 프롬프트 처리
  */
-let deferredPrompt: any = null;
+
+// 일부 브라우저에서만 제공되는 beforeinstallprompt 이벤트 타입
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+let deferredPrompt: BeforeInstallPromptEvent | null = null;
 
 export function setupInstallPrompt() {
   if (typeof window === 'undefined') return;
 
-  window.addEventListener('beforeinstallprompt', (e: any) => {
+  window.addEventListener('beforeinstallprompt', (e: Event) => {
     // 설치 프롬프트 이벤트 저장
-    deferredPrompt = e;
+    deferredPrompt = e as BeforeInstallPromptEvent;
     // 사용자가 설치할 수 있도록 UI 표시 (필요시)
     console.log('[PWA] 설치 프롬프트 준비됨');
   });

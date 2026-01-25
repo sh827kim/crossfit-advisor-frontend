@@ -1,6 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
+// CommonJS 환경에서도 동작하도록 dynamic import 사용 (eslint no-require-imports 대응)
 
 // SVG 생성 함수
 function generateIconSVG(size) {
@@ -60,6 +58,9 @@ function generateIconSVG(size) {
 }
 
 async function generateIcons() {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const { default: sharp } = await import('sharp');
   const sizes = [192, 512];
   const publicDir = path.join(__dirname, '../public');
 

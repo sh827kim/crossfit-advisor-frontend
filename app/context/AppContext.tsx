@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { Movement, WorkoutPlan, MuscleGroup, Exercise, WorkoutRecord } from '@/app/lib/types/workout.types';
 import { generateRandomNickname } from '@/app/lib/nickname-generator';
 import { createWorkoutStorage, WorkoutStorageAdapter } from '@/app/lib/db/storage-adapter';
+import { clearAllWorkoutRecords } from '@/app/lib/db/indexeddb';
 
 interface ExerciseWithStatus extends Exercise {
   isCompleted: boolean;
@@ -73,7 +74,7 @@ interface AppContextType {
 
   // 리셋
   resetInputState: () => void;
-  resetAllData: () => void;
+  resetAllData: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -388,33 +389,51 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const resetAllData = useCallback(async () => {
     // localStorage 먼저 삭제
-    localStorage.clear();
-
-    // IndexedDB 데이터베이스 삭제
-    if (typeof window !== 'undefined' && 'indexedDB' in window) {
-      try {
-        await new Promise<void>((resolve, reject) => {
-          const request = indexedDB.deleteDatabase('AfterWOD_DB');
-          request.onsuccess = () => resolve();
-          request.onerror = () => reject(request.error);
-        });
-        console.log('✅ IndexedDB 데이터베이스가 삭제되었습니다.');
-      } catch (error) {
-        console.error('❌ IndexedDB 삭제 실패:', error);
-      }
+    try {
+      localStorage.clear();
+    } catch (error) {
+      console.error('❌ localStorage 초기화 실패:', error);
     }
 
-    // Storage Adapter 재초기화
+    // Storage Adapter 참조 제거 (데이터 초기화 동안 사용 금지)
     storageRef.current = null;
 
-    // 모든 상태 초기화
+    // UI/라우팅이 즉시 반응하도록 메모리 상태는 먼저 초기화
     setHasVisited(false);
     setUserNickname(generateRandomNickname());
     setUserProfileImage(null);
     setWorkoutHistory([]);
+    setHistoryError(null);
+    setIsLoadingHistory(true);
     resetInputState();
     setShowExitPopup(false);
     setForceExit(false);
+
+    // IndexedDB 기록 초기화 (DB 삭제 대신 Store clear로 블로킹/레이스 최소화)
+    if (typeof window !== 'undefined' && 'indexedDB' in window) {
+      try {
+        await clearAllWorkoutRecords();
+        console.log('✅ IndexedDB 운동 기록이 초기화되었습니다.');
+      } catch (error) {
+        console.error('❌ IndexedDB 초기화 실패:', error);
+      }
+    }
+
+    // Storage Adapter 재초기화 (초기화 이후에도 기록 저장 가능해야 함)
+    try {
+      const storage = await createWorkoutStorage();
+      await storage.initialize();
+
+      const records = await storage.getAll();
+      storageRef.current = storage;
+      setWorkoutHistory(records);
+      setHistoryError(null);
+    } catch (error) {
+      console.error('Failed to re-initialize storage:', error);
+      setHistoryError('운동 기록을 불러오지 못했습니다.');
+    } finally {
+      setIsLoadingHistory(false);
+    }
   }, [resetInputState]);
 
   return (

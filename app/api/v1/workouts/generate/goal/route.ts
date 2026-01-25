@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import movementsData from '@/public/data/movements.json';
 import { generateGoalPlan } from '@/app/lib/workout-generator';
-import { WorkoutGenerateGoalRequest, WorkoutPlan, ApiResponse } from '@/app/lib/types/workout.types';
+import { WorkoutGenerateGoalRequest, WorkoutPlan, ApiResponse, Movement } from '@/app/lib/types/workout.types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 목표 운동 이름 가져오기
-    const allMovements = movementsData.movements;
+    const allMovements = movementsData.movements as unknown as Movement[];
     const goalMovement = allMovements.find(m => m.id === goalMovementId);
 
     if (!goalMovement) {
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     const { exercises, rounds, targetTimePerRound } = generateGoalPlan(
       duration,
       goalMovement.name,
-      allMovements as any
+      allMovements
     );
 
     const workoutPlan: WorkoutPlan = {

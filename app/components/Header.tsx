@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 
 export function Header() {
@@ -31,14 +32,17 @@ export function Header() {
         </button>
         <button
           onClick={() => router.push('/profile')}
-          className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-bold border border-blue-200 overflow-hidden hover:opacity-80 transition"
+          className="w-10 h-10 rounded-full bg-blue-100 relative flex items-center justify-center text-blue-600 text-sm font-bold border border-blue-200 overflow-hidden hover:opacity-80 transition"
           title="프로필"
         >
           {userProfileImage ? (
-            <img
+            <Image
               src={userProfileImage}
               alt="프로필"
-              className="w-full h-full object-cover"
+              fill
+              sizes="40px"
+              className="object-cover"
+              unoptimized
             />
           ) : (
             <i className="fa-solid fa-user text-lg"></i>

@@ -67,6 +67,56 @@ export function openDatabase(): Promise<IDBDatabase> {
 }
 
 /**
+ * 모든 운동 기록 초기화
+ * - DB 삭제 대신 ObjectStore를 clear하여 블로킹 가능성을 줄임
+ */
+export async function clearAllWorkoutRecords(): Promise<void> {
+  const db = await openDatabase();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const objectStore = transaction.objectStore(STORE_NAME);
+    const request = objectStore.clear();
+
+    request.onerror = () => {
+      try {
+        db.close();
+      } catch {
+        // noop
+      }
+      reject(request.error);
+    };
+
+    transaction.oncomplete = () => {
+      try {
+        db.close();
+      } catch {
+        // noop
+      }
+      resolve();
+    };
+
+    transaction.onerror = () => {
+      try {
+        db.close();
+      } catch {
+        // noop
+      }
+      reject(transaction.error);
+    };
+
+    transaction.onabort = () => {
+      try {
+        db.close();
+      } catch {
+        // noop
+      }
+      reject(transaction.error);
+    };
+  });
+}
+
+/**
  * 전체 운동 기록 조회 (최신순)
  */
 export async function getAllWorkoutRecords(): Promise<WorkoutRecordDB[]> {

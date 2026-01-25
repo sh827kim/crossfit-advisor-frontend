@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useApp } from '@/app/context/AppContext';
 import { Movement } from '@/app/lib/types/workout.types';
 
@@ -21,9 +21,7 @@ export function WodInputSection() {
   const [searchInput, setSearchInput] = useState('');
   const [allMovements, setAllMovements] = useState<Movement[]>([]);
   const [frequentMovements, setFrequentMovements] = useState<Movement[]>([]);
-  const [filteredMovements, setFilteredMovements] = useState<Movement[]>([]);
-  const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(false);
 
   // 마스터 데이터와 자주 나오는 운동 로드
   useEffect(() => {
@@ -41,39 +39,30 @@ export function WodInputSection() {
         setFrequentMovements(frequentData.data?.movements || []);
       } catch (error) {
         console.error('Failed to fetch movements:', error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  // 검색 처리
-  useEffect(() => {
+  const filteredMovements = useMemo(() => {
     if (!searchInput.trim()) {
-      setFilteredMovements([]);
-      setShowAutocomplete(false);
-      return;
+      return [];
     }
 
-    const searchLower = searchInput.toLowerCase();
     const searchChosung = getChosung(searchInput);
 
-    const filtered = allMovements.filter(movement => {
+    return allMovements.filter(movement => {
       const nameMatch = movement.name.includes(searchInput);
       const chosungMatch = getChosung(movement.name).includes(searchChosung);
       return nameMatch || chosungMatch;
     });
-
-    setFilteredMovements(filtered);
-    setShowAutocomplete(true);
   }, [searchInput, allMovements]);
 
   const handleAddMovement = (movement: Movement) => {
     addWod(movement);
     setSearchInput('');
-    setShowAutocomplete(false);
+    setIsAutocompleteOpen(false);
   };
 
   const handleAddFrequent = (movement: Movement) => {
@@ -89,8 +78,12 @@ export function WodInputSection() {
             type="text"
             placeholder="운동 검색 (초성: ㅅㄴㅊ)"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onFocus={() => searchInput && setShowAutocomplete(true)}
+            onChange={(e) => {
+              const nextValue = e.target.value;
+              setSearchInput(nextValue);
+              setIsAutocompleteOpen(Boolean(nextValue.trim()));
+            }}
+            onFocus={() => searchInput.trim() && setIsAutocompleteOpen(true)}
             autoComplete="off"
             className="
               flex-grow min-w-0
@@ -132,7 +125,7 @@ export function WodInputSection() {
         </div>
 
         {/* 자동완성 리스트 */}
-        {showAutocomplete && filteredMovements.length > 0 && (
+        {isAutocompleteOpen && filteredMovements.length > 0 && (
           <div className="
             absolute top-full left-0 right-0
             bg-white border border-gray-200
