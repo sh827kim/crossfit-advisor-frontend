@@ -90,20 +90,7 @@ export default function GoalCarePage() {
         <p className="text-xs text-gray-500 font-medium mt-2">연습하고 싶은 스킬을 선택해주세요</p>
       </div>
 
-      {/* 선택된 목표 칩 */}
-      {selectedGoal && (
-        <div className="flex-shrink-0 px-4 pb-4 flex gap-2 overflow-x-auto">
-          <button
-            onClick={() => setSelectedGoal(null)}
-            className="flex-shrink-0 flex items-center gap-2 px-3 py-2 bg-white text-black rounded-lg text-xs font-semibold whitespace-nowrap hover:opacity-80 transition"
-          >
-            <span>{selectedGoal.name}</span>
-            <span className="text-lg leading-none">×</span>
-          </button>
-        </div>
-      )}
-
-      {/* 목표 선택 그리드 */}
+      {/* 목표 선택 */}
       <div className="flex-1 overflow-y-auto px-4 pb-4">
         {isLoadingGoals ? (
           <div className="flex items-center justify-center h-full text-gray-500">
@@ -124,7 +111,7 @@ export default function GoalCarePage() {
                 onClick={() => setSelectedGoal(selectedGoal?.id === goal.id ? null : goal)}
                 className={`w-full py-4 px-4 border rounded-xl text-sm font-semibold transition-all ${
                   selectedGoal?.id === goal.id
-                    ? 'bg-gray-800 border-gray-700 text-white shadow-lg'
+                    ? 'bg-white border-white text-black shadow-lg'
                     : 'bg-gray-900 border-gray-800 text-gray-300 hover:border-gray-700'
                 }`}
               >
@@ -145,7 +132,7 @@ export default function GoalCarePage() {
               onClick={() => setSelectedTime(time)}
               className={`flex-shrink-0 px-4 py-2 rounded-lg font-bold transition-all ${
                 selectedTime === time
-                  ? 'bg-green-500 text-black text-base'
+                  ? 'bg-gray-400 text-black text-base'
                   : 'bg-gray-700 text-gray-300 text-sm hover:bg-gray-600'
               }`}
             >
@@ -167,7 +154,7 @@ export default function GoalCarePage() {
         <button
           onClick={handleGenerateWorkout}
           disabled={isLoading}
-          className="w-full bg-green-500 text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+          className="w-full bg-[#f43000] text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
         >
           {isLoading ? (
             <>
