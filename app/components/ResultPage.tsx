@@ -70,15 +70,15 @@ export function ResultPage() {
     setExercises(prev => {
       const updated = prev.map((ex, i) => (i === index ? { ...ex, isCompleted: !ex.isCompleted } : ex));
 
-      // 체크박스를 눌렀을 때, 타이머가 시작되지 않았으면 자동으로 시작
-      if (!isRunning && !updated[index].isCompleted) {
-        setIsRunning(true);
+      // 체크박스를 체크했을 때 (완료 처리), 타이머가 시작되지 않았으면 자동으로 시작
+      if (!isRunning && updated[index].isCompleted) {
+        setTimeout(() => setIsRunning(true), 0);
       }
 
       // 모든 운동이 완료되었는지 확인
       const allCompleted = updated.every(ex => ex.isCompleted);
-      if (allCompleted && isRunning) {
-        setIsRunning(false);
+      if (allCompleted) {
+        setTimeout(() => setIsRunning(false), 0);
       }
 
       return updated;

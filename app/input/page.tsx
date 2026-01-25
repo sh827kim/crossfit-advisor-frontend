@@ -38,6 +38,7 @@ export default function InputPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showEmptyWodPopup, setShowEmptyWodPopup] = useState(false);
 
   // 모드가 없으면 홈으로 리다이렉트
   useEffect(() => {
@@ -53,6 +54,16 @@ export default function InputPage() {
   const modeConfig = MODE_TITLES[currentMode];
 
   const handleGenerateWorkout = async () => {
+    // WOD 모드에서 입력이 없으면 팝업 표시
+    if (currentMode === 'wod' && wodList.length === 0) {
+      setShowEmptyWodPopup(true);
+      return;
+    }
+
+    await executeGeneration();
+  };
+
+  const executeGeneration = async () => {
     setIsLoading(true);
     setError(null);
 
@@ -60,12 +71,6 @@ export default function InputPage() {
       let requestBody: any;
 
       if (currentMode === 'wod') {
-        if (wodList.length === 0) {
-          if (!confirm('입력된 WOD가 없습니다. 전신 보조운동을 추천할까요?')) {
-            setIsLoading(false);
-            return;
-          }
-        }
         requestBody = {
           duration: totalTime,
           wodMovementIds: wodList.map(m => m.id)
@@ -169,6 +174,35 @@ export default function InputPage() {
           )}
         </button>
       </div>
+
+      {/* WOD 입력 없음 팝업 */}
+      {showEmptyWodPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-6">
+          <div className="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full">
+            <h3 className="text-xl font-black text-slate-800 mb-2 text-center">입력된 WOD가 없습니다</h3>
+            <p className="text-sm text-slate-500 text-center mb-6">
+              전신 보조운동을 추천할까요?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowEmptyWodPopup(false)}
+                className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 rounded-2xl transition"
+              >
+                취소
+              </button>
+              <button
+                onClick={() => {
+                  setShowEmptyWodPopup(false);
+                  executeGeneration();
+                }}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition"
+              >
+                추천받기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
