@@ -20,7 +20,6 @@ export function ResultPage() {
     setIsRunning
   } = useApp();
 
-  const [isCompleted, setIsCompleted] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
@@ -49,7 +48,6 @@ export function ResultPage() {
         setTimerSeconds(prev => {
           if (prev <= 1) {
             setIsRunning(false);
-            setIsCompleted(true);
             return 0;
           }
           return prev - 1;
@@ -58,7 +56,7 @@ export function ResultPage() {
     }
 
     return () => clearInterval(interval);
-  }, [isRunning, timerSeconds]);
+  }, [isRunning, timerSeconds, setIsRunning, setTimerSeconds]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

@@ -72,8 +72,7 @@ function selectCandidatesForWod(avoidMuscles: Set<MuscleGroup>, allMovements: Mo
 export function generateWorkoutPlan(
   mode: WorkoutMode,
   duration: number,
-  candidates: Movement[],
-  modeDisplay: string
+  candidates: Movement[]
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
   // 운동 개수 계산 (시간당 1개 기본, 최대 4개)
   let count = Math.ceil(duration / 10) + 1;
@@ -126,7 +125,7 @@ export function generateWodPlan(
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
   const avoidMuscles = detectAvoidMuscles(wodMovements);
   const candidates = selectCandidatesForWod(avoidMuscles, allMovements);
-  return generateWorkoutPlan('WOD', duration, candidates, '부족 부위 채우기');
+  return generateWorkoutPlan('WOD', duration, candidates);
 }
 
 /**
@@ -138,7 +137,7 @@ export function generateGoalPlan(
   allMovements: Movement[]
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
   const candidates = selectCandidatesForGoal(goalMovementName, allMovements);
-  return generateWorkoutPlan('GOAL', duration, candidates, '목표 달성');
+  return generateWorkoutPlan('GOAL', duration, candidates);
 }
 
 /**
@@ -150,5 +149,5 @@ export function generatePartPlan(
   allMovements: Movement[]
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
   const candidates = selectCandidatesForPart(targetMuscles, allMovements);
-  return generateWorkoutPlan('PART', duration, candidates, '타겟 집중');
+  return generateWorkoutPlan('PART', duration, candidates);
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import movementsData from '@/public/data/movements.json';
 import { generatePartPlan } from '@/app/lib/workout-generator';
-import { WorkoutGeneratePartRequest, WorkoutPlan, ApiResponse, MuscleGroup } from '@/app/lib/types/workout.types';
+import { WorkoutGeneratePartRequest, WorkoutPlan, ApiResponse, MuscleGroup, Movement } from '@/app/lib/types/workout.types';
 
 const VALID_MUSCLE_GROUPS: MuscleGroup[] = ['CORE', 'LEGS', 'BACK', 'CHEST', 'CARDIO'];
 
@@ -41,11 +41,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 운동 계획 생성
-    const allMovements = movementsData.movements;
+    const allMovements = movementsData.movements as unknown as Movement[];
     const { exercises, rounds, targetTimePerRound } = generatePartPlan(
       duration,
       validMuscles,
-      allMovements as any
+      allMovements
     );
 
     const workoutPlan: WorkoutPlan = {

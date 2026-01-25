@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import movementsData from '@/public/data/movements.json';
 import { generateWodPlan } from '@/app/lib/workout-generator';
-import { WorkoutGenerateWodRequest, WorkoutPlan, ApiResponse } from '@/app/lib/types/workout.types';
+import { WorkoutGenerateWodRequest, WorkoutPlan, ApiResponse, Movement } from '@/app/lib/types/workout.types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,12 +18,12 @@ export async function POST(request: NextRequest) {
     }
 
     // 입력한 운동 객체 가져오기 (ID 기반)
-    const allMovements = movementsData.movements;
-    const wodMovements: any[] = [];
+    const allMovements = movementsData.movements as unknown as Movement[];
+    const wodMovements: Movement[] = [];
 
     if (wodMovementIds && Array.isArray(wodMovementIds)) {
       for (const id of wodMovementIds) {
-        const movement = allMovements.find((m: any) => m.id === id);
+        const movement = allMovements.find(m => m.id === id);
         if (movement) {
           wodMovements.push(movement);
         }
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const { exercises, rounds, targetTimePerRound } = generateWodPlan(
       duration,
       wodMovements,
-      allMovements as any
+      allMovements
     );
 
     const workoutPlan: WorkoutPlan = {

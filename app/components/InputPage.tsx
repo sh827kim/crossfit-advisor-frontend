@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useApp } from '@/app/context/AppContext';
-import { Movement } from '@/app/lib/types/workout.types';
+import { ApiResponse, WorkoutGenerateGoalRequest, WorkoutGeneratePartRequest, WorkoutGenerateWodRequest, WorkoutPlan } from '@/app/lib/types/workout.types';
 import { WodInputSection } from './input-sections/WodInputSection';
 import { GoalInputSection } from './input-sections/GoalInputSection';
 import { PartInputSection } from './input-sections/PartInputSection';
@@ -31,8 +31,6 @@ export function InputPage() {
     setTotalTime,
     setGeneratedPlan,
     resetInputState,
-    addWorkoutRecord,
-    generatedPlan,
     wodList,
     selectedGoal,
     selectedParts
@@ -64,7 +62,7 @@ export function InputPage() {
     setError(null);
 
     try {
-      let requestBody: any;
+      let requestBody: WorkoutGenerateWodRequest | WorkoutGenerateGoalRequest | WorkoutGeneratePartRequest;
 
       if (currentMode === 'wod') {
         requestBody = {
@@ -101,9 +99,9 @@ export function InputPage() {
         body: JSON.stringify(requestBody)
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as ApiResponse<WorkoutPlan>;
 
-      if (!data.success) {
+      if (!data.success || !data.data) {
         setError(data.message || '운동 계획 생성에 실패했습니다.');
         setIsLoading(false);
         return;

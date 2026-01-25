@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
@@ -80,12 +81,15 @@ export function ProfilePage() {
           onClick={() => fileInputRef.current?.click()}
           className="group"
         >
-          <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-blue-600 border-4 border-white shadow-sm overflow-hidden cursor-pointer group-hover:border-blue-600 group-hover:brightness-75 transition">
+          <div className="w-24 h-24 bg-blue-100 rounded-full relative flex items-center justify-center mx-auto mb-4 text-4xl text-blue-600 border-4 border-white shadow-sm overflow-hidden cursor-pointer group-hover:border-blue-600 group-hover:brightness-75 transition">
             {userProfileImage ? (
-              <img
+              <Image
                 src={userProfileImage}
                 alt="프로필"
-                className="w-full h-full object-cover"
+                fill
+                sizes="96px"
+                className="object-cover"
+                unoptimized
               />
             ) : (
               <i className="fa-solid fa-user-astronaut"></i>
