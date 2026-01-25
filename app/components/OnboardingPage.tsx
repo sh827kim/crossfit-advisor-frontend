@@ -9,6 +9,48 @@ import { compressImage } from '@/app/lib/image-utils';
 // 온보딩 단계: splash → walkthrough → profile
 type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
 
+// 워크스루 단계 인터페이스
+interface WalkthroughStep {
+  title: string;
+  description: string;
+}
+
+// 워크스루 단계 정의
+const walkthroughSteps: WalkthroughStep[] = [
+  {
+    title: '운동 계획 추천',
+    description: 'WOD, 목표, 부위별로 선택하여\n맞춤형 워크아웃을 추천받으세요.'
+  },
+  {
+    title: '운동 진행',
+    description: '타이머와 체크박스로 운동을\n체계적으로 진행하세요.'
+  },
+  {
+    title: '기록하기',
+    description: '완료한 운동을 기록하여\n당신의 운동 데이터를 관리하세요.'
+  }
+];
+
+// 랜덤 배경 색상 생성
+const backgroundColors = [
+  '#FF6B6B', // 빨강
+  '#4ECDC4', // 청록
+  '#45B7D1', // 파랑
+  '#FFA07A', // 라이트 산호
+  '#98D8C8', // 민트
+  '#F7DC6F', // 노랑
+  '#BB8FCE', // 보라
+  '#85C1E2', // 하늘
+  '#F8B88B', // 살구
+  '#ABEBC6', // 라임
+];
+
+const getRandomColor = (seed: string) => {
+  // 닉네임의 첫 글자를 기반으로 일관된 색상 선택
+  const charCode = seed.charCodeAt(0) || 0;
+  return backgroundColors[charCode % backgroundColors.length];
+};
+
 export function OnboardingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,6 +62,11 @@ export function OnboardingPage() {
   const [showContent, setShowContent] = useState(false);
   const [nickname, setNickname] = useState(userNickname);
   const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
+
+  // Walkthrough 애니메이션 상태
+  const [visibleSteps, setVisibleSteps] = useState<number>(0);
+  const [displayedTexts, setDisplayedTexts] = useState<string[]>(['', '', '']);
+  const [typingIndices, setTypingIndices] = useState<number[]>([0, 0, 0]);
 
   // 초기화 요청 시 데이터 초기화
   useEffect(() => {
@@ -84,6 +131,58 @@ export function OnboardingPage() {
     }
   }, [hasVisited, shouldReset]);
 
+  // Walkthrough 단계별 애니메이션
+  useEffect(() => {
+    if (currentStep !== 'walkthrough') return;
+
+    // 0.5초마다 한 단계씩 보이기
+    const stepTimer = setInterval(() => {
+      setVisibleSteps(prev => {
+        if (prev < walkthroughSteps.length) {
+          return prev + 1;
+        }
+        clearInterval(stepTimer);
+        return prev;
+      });
+    }, 800);
+
+    return () => clearInterval(stepTimer);
+  }, [currentStep]);
+
+  // 각 단계별 타이핑 애니메이션
+  useEffect(() => {
+    if (currentStep !== 'walkthrough') return;
+
+    const timers: NodeJS.Timeout[] = [];
+
+    for (let stepIndex = 0; stepIndex < visibleSteps; stepIndex++) {
+      const fullText = walkthroughSteps[stepIndex].description;
+
+      // 각 단계가 보이는 시점부터 타이핑 시작
+      const startDelay = stepIndex * 800 + 200;
+
+      if (displayedTexts[stepIndex].length < fullText.length) {
+        const timer = setInterval(() => {
+          setDisplayedTexts(prev => {
+            const newTexts = [...prev];
+            if (newTexts[stepIndex].length < fullText.length) {
+              newTexts[stepIndex] = fullText.slice(0, newTexts[stepIndex].length + 1);
+            }
+            return newTexts;
+          });
+        }, 50);
+
+        setTimeout(() => {
+          timers.push(timer);
+        }, startDelay);
+      }
+    }
+
+    return () => {
+      timers.forEach(timer => clearInterval(timer));
+    };
+  }, [currentStep, visibleSteps, displayedTexts]);
+
   // userProfileImage 변경 감지
   useEffect(() => {
     setProfileImage(userProfileImage);
@@ -140,14 +239,28 @@ export function OnboardingPage() {
           <div className="flex flex-col items-center justify-center">
             {/* AFTERWOD 로고 */}
             <div className="mb-8">
-              <div className="bg-[#f43000] px-12 py-8 flex flex-col items-center rounded-lg">
-                <h1 className="text-4xl font-black text-black mb-3 italic">
+              <div className="bg-[#f43000] px-16 py-6 flex flex-col items-center rounded-lg">
+                <h1 className="text-5xl font-black text-black mb-3" style={{ fontFamily: 'CF_Compressed_Heavy, sans-serif', letterSpacing: '-0.02em', fontStyle: 'italic' }}>
                   AFTERWOD
                 </h1>
-                <div className="flex items-center gap-3 w-full">
-                  <div className="flex-1 h-0.5 bg-black"></div>
+                <div className="flex items-center gap-3 w-full px-4">
+                  {/* 왼쪽 화살표 */}
+                  <div className="flex flex-col items-center justify-center flex-1">
+                    <div className="w-1 h-6 bg-black mb-1"></div>
+                    <div className="flex gap-1">
+                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(45deg) translateY(-1px)' }}></div>
+                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(-45deg) translateY(1px)' }}></div>
+                    </div>
+                  </div>
                   <p className="text-xl font-bold text-black whitespace-nowrap">CLUB</p>
-                  <div className="flex-1 h-0.5 bg-black"></div>
+                  {/* 오른쪽 화살표 */}
+                  <div className="flex flex-col items-center justify-center flex-1">
+                    <div className="flex gap-1">
+                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(-45deg) translateY(1px)' }}></div>
+                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(45deg) translateY(-1px)' }}></div>
+                    </div>
+                    <div className="w-1 h-6 bg-black mt-1"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -159,8 +272,8 @@ export function OnboardingPage() {
     // 워크스루 화면 - 3가지 기능 설명
     if (currentStep === 'walkthrough') {
       return (
-        <main className="flex-grow flex flex-col justify-between items-center bg-black text-white px-6 pb-10 pt-8 overflow-y-auto">
-          <div className="flex-1 flex flex-col justify-start pt-4">
+        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6 overflow-y-auto">
+          <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
             <div className="mb-8">
               <p className="text-lg font-bold text-[#f43000] mb-2">
@@ -179,77 +292,58 @@ export function OnboardingPage() {
 
             {/* 3가지 기능 설명 */}
             <div className="space-y-6">
-              {/* 운동 계획 추천 */}
-              <div className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[#f43000] flex items-center justify-center text-black font-bold text-sm mb-3">
-                    1
+              {walkthroughSteps.map((step, index) => (
+                <div key={index} className={`flex gap-3 transition-opacity duration-300 ${visibleSteps > index ? 'opacity-100' : 'opacity-0'}`}>
+                  {/* 왼쪽 숫자 + 라인 */}
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-[#f43000] flex items-center justify-center text-black font-bold text-xs">
+                      {index + 1}
+                    </div>
+                    {/* 마지막 항목이 아니면 라인 표시 */}
+                    {index < walkthroughSteps.length - 1 && visibleSteps > index + 1 && (
+                      <div className="w-0.5 h-12 bg-[#921d00] mt-2"></div>
+                    )}
                   </div>
-                  <div className="w-1 h-16 bg-[#921d00]"></div>
-                </div>
-                <div className="flex-1 pt-1">
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    운동 계획 추천
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Crossfiter를 위한 맞춤형 워크아웃 추천해드려요.
-                  </p>
-                </div>
-              </div>
 
-              {/* 운동 진행 */}
-              <div className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[#f43000] flex items-center justify-center text-black font-bold text-sm mb-3">
-                    2
-                  </div>
-                  <div className="w-1 h-16 bg-[#921d00]"></div>
-                </div>
-                <div className="flex-1 pt-1">
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    운동 진행
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Crossfiter를 위한 맞춤형 워크아웃 추천해드려요.
-                  </p>
-                </div>
-              </div>
-
-              {/* 기록하기 */}
-              <div className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[#f43000] flex items-center justify-center text-black font-bold text-sm">
-                    3
+                  {/* 오른쪽 텍스트 */}
+                  <div className="flex-1 pt-0.5">
+                    <h3 className="text-lg font-bold text-white mb-1">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-gray-400 whitespace-pre-line min-h-10">
+                      {displayedTexts[index]}
+                      {displayedTexts[index].length < step.description.length && visibleSteps > index && (
+                        <span className="animate-pulse">|</span>
+                      )}
+                    </p>
                   </div>
                 </div>
-                <div className="flex-1 pt-1">
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    기록하기
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Crossfiter를 위한 맞춤형 워크아웃 추천해드려요.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Next 버튼 */}
-          <button
-            onClick={() => setCurrentStep('profile')}
-            className="w-max bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-8 rounded-full flex items-center gap-2 transition active:scale-95"
-          >
-            Next
-            <i className="fa-solid fa-arrow-right-up transform rotate-180"></i>
-          </button>
+          {/* Next 버튼 - 모든 단계가 완료되면 표시 */}
+          {visibleSteps === walkthroughSteps.length && displayedTexts[walkthroughSteps.length - 1].length === walkthroughSteps[walkthroughSteps.length - 1].description.length && (
+            <button
+              onClick={() => setCurrentStep('profile')}
+              className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn"
+            >
+              Next
+              <i className="fa-solid fa-arrow-up-right"></i>
+            </button>
+          )}
         </main>
       );
     }
 
     // 프로필 설정 화면
     if (currentStep === 'profile') {
+      // 닉네임의 첫 글자 추출
+      const firstChar = nickname.charAt(0) || '신';
+      const profileBgColor = getRandomColor(nickname || '신');
+
       return (
-        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-10 pt-8 overflow-y-auto">
+        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-8 pt-8 overflow-y-auto">
           <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
             <div className="mb-8">
@@ -267,19 +361,29 @@ export function OnboardingPage() {
             </div>
 
             {/* 프로필 카드 */}
-            <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-gray-700 rounded-3xl p-8 mb-8 backdrop-blur-sm">
+            <div
+              className="relative rounded-3xl p-8 mb-8 overflow-hidden"
+              style={{
+                background: `linear-gradient(125.7deg, rgba(244, 48, 0, 0.2) 3.2%, rgba(0, 0, 0, 0.2) 35.5%), linear-gradient(90deg, rgb(31, 31, 31) 0%, rgb(31, 31, 31) 100%)`,
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                boxShadow: '0 0 32px rgba(244, 48, 0, 0.15)'
+              }}
+            >
               {/* MEMBER 라벨 */}
               <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-6 text-center opacity-50">
                 Member
               </p>
 
               {/* 프로필 이미지 */}
-              <div className="flex justify-center mb-8">
+              <div className="flex justify-center mb-8 relative">
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="group relative"
                 >
-                  <div className="w-24 h-24 rounded-full bg-yellow-300 relative flex items-center justify-center overflow-hidden cursor-pointer hover:brightness-90 transition">
+                  <div
+                    className="w-24 h-24 rounded-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:brightness-90 transition"
+                    style={{ backgroundColor: profileBgColor }}
+                  >
                     {profileImage ? (
                       <Image
                         src={profileImage}
@@ -291,7 +395,7 @@ export function OnboardingPage() {
                       />
                     ) : (
                       <span className="text-4xl font-bold text-black">
-                        신
+                        {firstChar}
                       </span>
                     )}
                   </div>
@@ -325,10 +429,24 @@ export function OnboardingPage() {
               </div>
 
               {/* 표시된 닉네임 */}
-              <div className="text-center">
+              <div className="text-center mb-6">
                 <p className="text-lg font-bold text-white">
                   {nickname || '신나는 승리'}
                 </p>
+              </div>
+
+              {/* 로고 */}
+              <div className="flex flex-col items-center justify-center pt-4 border-t border-gray-700">
+                <div className="text-center mt-4 opacity-50">
+                  <p className="text-xs font-bold text-white tracking-wider" style={{ fontFamily: 'CF_Compressed_Heavy, sans-serif', letterSpacing: '0.15em' }}>
+                    AFTERWOD
+                  </p>
+                  <div className="flex items-center justify-center gap-2 mt-1">
+                    <div className="w-1 h-3 bg-white"></div>
+                    <p className="text-xs font-bold text-white">CLUB</p>
+                    <div className="w-1 h-3 bg-white"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
