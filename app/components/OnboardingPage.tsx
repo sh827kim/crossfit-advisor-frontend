@@ -240,27 +240,15 @@ export function OnboardingPage() {
             {/* AFTERWOD 로고 */}
             <div className="mb-8">
               <div className="bg-[#f43000] px-16 py-6 flex flex-col items-center rounded-lg">
-                <h1 className="text-5xl font-black text-black mb-3" style={{ fontFamily: 'CF_Compressed_Heavy, sans-serif', letterSpacing: '-0.02em', fontStyle: 'italic' }}>
+                <h1 className="text-5xl font-black text-black mb-3 italic" style={{ fontFamily: 'SF Pro, sans-serif', fontWeight: 900, letterSpacing: '-0.02em' }}>
                   AFTERWOD
                 </h1>
                 <div className="flex items-center gap-3 w-full px-4">
-                  {/* 왼쪽 화살표 */}
-                  <div className="flex flex-col items-center justify-center flex-1">
-                    <div className="w-1 h-6 bg-black mb-1"></div>
-                    <div className="flex gap-1">
-                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(45deg) translateY(-1px)' }}></div>
-                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(-45deg) translateY(1px)' }}></div>
-                    </div>
-                  </div>
+                  {/* 왼쪽 선 */}
+                  <div className="flex-1 h-1 bg-black"></div>
                   <p className="text-xl font-bold text-black whitespace-nowrap">CLUB</p>
-                  {/* 오른쪽 화살표 */}
-                  <div className="flex flex-col items-center justify-center flex-1">
-                    <div className="flex gap-1">
-                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(-45deg) translateY(1px)' }}></div>
-                      <div className="w-1.5 h-2 bg-black" style={{ transform: 'rotate(45deg) translateY(-1px)' }}></div>
-                    </div>
-                    <div className="w-1 h-6 bg-black mt-1"></div>
-                  </div>
+                  {/* 오른쪽 선 */}
+                  <div className="flex-1 h-1 bg-black"></div>
                 </div>
               </div>
             </div>
@@ -326,10 +314,10 @@ export function OnboardingPage() {
           {visibleSteps === walkthroughSteps.length && displayedTexts[walkthroughSteps.length - 1].length === walkthroughSteps[walkthroughSteps.length - 1].description.length && (
             <button
               onClick={() => setCurrentStep('profile')}
-              className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-6 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn"
+              className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-8 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn text-lg"
             >
-              Next
-              <i className="fa-solid fa-arrow-up-right"></i>
+              <span>Next</span>
+              <span>→</span>
             </button>
           )}
         </main>
@@ -428,23 +416,16 @@ export function OnboardingPage() {
                 />
               </div>
 
-              {/* 표시된 닉네임 */}
-              <div className="text-center mb-6">
-                <p className="text-lg font-bold text-white">
-                  {nickname || '신나는 승리'}
-                </p>
-              </div>
-
               {/* 로고 */}
-              <div className="flex flex-col items-center justify-center pt-4 border-t border-gray-700">
-                <div className="text-center mt-4 opacity-50">
-                  <p className="text-xs font-bold text-white tracking-wider" style={{ fontFamily: 'CF_Compressed_Heavy, sans-serif', letterSpacing: '0.15em' }}>
+              <div className="flex flex-col items-center justify-center pt-6 border-t border-gray-700">
+                <div className="text-center mt-4 opacity-40">
+                  <p className="text-xs font-bold text-white tracking-wide italic" style={{ fontSize: '10px', letterSpacing: '0.1em' }}>
                     AFTERWOD
                   </p>
-                  <div className="flex items-center justify-center gap-2 mt-1">
-                    <div className="w-1 h-3 bg-white"></div>
+                  <div className="flex items-center justify-center gap-1.5 mt-1">
+                    <div className="w-0.5 h-2 bg-white"></div>
                     <p className="text-xs font-bold text-white">CLUB</p>
-                    <div className="w-1 h-3 bg-white"></div>
+                    <div className="w-0.5 h-2 bg-white"></div>
                   </div>
                 </div>
               </div>
