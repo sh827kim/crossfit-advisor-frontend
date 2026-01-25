@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Crossfit 초심자들을 위한 보강운동 추천 및 운동 기록 관리 프론트엔드 애플리케이션입니다.
 
-**서비스명**: 애프터와드 (Afterword)
+**서비스명**: 애프터와드 (AfterWOD)
 
 **주요 기능**:
 - 3가지 운동 모드 선택 (WOD, GOAL, PART)
