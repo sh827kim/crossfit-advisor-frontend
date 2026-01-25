@@ -6,7 +6,7 @@ import { useApp } from '@/app/context/AppContext';
 
 export function HistoryPage() {
   const router = useRouter();
-  const { workoutHistory } = useApp();
+  const { workoutHistory, isLoadingHistory } = useApp();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [today] = useState(() => new Date());
@@ -59,6 +59,15 @@ export function HistoryPage() {
   };
 
   const selectedDateRecords = selectedDate ? getRecordsForDate(selectedDate) : [];
+
+  // 로딩 중일 때
+  if (isLoadingHistory) {
+    return (
+      <main className="px-6 pb-6 flex-grow flex flex-col justify-center">
+        <p className="text-center text-slate-400">운동 기록을 불러오는 중...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="px-6 pb-6 flex-grow flex flex-col">

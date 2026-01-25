@@ -67,3 +67,17 @@ export interface ApiResponse<T> {
   message: string;
   data: T | null;
 }
+
+// 운동 기록 (앱 전체에서 사용)
+export interface WorkoutRecord {
+  date: string; // '2026-01-18' 형식
+  mode: 'WOD' | 'GOAL' | 'PART';
+  duration: number;
+  exercises: string[];
+}
+
+// IndexedDB에 저장되는 운동 기록 (내부용)
+export interface WorkoutRecordDB extends WorkoutRecord {
+  id?: number; // Auto-increment primary key
+  createdAt: number; // timestamp
+}

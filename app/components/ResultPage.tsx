@@ -87,7 +87,7 @@ export function ResultPage() {
     );
   };
 
-  const handleSaveRecord = () => {
+  const handleSaveRecord = async () => {
     if (!generatedPlan || !currentMode) return;
 
     const record = {
@@ -97,7 +97,7 @@ export function ResultPage() {
       exercises: exercises.map(ex => `${ex.name} ${ex.currentMinReps ? `${ex.currentMinReps}-${ex.currentMaxReps}` : ''}`)
     };
 
-    addWorkoutRecord(record);
+    await addWorkoutRecord(record);
     alert('운동 기록 저장 완료! 🔥');
 
     resetInputState();
