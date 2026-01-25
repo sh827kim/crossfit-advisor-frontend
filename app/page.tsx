@@ -37,11 +37,13 @@ export default function HomePage() {
     resetInputState();
     setCurrentMode(mode);
 
-    // Balance Care (WOD 모드)는 별도의 선택 페이지로 이동
+    // 모드별 전용 선택 페이지로 이동
     if (mode === 'wod') {
       router.push('/balance-care');
+    } else if (mode === 'goal') {
+      router.push('/goal-care');
     } else {
-      router.push('/input');
+      router.push('/part-care');
     }
   };
 

@@ -36,12 +36,14 @@ function getChosung(str: string): string {
 
 export default function BalanceCarePage() {
   const router = useRouter();
-  const { setCurrentMode, setTotalTime, resetInputState, addWod } = useApp();
+  const { setCurrentMode, setTotalTime, resetInputState, setGeneratedPlan } = useApp();
   const [searchInput, setSearchInput] = useState('');
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState(20);
   const [allMovements, setAllMovements] = useState<Movement[]>([]);
   const [frequentMovements, setFrequentMovements] = useState<Movement[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // API에서 운동 데이터 로드
   useEffect(() => {
@@ -88,29 +90,46 @@ export default function BalanceCarePage() {
     }
   };
 
-  const handleProceed = () => {
+  const handleGenerateWorkout = async () => {
     if (selectedExercises.length === 0) {
       alert('최소 1개의 운동을 선택해주세요.');
       return;
     }
 
-    resetInputState();
-    setCurrentMode('wod');
-    setTotalTime(selectedTime);
+    setIsLoading(true);
+    setError(null);
 
-    // 선택된 운동들을 Context에 추가
-    selectedExercises.forEach(exerciseId => {
-      const movement = allMovements.find(m => m.id === exerciseId);
-      if (movement) {
-        addWod(movement);
+    try {
+      const requestBody = {
+        duration: selectedTime,
+        wodMovementIds: selectedExercises
+      };
+
+      const response = await fetch('/api/v1/workouts/generate/wod', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        setError(data.message || '운동 계획 생성에 실패했습니다.');
+        setIsLoading(false);
+        return;
       }
-    });
 
-    router.push('/input');
+      setGeneratedPlan(data.data);
+      router.push('/result');
+    } catch (err) {
+      console.error('Error generating workout:', err);
+      setError('운동 계획 생성 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleBack = () => {
-    resetInputState();
     router.push('/');
   };
 
@@ -229,13 +248,28 @@ export default function BalanceCarePage() {
         </div>
       </div>
 
+      {/* 에러 메시지 */}
+      {error && (
+        <div className="px-4 py-3 mb-4 bg-red-900 border border-red-700 rounded-lg text-xs text-red-200 text-center">
+          {error}
+        </div>
+      )}
+
       {/* 진행 버튼 */}
       <div className="flex-shrink-0 px-4 pb-6">
         <button
-          onClick={handleProceed}
-          className="w-full bg-[#f43000] text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90"
+          onClick={handleGenerateWorkout}
+          disabled={isLoading}
+          className="w-full bg-[#f43000] text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
         >
-          나만의 밸런스 운동 생성하기
+          {isLoading ? (
+            <>
+              <i className="fa-solid fa-circle-notch fa-spin mr-2"></i>
+              생성 중...
+            </>
+          ) : (
+            '나만의 밸런스 운동 생성하기'
+          )}
         </button>
       </div>
     </main>
