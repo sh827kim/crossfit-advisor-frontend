@@ -418,14 +418,16 @@ export function OnboardingPage() {
 
               {/* 로고 */}
               <div className="flex flex-col items-center justify-center pt-6 border-t border-gray-700">
-                <div className="text-center mt-4 opacity-40">
-                  <p className="text-xs font-bold text-white tracking-wide italic" style={{ fontSize: '10px', letterSpacing: '0.1em' }}>
-                    AFTERWOD
-                  </p>
-                  <div className="flex items-center justify-center gap-1.5 mt-1">
-                    <div className="w-0.5 h-2 bg-white"></div>
-                    <p className="text-xs font-bold text-white">CLUB</p>
-                    <div className="w-0.5 h-2 bg-white"></div>
+                <div className="mt-4 opacity-40">
+                  <div className="bg-gray-800 px-16 py-2 flex flex-col items-center rounded" style={{ border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                    <p className="text-xs font-bold text-white tracking-wide italic mb-2" style={{ fontSize: '9px', letterSpacing: '0.08em' }}>
+                      AFTERWOD
+                    </p>
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="flex-1 h-0.5 bg-white"></div>
+                      <p className="text-xs font-bold text-white whitespace-nowrap">CLUB</p>
+                      <div className="flex-1 h-0.5 bg-white"></div>
+                    </div>
                   </div>
                 </div>
               </div>
