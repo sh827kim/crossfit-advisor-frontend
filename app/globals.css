@@ -119,3 +119,13 @@
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
+
+/* 스크롤바 숨기기 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -210,12 +210,12 @@ export default function BalanceCarePage() {
             <p className="text-sm">검색 결과가 없습니다</p>
           </div>
         ) : searchInput.trim() ? (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             {filteredMovements.map(movement => (
               <button
                 key={movement.id}
                 onClick={() => handleExerciseSelect(movement.id)}
-                className={`p-4 rounded-xl flex items-center justify-center transition-all active:scale-95 border font-semibold text-sm ${
+                className={`p-3 rounded-xl flex items-center justify-center transition-all active:scale-95 border font-semibold text-xs h-24 ${
                   selectedExercises.includes(movement.id)
                     ? 'bg-gray-800 border-gray-700 shadow-lg'
                     : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md'
@@ -231,14 +231,14 @@ export default function BalanceCarePage() {
       {/* 운동 시간 선택 (수평 스크롤) */}
       <div className="flex-shrink-0 px-4 py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
         <p className="text-xs font-bold text-gray-400 mb-4 text-center uppercase tracking-wider">운동 시간</p>
-        <div className="flex gap-3 justify-center overflow-x-auto pb-2">
+        <div className="flex gap-3 justify-center overflow-x-auto pb-2 hide-scrollbar">
           {[10, 15, 20, 25, 30, 35, 40].map(time => (
             <button
               key={time}
               onClick={() => setSelectedTime(time)}
               className={`flex-shrink-0 px-4 py-2 rounded-lg font-bold transition-all ${
                 selectedTime === time
-                  ? 'bg-gray-400 text-black text-base'
+                  ? 'bg-white text-black text-base'
                   : 'bg-gray-700 text-gray-300 text-sm hover:bg-gray-600'
               }`}
             >
