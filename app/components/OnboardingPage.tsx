@@ -5,6 +5,48 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
+import { defineStepper } from '@/components/ui/stepper';
+
+// 온보딩 단계: splash → walkthrough → profile
+type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
+
+const walkthroughStepper = defineStepper(
+  {
+    id: 'plan',
+    title: '운동 계획 추천',
+    description: 'WOD, 목표, 부위별로 선택하여\n맞춤형 워크아웃을 추천받으세요.'
+  },
+  {
+    id: 'progress',
+    title: '운동 진행',
+    description: '타이머와 체크박스로 운동을\n체계적으로 진행하세요.'
+  },
+  {
+    id: 'record',
+    title: '기록하기',
+    description: '완료한 운동을 기록하여\n당신의 운동 데이터를 관리하세요.'
+  }
+);
+
+// 랜덤 배경 색상 생성
+const backgroundColors = [
+  '#FF6B6B', // 빨강
+  '#4ECDC4', // 청록
+  '#45B7D1', // 파랑
+  '#FFA07A', // 라이트 산호
+  '#98D8C8', // 민트
+  '#F7DC6F', // 노랑
+  '#BB8FCE', // 보라
+  '#85C1E2', // 하늘
+  '#F8B88B', // 살구
+  '#ABEBC6', // 라임
+];
+
+const getRandomColor = (seed: string) => {
+  // 닉네임의 첫 글자를 기반으로 일관된 색상 선택
+  const charCode = seed.charCodeAt(0) || 0;
+  return backgroundColors[charCode % backgroundColors.length];
+};
 
 export function OnboardingPage() {
   const router = useRouter();
@@ -13,14 +55,13 @@ export function OnboardingPage() {
   const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited, resetAllData } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasHandledResetRef = useRef(false);
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>('splash');
   const [showContent, setShowContent] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [nickname, setNickname] = useState(userNickname);
   const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
-  const [displayText, setDisplayText] = useState('');
-  const [subtitleText, setSubtitleText] = useState('');
-  const fullTitle = '애프터와드';
-  const fullSubtitle = '당신을 위한 보강운동 추천 서비스';
+
+  // Walkthrough 애니메이션 상태 (타이핑 로직 제거 -> 단계별 표시만 유지)
+  const [visibleSteps, setVisibleSteps] = useState<number>(0);
 
   // 초기화 요청 시 데이터 초기화
   useEffect(() => {
@@ -70,45 +111,45 @@ export function OnboardingPage() {
     }
   }, [hasVisited, router, shouldReset]);
 
-  // 텍스트 애니메이션 (프로필 설정 화면에서만 시작)
-  useEffect(() => {
-    if (!showProfile) return;
 
-    let titleIndex = 0;
-    let subtitleIndex = 0;
-
-    // 프로필 화면 진입 시 텍스트 리셋
-    setDisplayText('');
-    setSubtitleText('');
-
-    const titleTimer = setInterval(() => {
-      if (titleIndex < fullTitle.length) {
-        setDisplayText(fullTitle.slice(0, titleIndex + 1));
-        titleIndex++;
-      } else if (subtitleIndex < fullSubtitle.length) {
-        setSubtitleText(fullSubtitle.slice(0, subtitleIndex + 1));
-        subtitleIndex++;
-      } else {
-        clearInterval(titleTimer);
-      }
-    }, 50); // 50ms마다 한글자씩 나타나기
-
-    return () => clearInterval(titleTimer);
-  }, [showProfile]);
-
-  // 온보딩 화면 로딩 시뮬레이션
+  // 온보딩 단계별 타이밍
   useEffect(() => {
     // 초기화 요청이거나 첫 방문인 경우
     if (hasVisited === false || shouldReset) {
       // 스플래시 화면 표시
       setShowContent(true);
-      // 2초 후 프로필 설정 화면으로 전환
+      // 2.5초 후 워크스루 화면으로 전환
       const timer = setTimeout(() => {
-        setShowProfile(true);
-      }, 2000);
+        setCurrentStep('walkthrough');
+      }, 2500);
       return () => clearTimeout(timer);
     }
   }, [hasVisited, shouldReset]);
+
+  // Walkthrough 단계 진입 시 애니메이션 초기화
+  useEffect(() => {
+    if (currentStep !== 'walkthrough') {
+      return;
+    }
+
+    setVisibleSteps(0);
+
+    // 0.8초마다 한 단계씩 보이기
+    const stepTimer = setInterval(() => {
+      setVisibleSteps(prev => {
+        if (prev < walkthroughStepper.steps.length) {
+          return prev + 1;
+        }
+        clearInterval(stepTimer);
+        return prev;
+      });
+    }, 800);
+
+    return () => {
+      clearInterval(stepTimer);
+    };
+  }, [currentStep]);
+
 
   // userProfileImage 변경 감지
   useEffect(() => {
@@ -157,181 +198,217 @@ export function OnboardingPage() {
 
   // 첫 방문이거나 초기화 요청: 온보딩 페이지
   if (!hasVisited || shouldReset) {
-    // 스플래시 화면
-    if (!showProfile) {
+    // 스플래시 화면 - AFTERWOD CLUB 로고
+    if (currentStep === 'splash') {
       return (
-        <main className={`px-6 pb-6 pt-8 flex-grow flex flex-col justify-center items-center transition-opacity duration-500 ${
-          showContent ? 'opacity-100' : 'opacity-0'
-        }`}>
-          {/* 배경 그래디언트 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-white to-slate-50 -z-10"></div>
-
-          <div className="w-full flex flex-col items-center justify-center">
-            {/* 로고 애니메이션 */}
-            <div className="mb-8 animate-bounce">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <i className="fa-solid fa-dumbbell text-white text-5xl"></i>
-              </div>
-            </div>
-
-            {/* 앱 제목 */}
-            <h1 className="text-5xl font-black text-slate-800 mb-2">
-              애프터와드
-            </h1>
-
-            {/* 영문 서브 타이틀 */}
-            <p className="text-sm text-slate-400 font-medium mb-6 tracking-wider">
-              Afterwod
-            </p>
-
-            {/* 슬로건 */}
-            <div className="text-center mb-12">
-              <p className="text-lg font-bold text-slate-700 mb-1">
-                당신을 위한
-              </p>
-              <p className="text-lg font-bold text-slate-700 mb-1">
-                보강운동 추천 서비스
-              </p>
-              <p className="text-sm text-slate-500 mt-3">
-                Crossfit 초심자를 위한 맞춤형 워크아웃 추천
-              </p>
-            </div>
-
-            {/* 특징 아이콘 */}
-            <div className="grid grid-cols-3 gap-4 mb-12 w-full max-w-xs">
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                  <i className="fa-solid fa-brain text-blue-600"></i>
+        <main className={`flex-grow flex flex-col justify-center items-center bg-black transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'
+          }`}>
+          <div className="flex flex-col items-center justify-center">
+            {/* AFTERWOD 로고 */}
+            <div className="mb-8 px-8 max-w-sm">
+              <div className="bg-[#f43000] px-16 py-6 flex flex-col items-center rounded-lg">
+                <h1 className="text-5xl font-black text-black mb-3 italic" style={{ fontFamily: 'SF Pro, sans-serif', fontWeight: 900, letterSpacing: '-0.02em' }}>
+                  AFTERWOD
+                </h1>
+                <div className="flex items-center gap-3 w-full">
+                  {/* 왼쪽 선 */}
+                  <div className="flex-1 h-1 bg-black"></div>
+                  <p className="text-xl font-bold text-black whitespace-nowrap">CLUB</p>
+                  {/* 오른쪽 선 */}
+                  <div className="flex-1 h-1 bg-black"></div>
                 </div>
-                <p className="text-xs text-slate-600 font-medium">AI 추천</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
-                  <i className="fa-solid fa-chart-line text-green-600"></i>
-                </div>
-                <p className="text-xs text-slate-600 font-medium">기록 관리</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
-                  <i className="fa-solid fa-zap text-purple-600"></i>
-                </div>
-                <p className="text-xs text-slate-600 font-medium">맞춤형</p>
               </div>
             </div>
-
-            {/* 로딩 인디케이터 */}
-            <div className="flex items-center justify-center gap-1 mb-4">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-            </div>
-            <p className="text-xs text-slate-400 font-medium">준비 중입니다...</p>
-
-            {/* 스킵 버튼 */}
-            <button
-              onClick={() => setShowProfile(true)}
-              className="mt-8 text-xs font-medium text-slate-400 hover:text-blue-600 transition"
-            >
-              또는 시작하기 →
-            </button>
           </div>
         </main>
       );
     }
 
-    // 프로필 설정 화면
-    return (
-      <main className={`px-6 pb-6 pt-8 flex-grow flex flex-col justify-center transition-opacity duration-500 ${
-        showProfile ? 'opacity-100' : 'opacity-0'
-      }`}>
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-black text-slate-800 mb-2 min-h-12">
-            {displayText}
-            {displayText.length < fullTitle.length && (
-              <span className="animate-pulse">|</span>
-            )}
-          </h1>
-          <p className="text-sm text-slate-500 font-medium min-h-12">
-            {subtitleText}
-            {subtitleText.length < fullSubtitle.length && (
-              <span className="animate-pulse">|</span>
-            )}
-          </p>
-        </div>
+    // 워크스루 화면 - 3가지 기능 설명
+    if (currentStep === 'walkthrough') {
+      const visibleWalkthroughSteps = walkthroughStepper.steps.slice(0, visibleSteps);
+      const canGoNext = visibleSteps === walkthroughStepper.steps.length;
 
-        <div className="bg-white border border-gray-100 rounded-3xl p-8 shadow-lg shadow-gray-100 mb-6">
-          {/* 프로필 이미지 */}
-          <div className="flex justify-center mb-6">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="group"
-            >
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-blue-300 relative flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 group-hover:brightness-75 transition"
+      return (
+        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6 overflow-y-auto">
+          <div className="flex-1 flex flex-col justify-start">
+            {/* 헤더 텍스트 */}
+            <div className="mb-8 animate-fadeIn" style={{ animation: 'fadeIn 0.8s ease-out' }}>
+              <p className="text-lg font-bold text-[#f43000] mb-2">
+                애프터 와드는
+              </p>
+              <h2 className="text-3xl font-bold leading-tight mb-2">
+                당신을 위한
+              </h2>
+              <h2 className="text-3xl font-bold leading-tight mb-4">
+                보강운동 추천해드려요.
+              </h2>
+              <p className="text-sm text-gray-400">
+                Crossfiter를 위한 맞춤형 워크아웃 추천해드려요.
+              </p>
+            </div>
+
+            {/* 워크스루 단계 (Stepperize + shadcn-stepper) */}
+            <div className="mt-2">
+              <walkthroughStepper.Stepper.Provider
+                key="walkthrough-provider"
+                variant="vertical"
+                tracking={false}
+                initialStep={walkthroughStepper.steps[0].id}
+                indicatorClassName="h-7 w-7 bg-[#f43000] text-black hover:bg-[#d92a00]"
+                separatorClassName="bg-[#921d00]"
+                separatorCompletedClassName="bg-[#921d00]"
               >
-                {profileImage ? (
-                  <Image
-                    src={profileImage}
-                    alt="프로필"
-                    fill
-                    sizes="96px"
-                    className="object-cover"
-                    unoptimized
-                  />
-                ) : (
-                  <div className="text-center">
-                    <i className="fa-solid fa-camera text-blue-400 text-2xl mb-1 block"></i>
-                    <span className="text-xs text-blue-400 font-medium">사진 추가</span>
-                  </div>
+                {() => (
+                  <walkthroughStepper.Stepper.Navigation aria-label="워크스루 단계">
+                    {visibleWalkthroughSteps.map((step) => (
+                      <walkthroughStepper.Stepper.Step key={step.id} of={step.id} className="animate-fadeIn">
+                        <walkthroughStepper.Stepper.Title className="text-lg font-bold text-white">
+                          {step.title}
+                        </walkthroughStepper.Stepper.Title>
+                        <walkthroughStepper.Stepper.Panel>
+                          <p className="text-sm text-gray-400 whitespace-pre-line leading-relaxed">
+                            {step.description}
+                          </p>
+                        </walkthroughStepper.Stepper.Panel>
+                      </walkthroughStepper.Stepper.Step>
+                    ))}
+                  </walkthroughStepper.Stepper.Navigation>
                 )}
-              </div>
+              </walkthroughStepper.Stepper.Provider>
+            </div>
+          </div>
+
+          {canGoNext && (
+            <button
+              onClick={() => setCurrentStep('profile')}
+              className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-8 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn text-lg"
+            >
+              <span>Next</span>
+              <i className="fa-solid fa-arrow-right"></i>
             </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
+          )}
+        </main>
+      );
+    }
+
+    // 프로필 설정 화면
+    if (currentStep === 'profile') {
+      const firstChar = nickname.charAt(0) || '신';
+      const profileBgColor = getRandomColor(nickname || '신');
+
+      return (
+        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-8 pt-8 overflow-y-auto">
+          <div className="flex-1 flex flex-col justify-start">
+            {/* 헤더 텍스트 */}
+            <div className="mb-8">
+              <p className="text-lg font-bold text-[#f43000] mb-2">
+                거의 다 왔어요!
+              </p>
+              <h2 className="text-3xl font-bold leading-tight mb-4">
+                프로필을
+                <br />
+                등록해주세요.
+              </h2>
+              <p className="text-sm text-gray-400">
+                Crossfiter를 위한 맞춤형 워크아웃 추천
+              </p>
+            </div>
+
+            {/* 프로필 카드 */}
+            <div
+              className="relative rounded-3xl p-8 mb-8 overflow-hidden"
+              style={{
+                background: `linear-gradient(125.7deg, rgba(244, 48, 0, 0.2) 3.2%, rgba(0, 0, 0, 0.2) 35.5%), linear-gradient(90deg, rgb(31, 31, 31) 0%, rgb(31, 31, 31) 100%)`,
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                boxShadow: '0 0 32px rgba(244, 48, 0, 0.15)'
+              }}
+            >
+              {/* MEMBER 라벨 */}
+              <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-6 text-center opacity-50">
+                Member
+              </p>
+
+              {/* 프로필 이미지 */}
+              <div className="flex justify-center mb-8 relative">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="group relative"
+                >
+                  <div
+                    className="w-24 h-24 rounded-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:brightness-90 transition"
+                    style={{ backgroundColor: profileBgColor }}
+                  >
+                    {profileImage ? (
+                      <Image
+                        src={profileImage}
+                        alt="프로필"
+                        fill
+                        sizes="96px"
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <span className="text-4xl font-bold text-black">
+                        {firstChar}
+                      </span>
+                    )}
+                  </div>
+                  {/* 카메라 아이콘 */}
+                  <div className="absolute bottom-0 right-0 w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-500 transition">
+                    <i className="fa-solid fa-camera text-white text-xs"></i>
+                  </div>
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </div>
+
+              {/* 닉네임 입력 */}
+              <div className="mb-6">
+                <label className="block text-xs font-bold text-gray-500 mb-3">
+                  닉네임 ({nickname.length}/10)
+                </label>
+                <input
+                  type="text"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value.slice(0, 10))}
+                  placeholder="닉네임을 입력하세요"
+                  maxLength={10}
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-2xl text-white font-medium placeholder-gray-600 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-600"
+                />
+              </div>
+
+              {/* 로고 */}
+              <div className="flex flex-col items-center justify-center pt-6 border-t border-gray-700">
+                <div className="mt-4 opacity-40 flex flex-col items-center">
+                  <p className="text-sm font-bold text-white tracking-wide italic mb-2" style={{ fontSize: '14px', letterSpacing: '0.08em' }}>
+                    AFTERWOD
+                  </p>
+                  <div className="flex items-center gap-2 w-full">
+                    <div className="flex-1 h-0.5 bg-white"></div>
+                    <p className="text-xs font-bold text-white whitespace-nowrap" style={{ fontSize: '10px' }}>CLUB</p>
+                    <div className="flex-1 h-0.5 bg-white"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* 닉네임 입력 */}
-          <div className="mb-6">
-            <label className="block text-xs font-bold text-slate-600 mb-2">
-              닉네임
-            </label>
-            <input
-              type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value.slice(0, 10))}
-              placeholder="닉네임을 입력하세요"
-              maxLength={10}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-slate-800 font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-            />
-            <p className="text-xs text-slate-400 mt-1">{nickname.length}/10</p>
-          </div>
-
-          {/* 소개 문구 */}
-          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-6">
-            <p className="text-sm text-slate-700 font-medium">
-              <span className="text-blue-600 font-bold"> 계획 추천</span> →
-              <span className="text-blue-600 font-bold"> 운동 진행</span> →
-              <span className="text-blue-600 font-bold"> 기록</span>
-            </p>
-            <p className="text-xs text-slate-500 mt-2">
-              당신의 보강운동을 도와드려요!
-            </p>
-          </div>
-        </div>
-
-        {/* 시작 버튼 */}
-        <button
-          onClick={handleStart}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-blue-900/20 text-lg active:scale-95"
-        >
-          시작하기 <i className="fa-solid fa-arrow-right ml-2"></i>
-        </button>
-      </main>
-    );
+          {/* 시작하기 버튼 */}
+          <button
+            onClick={handleStart}
+            className="w-full bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-4 rounded-2xl transition active:scale-95 text-lg"
+          >
+            시작하기
+          </button>
+        </main>
+      );
+    }
   }
 
   // 재방문자는 렌더링하지 않음 (메인 페이지로 자동 리다이렉트됨)

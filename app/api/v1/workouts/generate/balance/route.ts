@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import movementsData from '@/public/data/movements.json';
-import { generateWodPlan } from '@/app/lib/workout-generator';
-import { WorkoutGenerateWodRequest, WorkoutPlan, ApiResponse, Movement } from '@/app/lib/types/workout.types';
+import { generateBalancePlan } from '@/app/lib/workout-generator';
+import { WorkoutGenerateBalanceRequest, WorkoutPlan, ApiResponse, Movement } from '@/app/lib/types/workout.types';
 
 export async function POST(request: NextRequest) {
   try {
-    const body: WorkoutGenerateWodRequest = await request.json();
+    const body: WorkoutGenerateBalanceRequest = await request.json();
     const { duration, wodMovementIds } = body;
 
     // 유효성 검사
@@ -31,14 +31,14 @@ export async function POST(request: NextRequest) {
     }
 
     // 운동 계획 생성
-    const { exercises, rounds, targetTimePerRound } = generateWodPlan(
+    const { exercises, rounds, targetTimePerRound } = generateBalancePlan(
       duration,
       wodMovements,
       allMovements
     );
 
     const workoutPlan: WorkoutPlan = {
-      mode: 'WOD',
+      mode: 'BALANCE',
       duration,
       rounds,
       targetTimePerRound,

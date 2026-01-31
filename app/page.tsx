@@ -36,7 +36,15 @@ export default function HomePage() {
   const handleInputClick = (mode: 'wod' | 'goal' | 'part') => {
     resetInputState();
     setCurrentMode(mode);
-    router.push('/input');
+
+    // 모드별 전용 선택 페이지로 이동
+    if (mode === 'wod') {
+      router.push('/balance-care');
+    } else if (mode === 'goal') {
+      router.push('/goal-care');
+    } else {
+      router.push('/part-care');
+    }
   };
 
   // 클라이언트 마운트 전 또는 리다이렉트 중
@@ -44,52 +52,55 @@ export default function HomePage() {
     return null;
   }
 
-  // 일반 홈 페이지
+  // Figma 디자인 기반 홈 페이지
   return (
-    <main className="px-6 pb-6 flex-grow flex flex-col pt-6">
-      <div className="mb-6 text-center">
-        <h2 className="text-2xl font-black text-slate-800 leading-tight mb-2">오늘의 운동 목표는?</h2>
-        <p className="text-sm text-slate-500 font-medium">상황에 맞는 최적의 루틴을 추천해드려요.</p>
+    <main className="flex-grow flex flex-col bg-black text-white pb-6 px-4">
+      {/* 타이틀 */}
+      <div className="mb-12 mt-8 text-center">
+        <h1 className="text-5xl font-black text-white mb-4 leading-tight">TODAY</h1>
+        <h2 className="text-5xl font-black text-white leading-tight">PLAN</h2>
+        <p className="text-sm text-gray-500 mt-6">상황에 맞는 최적의 루틴을 추천해드려요</p>
       </div>
 
-      <div className="flex flex-col w-full gap-3">
-        {/* 부족한 부위 채우기 */}
+      {/* 카드 영역 */}
+      <div className="flex flex-col gap-4 flex-1">
+        {/* 애프터와드 밸런스 케어 */}
         <button
           onClick={() => handleInputClick('wod')}
-          className="w-full flex flex-col items-center justify-center p-6 mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 text-center h-44 relative overflow-hidden group active:scale-95"
+          className="w-full py-6 px-5 rounded-2xl transition active:scale-95 overflow-hidden relative"
+          style={{
+            background: 'linear-gradient(118.37deg, rgba(244, 48, 0, 0.2) 8.59%, rgba(0, 0, 0, 0.2) 42.36%), #1F1F1F',
+            border: '1px solid rgba(255, 255, 255, 0.05)'
+          }}
         >
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-green-500"></div>
-          <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-            <i className="fa-solid fa-battery-full text-green-600 text-3xl"></i>
-          </div>
-          <h3 className="font-bold text-slate-800 text-lg">부족한 부위 채우기</h3>
-          <p className="text-xs text-slate-400 font-medium mt-1">오늘 WOD에서 안 쓴 근육 위주</p>
+          <h3 className="text-lg font-black text-white text-left">애프터와드 밸런스 케어</h3>
+          <p className="text-xs text-gray-500 text-left mt-1">오늘 운동을 분석해 균형 잡힌 마무리 운동을 추천해요.</p>
         </button>
 
-        {/* 나의 달성 목표 */}
+        {/* 목표 달성 트레이닝 */}
         <button
           onClick={() => handleInputClick('goal')}
-          className="w-full flex flex-col items-center justify-center p-6 mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 text-center h-44 relative overflow-hidden group active:scale-95"
+          className="w-full py-6 px-5 rounded-2xl transition active:scale-95 overflow-hidden relative"
+          style={{
+            background: 'linear-gradient(115.05deg, rgba(124, 253, 50, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
+            border: '1px solid rgba(255, 255, 255, 0.05)'
+          }}
         >
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-purple-500"></div>
-          <div className="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-            <i className="fa-solid fa-trophy text-purple-600 text-3xl"></i>
-          </div>
-          <h3 className="font-bold text-slate-800 text-lg">나의 달성 목표</h3>
-          <p className="text-xs text-slate-400 font-medium mt-1">머슬업, 핸드스탠드 등 스킬</p>
+          <h3 className="text-lg font-black text-white text-left">목표 달성 트레이닝</h3>
+          <p className="text-xs text-gray-500 text-left mt-1">설정하신 목표 달성에 필요한 최적의 훈련을 시작해요.</p>
         </button>
 
-        {/* 타겟 부위 선택 */}
+        {/* 부위별 집중 강화 */}
         <button
           onClick={() => handleInputClick('part')}
-          className="w-full flex flex-col items-center justify-center p-6 mb-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 text-center h-44 relative overflow-hidden group active:scale-95"
+          className="w-full py-6 px-5 rounded-2xl transition active:scale-95 overflow-hidden relative"
+          style={{
+            background: 'linear-gradient(116.58deg, rgba(35, 212, 224, 0.2) 9.25%, rgba(0, 0, 0, 0.2) 42.06%), #1F1F1F',
+            border: '1px solid rgba(255, 255, 255, 0.05)'
+          }}
         >
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-500"></div>
-          <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-            <i className="fa-solid fa-bullseye text-blue-600 text-3xl"></i>
-          </div>
-          <h3 className="font-bold text-slate-800 text-lg">타겟 부위 선택</h3>
-          <p className="text-xs text-slate-400 font-medium mt-1">원하는 부위 집중 공략</p>
+          <h3 className="text-lg font-black text-white text-left">부위별 집중 강화</h3>
+          <p className="text-xs text-gray-500 text-left mt-1">오늘 더 훈련하고 싶은 부위만 골라 운동을 구성하세요.</p>
         </button>
       </div>
     </main>

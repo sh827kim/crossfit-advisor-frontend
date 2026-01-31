@@ -6,167 +6,158 @@ import { useApp } from '@/app/context/AppContext';
 
 export function HistoryPage() {
   const router = useRouter();
-  const { workoutHistory, isLoadingHistory, historyError } = useApp();
+  const { workoutHistory, isLoadingHistory } = useApp();
 
-  // 오늘 날짜를 초기값으로 설정 (lazy initialization)
-  const [today] = useState(() => new Date());
+  // Initialize Date
+  const [currentDate] = useState(new Date()); // For Calendar Month view
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   });
-  const [currentMonth] = useState(new Date());
 
-  const year = currentMonth.getFullYear();
-  const month = currentMonth.getMonth();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
-  // 캘린더 생성
-  const firstDay = new Date(year, month, 1).getDay();
+  // Calendar Logic
+  const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+  // Adjust for Mon start if needed? The CSS shows Mon first.
+  // Standard JS getDay(): 0=Sun, 1=Mon.
+  // We want Mon=0, Sun=6.
+  const startDay = (firstDay + 6) % 7;
+
   const calendarDays: (number | null)[] = [];
-  for (let i = 0; i < firstDay; i++) {
+  for (let i = 0; i < startDay; i++) {
     calendarDays.push(null);
   }
   for (let i = 1; i <= daysInMonth; i++) {
     calendarDays.push(i);
   }
 
-  // 기록 조회
-  const getRecordsForDate = (date: string) => {
-    return workoutHistory.filter(record => record.date === date);
-  };
+  // Helper: Get Records
+  const getRecords = (dateStr: string) => workoutHistory.filter(r => r.date === dateStr);
 
-  // 해당 날짜에 기록이 있는지 확인
-  const hasRecord = (day: number) => {
+  // Helper: Get Dot Colors for a Day
+  const getDots = (day: number) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return workoutHistory.some(record => record.date === dateStr);
+    const records = getRecords(dateStr);
+    if (records.length === 0) return [];
+
+    // Map records to colors 
+    // Design shows 3 dots max.
+    const colors = records.map(r => {
+      if (r.mode === 'BALANCE') return '#F43000'; // Red
+      if (r.mode === 'GOAL') return '#EEFD32'; // Yellow
+      if (r.mode === 'PART') return '#00DCEB'; // Cyan
+      return '#00DCEB'; // Others (Cyan)
+    });
+
+    return colors.slice(0, 3); // Max 3
   };
 
-  // 오늘 날짜인지 확인
-  const isToday = (day: number) => {
-    return (
-      day === today.getDate() &&
-      month === today.getMonth() &&
-      year === today.getFullYear()
-    );
-  };
-
-  const modeDisplay: Record<string, string> = {
-    'WOD': '부족 부위',
-    'GOAL': '목표',
-    'PART': '타겟'
-  };
-
-  const selectedDateRecords = getRecordsForDate(selectedDate);
-
-  // 로딩 중일 때
-  if (isLoadingHistory) {
-    return (
-      <main className="px-6 pb-6 flex-grow flex flex-col justify-center">
-        <p className="text-center text-slate-400">운동 기록을 불러오는 중...</p>
-      </main>
-    );
-  }
+  const selectedDateRecords = getRecords(selectedDate);
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <main className="px-6 pb-6 flex-grow flex flex-col">
-      {/* 에러 메시지 */}
-      {historyError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 mt-6">
-          <p className="text-sm text-red-700 mb-2">{historyError}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="text-xs text-red-600 underline hover:text-red-800"
-          >
-            다시 시도
-          </button>
-        </div>
-      )}
-      <div className="h-16 flex items-center mb-2 mt-6">
-        <button
-          onClick={() => router.replace('/')}
-          className="text-slate-400 hover:text-slate-800 transition mr-4"
-        >
-          <i className="fa-solid fa-arrow-left text-xl"></i>
+    <main className="min-h-screen bg-[#010101] text-white font-sf-pro relative overflow-hidden flex flex-col">
+      {/* Background Decoration (Gradient) - Optional, based on design mood */}
+
+      {/* Header */}
+      <div className="pt-14 pb-4 px-5 flex items-center justify-between relative z-10">
+        <button onClick={() => router.back()} className="text-white p-2 -ml-2">
+          <i className="fa-solid fa-chevron-left text-lg" />
         </button>
-        <h2 className="text-2xl font-black text-slate-800">운동 기록</h2>
+        <h1 className="text-[17px] font-bold font-apple absolute left-1/2 -translate-x-1/2">
+          {year}.{month + 1} 운동기록
+        </h1>
+        <div className="w-8" /> {/* Spacer */}
       </div>
 
-      {/* 캘린더 */}
-      <div className="bg-white rounded-3xl shadow-lg shadow-gray-100 border border-gray-50 p-6 mb-6">
-        <div className="text-center font-bold text-lg mb-6 text-slate-800">
-          {year}년 {month + 1}월
+      {/* Calendar Grid */}
+      <div className="px-5 mt-4">
+        {/* Weekdays */}
+        <div className="grid grid-cols-7 mb-4 text-center">
+          {weekDays.map(d => (
+            <div key={d} className="text-[13px] text-white/55 font-normal">
+              {d}
+            </div>
+          ))}
         </div>
 
-        {/* 요일 헤더 */}
-        <div className="grid grid-cols-7 gap-2 text-center mb-2 text-xs font-bold text-slate-300">
-          <div>일</div>
-          <div>월</div>
-          <div>화</div>
-          <div>수</div>
-          <div>목</div>
-          <div>금</div>
-          <div>토</div>
-        </div>
+        {/* Days */}
+        <div className="grid grid-cols-7 gap-y-6 justify-items-center">
+          {calendarDays.map((day, idx) => {
+            if (!day) return <div key={`empty-${idx}`} />;
 
-        {/* 캘린더 일자 */}
-        <div className="grid grid-cols-7 gap-2">
-          {calendarDays.map((day, index) => {
-            const dateStr = day
-              ? `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-              : null;
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const isSelected = dateStr === selectedDate;
+            const dots = getDots(day);
 
             return (
               <div
-                key={index}
-                onClick={() => dateStr && setSelectedDate(dateStr)}
-                className={`aspect-square flex items-center justify-center rounded-lg font-bold text-sm cursor-pointer transition ${
-                  day === null
-                    ? 'text-transparent'
-                    : hasRecord(day)
-                    ? 'bg-blue-600 text-white cursor-pointer hover:bg-blue-700'
-                    : isToday(day)
-                    ? 'bg-orange-100 text-slate-800 border-2 border-orange-500 hover:bg-orange-200'
-                    : 'text-slate-400 hover:bg-gray-100'
-                }`}
+                key={day}
+                className="flex flex-col items-center cursor-pointer relative"
+                onClick={() => setSelectedDate(dateStr)}
               >
-                {day}
+                <div className={`w-[30px] h-[30px] flex items-center justify-center rounded-full text-[15px] mb-1 transition-all ${isSelected ? 'bg-white text-black font-bold' : 'text-white font-normal'
+                  }`}>
+                  {day}
+                </div>
+
+                {/* Dots Container */}
+                <div className="flex gap-[3px] h-[5px] items-center absolute -bottom-2">
+                  {dots.map((color, i) => (
+                    <div key={i} className="w-[5px] h-[5px] rounded-full" style={{ backgroundColor: color }} />
+                  ))}
+                </div>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* 기록 상세 */}
-      <div className="bg-slate-50 rounded-2xl p-6 flex-grow overflow-y-auto border border-slate-100">
-        {selectedDateRecords.length === 0 ? (
-          <p className="text-center text-slate-400 text-sm py-8">
-            이 날짜에 기록된 운동이 없습니다.
-          </p>
-        ) : (
-          <>
-            <h3 className="font-black mb-4 sticky top-0 bg-slate-50 pb-2 border-b border-slate-200 text-slate-800">
-              {selectedDate}
-            </h3>
-            <div className="space-y-3">
-              {selectedDateRecords.map((record, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100"
-                >
-                  <div className="flex justify-between mb-3 items-center">
-                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
-                      {modeDisplay[record.mode] || record.mode}
-                    </span>
-                    <span className="text-sm font-bold text-blue-600">{record.duration}분</span>
-                  </div>
-                  <div className="text-sm text-slate-700 leading-relaxed font-medium">
-                    {record.exercises.join(', ')}
-                  </div>
+      {/* Floating Card List (Bottom Sheet style but inline for now) */}
+      <div className="mt-10 px-5 pb-10 flex-1 overflow-y-auto">
+        {selectedDateRecords.length > 0 ? (
+          <div className="space-y-3">
+            {selectedDateRecords.map((record, i) => (
+              <div key={i} className="w-full bg-[#1F1F1F] rounded-[24px] border border-white/5 p-6 relative">
+                {/* Mode Specific Styling */}
+                <div className={`text-[13px] font-extrabold mb-1 ${record.mode === 'BALANCE' ? 'text-[#F43000]' :
+                  record.mode === 'GOAL' ? 'text-[#EEFD32]' : 'text-[#00DCEB]'
+                  }`}>
+                  {record.mode === 'BALANCE' ? '밸런스 케어 운동' :
+                    record.mode === 'GOAL' ? '골 케어 운동' :
+                      record.mode === 'PART' ? '파트 케어 운동' : '오늘의 운동'}
                 </div>
-              ))}
-            </div>
-          </>
+
+                {/* Main Title (Duration/Rounds) */}
+                <div className="text-[24px] font-bold text-white mb-3 font-sf-pro">
+                  {record.rounds
+                    ? `${record.rounds} Rounds, ${Math.ceil(record.duration / 60)}분 운동`
+                    : `${Math.ceil(record.duration / 60)}분 운동`
+                  }
+                </div>
+
+                {/* Exercises */}
+                <div className="text-[13px] text-[#787878] leading-relaxed line-clamp-2">
+                  {record.exercises.join(', ')}
+                </div>
+
+                {/* Menu Dots (Visual) */}
+                <div className="absolute top-6 right-6 flex gap-1">
+                  <div className="w-[3px] h-[3px] bg-[#6B6B6B] rounded-full" />
+                  <div className="w-[3px] h-[3px] bg-[#6B6B6B] rounded-full" />
+                  <div className="w-[3px] h-[3px] bg-[#6B6B6B] rounded-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-40 text-white/30 text-sm">
+            기록이 없습니다.
+          </div>
         )}
       </div>
     </main>
