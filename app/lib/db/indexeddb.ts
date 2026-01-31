@@ -11,9 +11,10 @@
 export interface WorkoutRecordDB {
   id?: number; // Auto-increment primary key
   date: string; // '2026-01-18' 형식
-  mode: 'WOD' | 'GOAL' | 'PART';
+  mode: 'WOD' | 'GOAL' | 'PART' | 'balance-care';
   duration: number;
   exercises: string[];
+  rounds?: number;
   createdAt: number; // timestamp (같은 날짜의 여러 기록 정렬용)
 }
 
