@@ -129,7 +129,7 @@ const defineStepper = <const Steps extends Stepperize.Step[]>(
               separatorCompletedClassName,
             }}
           >
-            <Scoped initialStep={props.initialStep} initialMetadata={props.initialMetadata}>
+            <Scoped initialStep={initialStep} initialMetadata={initialMetadata}>
               <StepperContainer className={className} {...props}>
                 {children}
               </StepperContainer>
