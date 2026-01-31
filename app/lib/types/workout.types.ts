@@ -1,6 +1,6 @@
 // 운동 계획 생성 요청/응답 타입
 
-export type WorkoutMode = 'WOD' | 'GOAL' | 'PART';
+export type WorkoutMode = 'BALANCE' | 'GOAL' | 'PART';
 
 export type MuscleGroup = 'CORE' | 'LEGS' | 'BACK' | 'CHEST' | 'CARDIO';
 
@@ -38,7 +38,7 @@ export interface Exercise {
   muscleGroups: MuscleGroup[];
 }
 
-export interface WorkoutGenerateWodRequest {
+export interface WorkoutGenerateBalanceRequest {
   duration: number;
   wodMovementIds?: string[];
 }
@@ -72,7 +72,7 @@ export interface ApiResponse<T> {
 export interface WorkoutRecord {
   id?: string | number;
   date: string; // '2026-01-18' 형식
-  mode: 'WOD' | 'GOAL' | 'PART' | 'balance-care';
+  mode: 'BALANCE' | 'GOAL' | 'PART';
   duration: number;
   exercises: string[];
   rounds?: number;

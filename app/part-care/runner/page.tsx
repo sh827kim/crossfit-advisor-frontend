@@ -150,7 +150,7 @@ export default function PartRunnerPage() {
                 exercises: generatedPlan.exercises.map(ex => ex.name),
                 planId: 'part-care-custom',
                 mode: 'PART',
-                rounds: generatedPlan.rounds || 1
+                rounds: currentRound
             } as any);
         } catch (e) {
             console.error(e);

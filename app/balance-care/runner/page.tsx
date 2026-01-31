@@ -8,6 +8,10 @@ import { cn } from '@/app/lib/utils';
 
 type Stage = 'intro' | 'countdown' | 'workout' | 'paused' | 'done';
 
+const THEME_COLOR = '#F43000';
+const THEME_DARK_COLOR = '#921D00';
+const THEME_SHADOW = 'rgba(244, 48, 0, 0.5)';
+
 export default function RunnerPage() {
     const router = useRouter();
     const { generatedPlan, addWorkoutRecord } = useApp();
@@ -152,8 +156,8 @@ export default function RunnerPage() {
                 duration: timer,
                 exercises: generatedPlan.exercises.map(ex => ex.name),
                 planId: 'balance-care-custom',
-                mode: 'balance-care',
-                rounds: generatedPlan.rounds || 1
+                mode: 'BALANCE',
+                rounds: currentRound
             } as any);
         } catch (e) {
             console.error(e);

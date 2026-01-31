@@ -150,7 +150,7 @@ export default function GoalRunnerPage() {
                 exercises: generatedPlan.exercises.map(ex => ex.name),
                 planId: 'goal-care-custom',
                 mode: 'GOAL',
-                rounds: generatedPlan.rounds || 1
+                rounds: currentRound
             } as any);
         } catch (e) {
             console.error(e);

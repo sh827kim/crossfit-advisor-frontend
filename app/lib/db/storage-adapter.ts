@@ -17,14 +17,7 @@ import {
 } from './indexeddb';
 import { migrateFromLocalStorage } from './migration';
 import { cleanupAndSaveWorkoutRecords } from '../storage-manager';
-
-// 공통 WorkoutRecord 타입 (앱 전체에서 사용)
-export interface WorkoutRecord {
-  date: string;
-  mode: 'WOD' | 'GOAL' | 'PART';
-  duration: number;
-  exercises: string[];
-}
+import { WorkoutRecord } from '../types/workout.types';
 
 /**
  * 스토리지 어댑터 인터페이스
@@ -92,10 +85,13 @@ class IndexedDBAdapter implements WorkoutStorageAdapter {
   /** DB 레코드를 앱 레코드로 변환 */
   private convertFromDB(dbRecord: WorkoutRecordDB): WorkoutRecord {
     return {
+      id: dbRecord.id,
       date: dbRecord.date,
       mode: dbRecord.mode,
       duration: dbRecord.duration,
-      exercises: dbRecord.exercises
+      exercises: dbRecord.exercises,
+      rounds: dbRecord.rounds,
+      planId: dbRecord.planId
     };
   }
 }

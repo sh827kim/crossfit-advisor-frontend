@@ -89,7 +89,7 @@ export default function BalanceCarePage() {
         wodMovementIds: selectedExercises
       };
 
-      const response = await fetch('/api/v1/workouts/generate/wod', {
+      const response = await fetch('/api/v1/workouts/generate/balance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
