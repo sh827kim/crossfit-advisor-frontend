@@ -15,6 +15,7 @@ export interface WorkoutRecordDB {
   duration: number;
   exercises: string[];
   rounds?: number;
+  planId?: string;
   createdAt: number; // timestamp (같은 날짜의 여러 기록 정렬용)
 }
 
