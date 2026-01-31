@@ -5,31 +5,28 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
+import { defineStepper } from '@/components/ui/stepper';
 
 // 온보딩 단계: splash → walkthrough → profile
 type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
 
-// 워크스루 단계 인터페이스
-interface WalkthroughStep {
-  title: string;
-  description: string;
-}
-
-// 워크스루 단계 정의
-const walkthroughSteps: WalkthroughStep[] = [
+const walkthroughStepper = defineStepper(
   {
+    id: 'plan',
     title: '운동 계획 추천',
     description: 'WOD, 목표, 부위별로 선택하여\n맞춤형 워크아웃을 추천받으세요.'
   },
   {
+    id: 'progress',
     title: '운동 진행',
     description: '타이머와 체크박스로 운동을\n체계적으로 진행하세요.'
   },
   {
+    id: 'record',
     title: '기록하기',
     description: '완료한 운동을 기록하여\n당신의 운동 데이터를 관리하세요.'
   }
-];
+);
 
 // 랜덤 배경 색상 생성
 const backgroundColors = [
@@ -63,10 +60,8 @@ export function OnboardingPage() {
   const [nickname, setNickname] = useState(userNickname);
   const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
 
-  // Walkthrough 애니메이션 상태
+  // Walkthrough 애니메이션 상태 (타이핑 로직 제거 -> 단계별 표시만 유지)
   const [visibleSteps, setVisibleSteps] = useState<number>(0);
-  const [displayedTexts, setDisplayedTexts] = useState<string[]>(['', '', '']);
-  const [typingIndices, setTypingIndices] = useState<number[]>([0, 0, 0]);
 
   // 초기화 요청 시 데이터 초기화
   useEffect(() => {
@@ -131,14 +126,18 @@ export function OnboardingPage() {
     }
   }, [hasVisited, shouldReset]);
 
-  // Walkthrough 단계별 애니메이션
+  // Walkthrough 단계 진입 시 애니메이션 초기화
   useEffect(() => {
-    if (currentStep !== 'walkthrough') return;
+    if (currentStep !== 'walkthrough') {
+      return;
+    }
 
-    // 0.5초마다 한 단계씩 보이기
+    setVisibleSteps(0);
+
+    // 0.8초마다 한 단계씩 보이기
     const stepTimer = setInterval(() => {
       setVisibleSteps(prev => {
-        if (prev < walkthroughSteps.length) {
+        if (prev < walkthroughStepper.steps.length) {
           return prev + 1;
         }
         clearInterval(stepTimer);
@@ -146,42 +145,11 @@ export function OnboardingPage() {
       });
     }, 800);
 
-    return () => clearInterval(stepTimer);
+    return () => {
+      clearInterval(stepTimer);
+    };
   }, [currentStep]);
 
-  // 각 단계별 타이핑 애니메이션
-  useEffect(() => {
-    if (currentStep !== 'walkthrough') return;
-
-    const timers: NodeJS.Timeout[] = [];
-
-    for (let stepIndex = 0; stepIndex < visibleSteps; stepIndex++) {
-      const fullText = walkthroughSteps[stepIndex].description;
-
-      // 각 단계가 보이는 시점부터 타이핑 시작
-      const startDelay = stepIndex * 800 + 200;
-
-      if (displayedTexts[stepIndex].length < fullText.length) {
-        const timer = setInterval(() => {
-          setDisplayedTexts(prev => {
-            const newTexts = [...prev];
-            if (newTexts[stepIndex].length < fullText.length) {
-              newTexts[stepIndex] = fullText.slice(0, newTexts[stepIndex].length + 1);
-            }
-            return newTexts;
-          });
-        }, 50);
-
-        setTimeout(() => {
-          timers.push(timer);
-        }, startDelay);
-      }
-    }
-
-    return () => {
-      timers.forEach(timer => clearInterval(timer));
-    };
-  }, [currentStep, visibleSteps, displayedTexts]);
 
   // userProfileImage 변경 감지
   useEffect(() => {
@@ -233,9 +201,8 @@ export function OnboardingPage() {
     // 스플래시 화면 - AFTERWOD CLUB 로고
     if (currentStep === 'splash') {
       return (
-        <main className={`flex-grow flex flex-col justify-center items-center bg-black transition-opacity duration-500 ${
-          showContent ? 'opacity-100' : 'opacity-0'
-        }`}>
+        <main className={`flex-grow flex flex-col justify-center items-center bg-black transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'
+          }`}>
           <div className="flex flex-col items-center justify-center">
             {/* AFTERWOD 로고 */}
             <div className="mb-8 px-8 max-w-sm">
@@ -259,6 +226,9 @@ export function OnboardingPage() {
 
     // 워크스루 화면 - 3가지 기능 설명
     if (currentStep === 'walkthrough') {
+      const visibleWalkthroughSteps = walkthroughStepper.steps.slice(0, visibleSteps);
+      const canGoNext = visibleSteps === walkthroughStepper.steps.length;
+
       return (
         <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6 overflow-y-auto">
           <div className="flex-1 flex flex-col justify-start">
@@ -278,40 +248,38 @@ export function OnboardingPage() {
               </p>
             </div>
 
-            {/* 3가지 기능 설명 */}
-            <div className="space-y-6">
-              {walkthroughSteps.map((step, index) => (
-                <div key={index} className={`flex gap-3 transition-opacity duration-300 ${visibleSteps > index ? 'opacity-100' : 'opacity-0'}`}>
-                  {/* 왼쪽 숫자 + 라인 */}
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div className="w-7 h-7 rounded-full bg-[#f43000] flex items-center justify-center text-black font-bold text-xs">
-                      {index + 1}
-                    </div>
-                    {/* 마지막 항목이 아니면 라인 표시 */}
-                    {index < walkthroughSteps.length - 1 && visibleSteps > index + 1 && (
-                      <div className="w-0.5 h-12 bg-[#921d00] mt-2"></div>
-                    )}
-                  </div>
-
-                  {/* 오른쪽 텍스트 */}
-                  <div className="flex-1 pt-0.5">
-                    <h3 className="text-lg font-bold text-white mb-1">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-gray-400 whitespace-pre-line min-h-10">
-                      {displayedTexts[index]}
-                      {displayedTexts[index].length < step.description.length && visibleSteps > index && (
-                        <span className="animate-pulse">|</span>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              ))}
+            {/* 워크스루 단계 (Stepperize + shadcn-stepper) */}
+            <div className="mt-2">
+              <walkthroughStepper.Stepper.Provider
+                key="walkthrough-provider"
+                variant="vertical"
+                tracking={false}
+                initialStep={walkthroughStepper.steps[0].id}
+                indicatorClassName="h-7 w-7 bg-[#f43000] text-black hover:bg-[#d92a00]"
+                separatorClassName="bg-[#921d00]"
+                separatorCompletedClassName="bg-[#921d00]"
+              >
+                {() => (
+                  <walkthroughStepper.Stepper.Navigation aria-label="워크스루 단계">
+                    {visibleWalkthroughSteps.map((step) => (
+                      <walkthroughStepper.Stepper.Step key={step.id} of={step.id} className="animate-fadeIn">
+                        <walkthroughStepper.Stepper.Title className="text-lg font-bold text-white">
+                          {step.title}
+                        </walkthroughStepper.Stepper.Title>
+                        <walkthroughStepper.Stepper.Panel>
+                          <p className="text-sm text-gray-400 whitespace-pre-line leading-relaxed">
+                            {step.description}
+                          </p>
+                        </walkthroughStepper.Stepper.Panel>
+                      </walkthroughStepper.Stepper.Step>
+                    ))}
+                  </walkthroughStepper.Stepper.Navigation>
+                )}
+              </walkthroughStepper.Stepper.Provider>
             </div>
           </div>
 
-          {/* Next 버튼 - 모든 단계가 완료되면 표시 */}
-          {visibleSteps === walkthroughSteps.length && displayedTexts[walkthroughSteps.length - 1].length === walkthroughSteps[walkthroughSteps.length - 1].description.length && (
+          {canGoNext && (
             <button
               onClick={() => setCurrentStep('profile')}
               className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-8 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn text-lg"
@@ -326,7 +294,6 @@ export function OnboardingPage() {
 
     // 프로필 설정 화면
     if (currentStep === 'profile') {
-      // 닉네임의 첫 글자 추출
       const firstChar = nickname.charAt(0) || '신';
       const profileBgColor = getRandomColor(nickname || '신');
 

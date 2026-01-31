@@ -6,7 +6,7 @@ import { useApp } from '@/app/context/AppContext';
 
 export default function HomePage() {
   const router = useRouter();
-  const { setCurrentMode, resetInputState, hasVisited, userProfileImage } = useApp();
+  const { setCurrentMode, resetInputState, hasVisited } = useApp();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {

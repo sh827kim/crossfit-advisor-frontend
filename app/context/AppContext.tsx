@@ -13,10 +13,6 @@ interface ExerciseWithStatus extends Exercise {
 }
 
 interface AppContextType {
-  // 페이지 상태
-  currentPage: 'home' | 'input' | 'result' | 'history' | 'profile';
-  setCurrentPage: (page: AppContextType['currentPage']) => void;
-
   // 입력 모드
   currentMode: 'wod' | 'goal' | 'part' | null;
   setCurrentMode: (mode: AppContextType['currentMode']) => void;
@@ -66,12 +62,6 @@ interface AppContextType {
   setUserProfileImage: (image: string | null) => void;
   markAsVisited: () => void;
 
-  // PWA 종료 팝업
-  showExitPopup: boolean;
-  setShowExitPopup: (show: boolean) => void;
-  forceExit: boolean;
-  setForceExit: (force: boolean) => void;
-
   // 리셋
   resetInputState: () => void;
   resetAllData: () => Promise<void>;
@@ -80,8 +70,6 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [currentPage, setCurrentPage] = useState<AppContextType['currentPage']>('home');
-
   // localStorage에서 초기값 로드 (lazy initialization) - 입력 상태
   const [currentMode, setCurrentMode] = useState<AppContextType['currentMode']>(() => {
     if (typeof window === 'undefined') return null;
@@ -187,9 +175,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('cf_user_profile_image');
   });
-
-  const [showExitPopup, setShowExitPopup] = useState(false);
-  const [forceExit, setForceExit] = useState(false);
 
   // Storage Adapter 참조 (IndexedDB 또는 LocalStorage)
   const storageRef = useRef<WorkoutStorageAdapter | null>(null);
@@ -406,8 +391,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setHistoryError(null);
     setIsLoadingHistory(true);
     resetInputState();
-    setShowExitPopup(false);
-    setForceExit(false);
 
     // IndexedDB 기록 초기화 (DB 삭제 대신 Store clear로 블로킹/레이스 최소화)
     if (typeof window !== 'undefined' && 'indexedDB' in window) {
@@ -439,8 +422,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   return (
     <AppContext.Provider
       value={{
-        currentPage,
-        setCurrentPage,
         currentMode,
         setCurrentMode,
         wodList,
@@ -472,10 +453,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setUserNickname,
         setUserProfileImage,
         markAsVisited,
-        showExitPopup,
-        setShowExitPopup,
-        forceExit,
-        setForceExit,
         resetInputState,
         resetAllData
       }}

@@ -3,32 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
-import type { Movement, MuscleGroup, Equipment } from '@/app/lib/types/workout.types';
-
-interface ExerciseData {
-  id: string;
-  name: string;
-  muscleGroups: MuscleGroup[];
-  equipment: Equipment;
-}
-
-// 기본 제공 운동들
-const BALANCE_CARE_EXERCISES: ExerciseData[] = [
-  { id: 'snatch', name: '스내치', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
-  { id: 'clean', name: '클린', muscleGroups: ['CORE', 'BACK', 'LEGS'], equipment: 'BARBELL' },
-  { id: 'toes-to-bar', name: '토우-투-바', muscleGroups: ['CORE', 'BACK'], equipment: 'BODYWEIGHT' },
-  { id: 'pull-up', name: '풀업', muscleGroups: ['BACK', 'CHEST'], equipment: 'BODYWEIGHT' },
-  { id: 'rowing', name: '로잉', muscleGroups: ['CARDIO', 'BACK'], equipment: 'ROWING' },
-  { id: 'wall-walk', name: '월 워크', muscleGroups: ['CORE', 'CHEST'], equipment: 'WALL' },
-];
+import type { Movement } from '@/app/lib/types/workout.types';
+import { CareTimeSelector } from '@/app/components/CareTimeSelector';
 
 // 한글 초성 추출 함수
 function getChosung(str: string): string {
-  const cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+  const cho = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
   let result = "";
-  for(let i=0; i<str.length; i++) {
+  for (let i = 0; i < str.length; i++) {
     const code = str.charCodeAt(i) - 44032;
-    if(code > -1 && code < 11172) result += cho[Math.floor(code/588)];
+    if (code > -1 && code < 11172) result += cho[Math.floor(code / 588)];
     else result += str.charAt(i);
   }
   return result;
@@ -36,7 +20,7 @@ function getChosung(str: string): string {
 
 export default function BalanceCarePage() {
   const router = useRouter();
-  const { setCurrentMode, setTotalTime, resetInputState, setGeneratedPlan } = useApp();
+  const { setGeneratedPlan } = useApp();
   const [searchInput, setSearchInput] = useState('');
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState(20);
@@ -70,10 +54,10 @@ export default function BalanceCarePage() {
   // 검색 필터링 (초성 검색 포함)
   const filteredMovements = searchInput.trim()
     ? allMovements.filter(movement => {
-        const nameMatch = movement.name.includes(searchInput);
-        const chosungMatch = getChosung(movement.name).includes(getChosung(searchInput));
-        return nameMatch || chosungMatch;
-      })
+      const nameMatch = movement.name.includes(searchInput);
+      const chosungMatch = getChosung(movement.name).includes(getChosung(searchInput));
+      return nameMatch || chosungMatch;
+    })
     : [];
 
   const handleExerciseSelect = (movementId: string) => {
@@ -120,7 +104,7 @@ export default function BalanceCarePage() {
       }
 
       setGeneratedPlan(data.data);
-      router.push('/result');
+      router.push('/balance-care/runner');
     } catch (err) {
       console.error('Error generating workout:', err);
       setError('운동 계획 생성 중 오류가 발생했습니다.');
@@ -139,9 +123,11 @@ export default function BalanceCarePage() {
       <div className="flex-shrink-0 px-4 pt-4 pb-6">
         <button
           onClick={handleBack}
-          className="text-xs font-bold text-gray-400 mb-4 flex items-center hover:text-gray-200 transition uppercase tracking-wide"
+          aria-label="이전으로"
+          type="button"
+          className="w-11 h-11 mb-4 flex items-center justify-center text-white/80 hover:text-white transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
         >
-          <i className="fa-solid fa-arrow-left mr-2"></i>이전으로
+          <i aria-hidden="true" className="fa-solid fa-angle-left text-2xl"></i>
         </button>
         <h1 className="text-3xl font-black text-white">오늘의 WOD를</h1>
         <h2 className="text-3xl font-black text-white">알려주세요.</h2>
@@ -190,11 +176,10 @@ export default function BalanceCarePage() {
               <button
                 key={movement.id}
                 onClick={() => handleAddFrequent(movement)}
-                className={`px-2 py-1.5 rounded-lg text-xs font-semibold transition ${
-                  selectedExercises.includes(movement.id)
-                    ? 'bg-gray-800 text-white border border-gray-700'
-                    : 'bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700'
-                }`}
+                className={`px-2 py-1.5 rounded-lg text-xs font-semibold transition ${selectedExercises.includes(movement.id)
+                  ? 'bg-gray-800 text-white border border-gray-700'
+                  : 'bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700'
+                  }`}
               >
                 {movement.name}
               </button>
@@ -210,67 +195,62 @@ export default function BalanceCarePage() {
             <p className="text-sm">검색 결과가 없습니다</p>
           </div>
         ) : searchInput.trim() ? (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col gap-2">
             {filteredMovements.map(movement => (
               <button
                 key={movement.id}
                 onClick={() => handleExerciseSelect(movement.id)}
-                className={`p-3 rounded-xl flex items-center justify-center transition-all active:scale-95 border font-semibold text-xs h-24 ${
-                  selectedExercises.includes(movement.id)
-                    ? 'bg-gray-800 border-gray-700 shadow-lg'
-                    : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md'
-                }`}
+                className={`w-full px-4 py-3 rounded-xl flex items-center justify-between transition-all active:scale-95 border font-semibold text-sm ${selectedExercises.includes(movement.id)
+                  ? 'bg-gray-800 border-gray-700 shadow-lg text-white'
+                  : 'bg-gray-900 border-gray-800 hover:border-gray-700 shadow-md text-gray-300'
+                  }`}
               >
-                <span className="text-center leading-tight">{movement.name}</span>
+                <span className="text-left leading-tight">{movement.name}</span>
+                {selectedExercises.includes(movement.id) ? (
+                  <i aria-hidden="true" className="fa-solid fa-check text-xs text-white/80"></i>
+                ) : null}
               </button>
             ))}
           </div>
         ) : null}
       </div>
 
-      {/* 운동 시간 선택 (수평 스크롤) */}
-      <div className="flex-shrink-0 px-4 py-6 bg-gradient-to-t from-black via-black/80 to-transparent">
-        <p className="text-xs font-bold text-gray-400 mb-4 text-center uppercase tracking-wider">운동 시간</p>
-        <div className="flex gap-3 justify-center overflow-x-auto pb-2 hide-scrollbar">
-          {[10, 15, 20, 25, 30, 35, 40].map(time => (
-            <button
-              key={time}
-              onClick={() => setSelectedTime(time)}
-              className={`flex-shrink-0 px-4 py-2 rounded-lg font-bold transition-all ${
-                selectedTime === time
-                  ? 'bg-white text-black text-base'
-                  : 'bg-gray-700 text-gray-300 text-sm hover:bg-gray-600'
-              }`}
-            >
-              {time}분
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* 하단 컨트롤 패널 (배경 카드) */}
+      <div className="flex-shrink-0 relative w-full mt-auto">
+        <div className="absolute top-[-30px] left-0 right-0 h-[30px] bg-gradient-to-b from-transparent to-black pointer-events-none"></div>
 
-      {/* 에러 메시지 */}
-      {error && (
-        <div className="px-4 py-3 mb-4 bg-red-900 border border-red-700 rounded-lg text-xs text-red-200 text-center">
-          {error}
-        </div>
-      )}
+        <div className="w-full bg-[#1F1F1F] rounded-t-[32px] border-t border-white/10 shadow-[0_-6px_44px_rgba(0,0,0,0.8)] relative overflow-hidden pb-6 pt-2">
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F43000]/20 to-black/20 pointer-events-none"></div>
 
-      {/* 진행 버튼 */}
-      <div className="flex-shrink-0 px-4 pb-6">
-        <button
-          onClick={handleGenerateWorkout}
-          disabled={isLoading}
-          className="w-full bg-[#f43000] text-black font-bold py-4 rounded-2xl transition-all active:scale-95 text-base hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
-        >
-          {isLoading ? (
-            <>
-              <i className="fa-solid fa-circle-notch fa-spin mr-2"></i>
-              생성 중...
-            </>
-          ) : (
-            '나만의 밸런스 운동 생성하기'
-          )}
-        </button>
+          <div className="relative z-10 flex flex-col items-center">
+            <CareTimeSelector value={selectedTime} onChange={setSelectedTime} />
+
+            {/* 에러 메시지 */}
+            {error && (
+              <div className="px-4 py-2 mb-2 w-full max-w-xs bg-red-900/50 border border-red-700/50 rounded-lg text-xs text-red-200 text-center">
+                {error}
+              </div>
+            )}
+
+            <div className="px-6 w-full max-w-sm mt-2">
+              <button
+                onClick={handleGenerateWorkout}
+                disabled={isLoading}
+                className="w-full h-[58px] bg-[#f43000] text-black font-extrabold rounded-2xl transition-all active:scale-95 text-[17px] hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center shadow-lg shadow-orange-900/20"
+              >
+                {isLoading ? (
+                  <>
+                    <i className="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                    생성 중...
+                  </>
+                ) : (
+                  '나만의 밸런스 운동 생성하기'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

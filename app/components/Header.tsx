@@ -28,8 +28,9 @@ export function Header() {
   const pathname = usePathname();
   const { userProfileImage, userNickname } = useApp();
 
-  // 온보딩 페이지에서는 Header 렌더링하지 않음
-  if (pathname === '/onboarding') {
+  // 특정 화면에서는 글로벌 헤더를 숨김 (페이지 자체 헤더/플로우 사용)
+  const hideHeaderPrefixes = ['/onboarding', '/goal-care', '/balance-care', '/part-care'];
+  if (hideHeaderPrefixes.some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
     return null;
   }
 

@@ -10,22 +10,34 @@
     --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
 
     /* 현재 파란색 계열 색상 (Figma 디자인 적용 시 수정) */
-    --color-primary: 220 90% 56%; /* blue-600 */
-    --color-primary-foreground: 0 0% 100%; /* white */
+    --color-primary: 220 90% 56%;
+    /* blue-600 */
+    --color-primary-foreground: 0 0% 100%;
+    /* white */
 
-    --color-secondary: 215 20% 45%; /* slate-600 */
-    --color-secondary-foreground: 0 0% 100%; /* white */
+    --color-secondary: 215 20% 45%;
+    /* slate-600 */
+    --color-secondary-foreground: 0 0% 100%;
+    /* white */
 
-    --color-accent: 142 76% 36%; /* green-600 */
-    --color-accent-foreground: 0 0% 100%; /* white */
+    --color-accent: 142 76% 36%;
+    /* green-600 */
+    --color-accent-foreground: 0 0% 100%;
+    /* white */
 
-    --color-success: 142 76% 36%; /* green-600 */
-    --color-warning: 39 84% 58%; /* amber-500 */
-    --color-destructive: 0 84% 60%; /* red-500 */
-    --color-destructive-foreground: 0 0% 100%; /* white */
+    --color-success: 142 76% 36%;
+    /* green-600 */
+    --color-warning: 39 84% 58%;
+    /* amber-500 */
+    --color-destructive: 0 84% 60%;
+    /* red-500 */
+    --color-destructive-foreground: 0 0% 100%;
+    /* white */
 
-    --color-muted: 220 14% 96%; /* slate-100 */
-    --color-muted-foreground: 215 20% 65%; /* slate-400 */
+    --color-muted: 220 14% 96%;
+    /* slate-100 */
+    --color-muted-foreground: 215 20% 65%;
+    /* slate-400 */
   }
 
   /* 다크 모드 (향후 지원) */
@@ -66,20 +78,32 @@
   }
 
   /* 한글 줄바꿈 처리 - 기본 설정 */
-  html, body, * {
+  html,
+  body,
+  * {
     word-break: keep-all;
     overflow-wrap: break-word;
   }
 
   /* 텍스트 컨테이너 */
-  p, span, div, a, button, label {
+  p,
+  span,
+  div,
+  a,
+  button,
+  label {
     word-break: keep-all;
     overflow-wrap: break-word;
     white-space: normal;
   }
 
   /* 제목 */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     word-break: keep-all;
     overflow-wrap: break-word;
   }
@@ -92,7 +116,8 @@
   }
 
   /* 입력 필드 */
-  input, textarea {
+  input,
+  textarea {
     word-break: keep-all;
     overflow-wrap: break-word;
   }
@@ -110,6 +135,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -117,15 +143,32 @@
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.8s ease-out both;
 }
 
-/* 스크롤바 숨기기 */
+/* 스크롤바 숨기기 (스크롤은 가능) */
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* 타이핑 페이드 인 (글자별) */
+@keyframes fadeInOpacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-typingFade {
+  animation: fadeInOpacity 0.5s ease-out forwards;
 }
