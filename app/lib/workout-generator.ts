@@ -52,7 +52,7 @@ function selectCandidatesForPart(targetMuscles: MuscleGroup[], allMovements: Mov
 /**
  * WOD 모드용 운동을 선택
  */
-function selectCandidatesForWod(avoidMuscles: Set<MuscleGroup>, allMovements: Movement[]): Movement[] {
+function selectCandidatesForBalance(avoidMuscles: Set<MuscleGroup>, allMovements: Movement[]): Movement[] {
   const candidates = allMovements.filter(m => {
     // 피해야 할 근육을 사용하는 운동 제외
     return !m.muscleGroups.some(mg => avoidMuscles.has(mg));
@@ -118,14 +118,14 @@ export function generateWorkoutPlan(
 /**
  * WOD 모드 운동 계획 생성
  */
-export function generateWodPlan(
+export function generateBalancePlan(
   duration: number,
   wodMovements: Movement[],
   allMovements: Movement[]
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
   const avoidMuscles = detectAvoidMuscles(wodMovements);
-  const candidates = selectCandidatesForWod(avoidMuscles, allMovements);
-  return generateWorkoutPlan('WOD', duration, candidates);
+  const candidates = selectCandidatesForBalance(avoidMuscles, allMovements);
+  return generateWorkoutPlan('BALANCE', duration, candidates);
 }
 
 /**

@@ -47,10 +47,10 @@ export function HistoryPage() {
     // Map records to colors 
     // Design shows 3 dots max.
     const colors = records.map(r => {
-      if (r.mode === 'balance-care') return '#F43000'; // Red
+      if (r.mode === 'BALANCE') return '#F43000'; // Red
       if (r.mode === 'GOAL') return '#EEFD32'; // Yellow
       if (r.mode === 'PART') return '#00DCEB'; // Cyan
-      return '#00DCEB'; // WOD/Others (Cyan)
+      return '#00DCEB'; // Others (Cyan)
     });
 
     return colors.slice(0, 3); // Max 3
@@ -124,12 +124,12 @@ export function HistoryPage() {
             {selectedDateRecords.map((record, i) => (
               <div key={i} className="w-full bg-[#1F1F1F] rounded-[24px] border border-white/5 p-6 relative">
                 {/* Mode Specific Styling */}
-                <div className={`text-[13px] font-extrabold mb-1 ${record.mode === 'balance-care' ? 'text-[#F43000]' :
+                <div className={`text-[13px] font-extrabold mb-1 ${record.mode === 'BALANCE' ? 'text-[#F43000]' :
                   record.mode === 'GOAL' ? 'text-[#EEFD32]' : 'text-[#00DCEB]'
                   }`}>
-                  {record.mode === 'balance-care' ? '밸런스 케어 운동' :
+                  {record.mode === 'BALANCE' ? '밸런스 케어 운동' :
                     record.mode === 'GOAL' ? '골 케어 운동' :
-                      record.mode === 'PART' ? '파트 케어 운동' : '오늘의 운동 (WOD)'}
+                      record.mode === 'PART' ? '파트 케어 운동' : '오늘의 운동'}
                 </div>
 
                 {/* Main Title (Duration/Rounds) */}
