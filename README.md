@@ -12,7 +12,7 @@ Crossfit 초심자들을 위한 **보강운동 추천 및 운동 기록 관리**
 ### 1. 홈 페이지 - 운동 모드 선택
 사용자는 오늘의 운동 목표에 맞는 3가지 모드 중 하나를 선택:
 
-#### 🔋 부족한 부위 채우기 (WOD 모드)
+#### 🔋 부족한 부위 채우기 (BALANCE 모드)
 - 오늘 수행한 WOD 운동 입력
 - 입력한 운동의 근육그룹 분석
 - 사용하지 않은 근육 위주의 보강운동 자동 추천
@@ -124,7 +124,7 @@ pnpm lint
 ```
 app/
 ├── api/                          # API Routes
-│   └── v1/workouts/generate/     # 운동 계획 생성 API
+│   └── v1/workouts/generate/     # 운동 계획 생성 API (balance, goal, part)
 ├── components/                   # 재사용 가능한 컴포넌트
 │   ├── Header.tsx
 │   ├── HomePage.tsx
