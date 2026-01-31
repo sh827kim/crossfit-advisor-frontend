@@ -9,7 +9,7 @@ Crossfit 초심자들을 위한 보강운동 추천 및 운동 기록 관리 프
 **서비스명**: 애프터와드 (AfterWOD)
 
 **주요 기능**:
-- 3가지 운동 모드 선택 (WOD, GOAL, PART)
+- 3가지 운동 모드 선택 (BALANCE, GOAL, PART)
 - 맞춤형 운동 계획 생성
 - 실시간 타이머와 함께 운동 진행
 - 운동 기록 저장 및 관리
@@ -60,7 +60,7 @@ NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
 app/
 ├── api/                  # API Routes (백엔드 엔드포인트)
 │   └── v1/workouts/generate/
-│       ├── wod/          # WOD 모드 API
+│       ├── balance/          # BALANCE 모드 API
 │       ├── goal/         # GOAL 모드 API
 │       └── part/         # PART 모드 API
 ├── components/           # 재사용 가능한 UI 컴포넌트
@@ -151,11 +151,11 @@ app/
 
 ```typescript
 // 사용자가 모드 선택
-setCurrentMode('wod');
+setCurrentMode('balance');
 setCurrentPage('input');  // → /input으로 이동
 
 // 입력 후 계획 생성
-const response = await fetch('/api/v1/workouts/generate/wod', {
+const response = await fetch('/api/v1/workouts/generate/balance', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ duration: 20, wodMovementIds: [...] })
@@ -188,7 +188,7 @@ handleSaveRecord();
 // 기록 저장
 addWorkoutRecord({
   date: '2026-01-18',
-  mode: 'WOD',
+  mode: 'BALANCE',
   duration: 20,
   exercises: ['Snatch 3-5', 'Pull-ups 5-8']
 });
@@ -237,7 +237,7 @@ className="bg-primary text-primary-foreground"
 ## 현재 구현된 기능
 
 ✅ **홈 페이지**: 3가지 운동 모드 선택
-✅ **입력 페이지**: 모드별 입력 폼 (WOD/GOAL/PART)
+✅ **입력 페이지**: 모드별 입력 폼 (BALANCE/GOAL/PART)
 ✅ **운동 진행 (Result 페이지)**:
   - 실시간 타이머
   - 운동별 완료 체크박스

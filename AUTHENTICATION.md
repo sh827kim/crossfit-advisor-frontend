@@ -130,7 +130,7 @@ import { authenticatedFetch } from '@/app/lib/api';
 
 // 사용: Access Token이 자동으로 포함되고, 만료시 자동 재발급
 const response = await authenticatedFetch(
-  '/api/wod/analyze',
+  '/api/v1/workouts/generate/balance',
   {
     method: 'POST',
     body: JSON.stringify({
@@ -194,7 +194,7 @@ const validToken = await ensureValidAccessToken();
 
 | 함수 | 설명 | 사용 예 |
 |------|------|--------|
-| `authenticatedFetch(endpoint, options)` | 토큰 포함 API 호출 (자동 갱신) | `await authenticatedFetch('/api/wod/analyze', {...})` |
+| `authenticatedFetch(endpoint, options)` | 토큰 포함 API 호출 (자동 갱신) | `await authenticatedFetch('/api/v1/workouts/generate/balance', {...})` |
 | `ensureValidAccessToken()` | 유효한 토큰 확보 | `const token = await ensureValidAccessToken()` |
 | `refreshAccessToken(refreshToken)` | 토큰 갱신 | `const {accessToken} = await refreshAccessToken(rt)` |
 | `logoutFromBackend()` | 백엔드 로그아웃 | `await logoutFromBackend()` |

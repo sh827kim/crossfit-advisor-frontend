@@ -4,12 +4,7 @@
  * - 이번달 데이터 100건 초과 시 오래된 데이터 삭제
  */
 
-interface WorkoutRecord {
-  date: string;
-  mode: 'WOD' | 'GOAL' | 'PART';
-  duration: number;
-  exercises: string[];
-}
+import { WorkoutRecord } from './types/workout.types';
 
 /**
  * 운동 기록 정리 및 저장

@@ -66,7 +66,7 @@ export async function migrateFromLocalStorage(): Promise<void> {
       try {
         const recordWithTimestamp: Omit<WorkoutRecordDB, 'id'> = {
           date: record.date,
-          mode: record.mode,
+          mode: (record.mode as string) === 'WOD' ? 'BALANCE' : (record.mode as 'BALANCE' | 'GOAL' | 'PART'),
           duration: record.duration,
           exercises: record.exercises,
           createdAt: new Date(record.date).getTime() // 날짜를 timestamp로 변환

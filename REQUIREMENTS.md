@@ -44,11 +44,11 @@ Crossfit **초심자**를 위한
 
 3가지 운동 모드 선택 버튼:
 
-#### 1) 부족한 부위 채우기 (WOD 모드)
+#### 1) 부족한 부위 채우기 (BALANCE 모드)
 - 사용자가 수행한 WOD 운동 입력
 - 입력한 운동의 근육그룹 분석
 - 사용하지 않은 근육 위주 보강운동 추천
-- 백엔드: `/api/v1/workouts/generate/wod`
+- 백엔드: `/api/v1/workouts/generate/balance`
 
 #### 2) 나의 달성 목표 (GOAL 모드)
 - 연습 목표 선택 (머슬업, 핸드스탠드 등)
@@ -107,7 +107,7 @@ Crossfit **초심자**를 위한
 - "오늘 운동 기록하기" 버튼으로 저장
 - 저장 항목:
   - 운동 일자 (YYYY-MM-DD)
-  - 운동 모드 (WOD / GOAL / PART)
+  - 운동 모드 (BALANCE / GOAL / PART)
   - 소요 시간 (분)
   - 각 운동별 수행 현황 (운동명 + 횟수)
 
@@ -147,7 +147,7 @@ Crossfit **초심자**를 위한
 ### Context API 사용
 - 전역 상태: `AppContext`
   - 현재 운동 모드
-  - 선택된 운동 목록 (WOD, GOAL, PART)
+  - 선택된 운동 목록 (BALANCE, GOAL, PART)
   - 생성된 운동 계획
   - 운동 기록 (localStorage 동기화)
   - 총 운동 시간
