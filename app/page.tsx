@@ -22,14 +22,40 @@ export default function HomePage() {
     }
   }, [isClient, hasVisited, router]);
 
-  // 메인 페이지 도착 시 히스토리 초기화
+  // 메인 페이지 도착 시 히스토리 초기화 및 뒤로가기 종료 처리
   useEffect(() => {
     if (isClient && hasVisited && window.location.pathname === '/') {
-      // 메인 페이지의 히스토리를 깔끔하게 유지
-      // 1. 현재 항목을 메인으로 설정 (이전 모든 히스토리 제거)
+      // 1. 현재 메인 페이지 상태 덮어쓰기
       window.history.replaceState({ page: 'home' }, '', '/');
-      // 2. 뒤로가기 차단을 위해 추가 상태 추가
+
+      // 2. 뒤로가기 방지를 위한 더미 상태 푸시
       window.history.pushState({ page: 'home-guard' }, '', '/');
+
+      // 3. PopState 이벤트 핸들러 (뒤로가기 시 실행)
+      const handlePopState = () => {
+        // 앱 종료 시도 (WebView 등 환경에 따라 다름)
+        // @ts-ignore
+        if (window.ReactNativeWebView) {
+          // @ts-ignore
+          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'EXIT_APP' }));
+        } else {
+          // 브라우저 환경: 바로 닫기 시도 (동작 안할 수 있음) 후 안내
+          window.close();
+          const confirmed = window.confirm('앱을 종료하시겠습니까?');
+          if (confirmed) {
+            window.close();
+          } else {
+            // 종료 취소 시 다시 가드 상태 푸시하여 메인 유지
+            window.history.pushState({ page: 'home-guard' }, '', '/');
+          }
+        }
+      };
+
+      window.addEventListener('popstate', handlePopState);
+
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
     }
   }, [isClient, hasVisited]);
 
@@ -54,53 +80,69 @@ export default function HomePage() {
 
   // Figma 디자인 기반 홈 페이지
   return (
-    <main className="flex-grow flex flex-col bg-black text-white pb-6 px-4">
-      {/* 타이틀 */}
-      <div className="mb-12 mt-8 text-center">
-        <h1 className="text-5xl font-black text-white mb-4 leading-tight">TODAY</h1>
-        <h2 className="text-5xl font-black text-white leading-tight">PLAN</h2>
-        <p className="text-sm text-gray-500 mt-6">상황에 맞는 최적의 루틴을 추천해드려요</p>
+    <main className="min-h-screen flex flex-col bg-[#010101] text-white overflow-hidden relative font-apple-sd">
+      {/* 상단 로고 및 텍스트 영역 (Top spacing approx 130px from design considering header) */}
+      <div className="pt-[80px] pl-[41px] mb-[40px]">
+        {/* Logo */}
+        <div className="mb-4">
+          <img src="/logo-red.svg" alt="AFTERWOD" className="w-[94px] h-auto" />
+        </div>
+        {/* Text */}
+        <h1 className="text-[24px] font-bold leading-tight text-white mb-1">
+          오늘도 잊지 않으셨네요!
+        </h1>
+        <h2 className="text-[24px] font-bold leading-tight text-white mb-2">
+          운동을 선택해 보세요
+        </h2>
+        <p className="text-[14px] text-gray-500 font-normal">
+          상황에 맞는 최적의 루틴을 추천해드려요
+        </p>
       </div>
 
-      {/* 카드 영역 */}
-      <div className="flex flex-col gap-4 flex-1">
-        {/* 애프터와드 밸런스 케어 */}
+      {/* 케어 버튼 영역 */}
+      <div className="flex flex-col gap-[14px] items-center w-full px-[12px]">
+        {/* 1. 애프터와드 밸런스 케어 (Red) */}
         <button
           onClick={() => handleInputClick('wod')}
-          className="w-full py-6 px-5 rounded-2xl transition active:scale-95 overflow-hidden relative"
+          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
           style={{
-            background: 'linear-gradient(118.37deg, rgba(244, 48, 0, 0.2) 8.59%, rgba(0, 0, 0, 0.2) 42.36%), #1F1F1F',
+            background: 'linear-gradient(115.05deg, rgba(244, 48, 0, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             border: '1px solid rgba(255, 255, 255, 0.05)'
           }}
         >
-          <h3 className="text-lg font-black text-white text-left">애프터와드 밸런스 케어</h3>
-          <p className="text-xs text-gray-500 text-left mt-1">오늘 운동을 분석해 균형 잡힌 마무리 운동을 추천해요.</p>
+          <h3 className="text-[22px] font-bold text-white leading-[26px]">애프터와드 밸런스 케어</h3>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 운동을 분석해 균형 잡힌 마무리 운동을 추천해요.</p>
+
+          {/* Hover/Active Effect Overlay */}
+          <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
 
-        {/* 목표 달성 트레이닝 */}
+        {/* 2. 목표 달성 트레이닝 (Yellow) */}
         <button
           onClick={() => handleInputClick('goal')}
-          className="w-full py-6 px-5 rounded-2xl transition active:scale-95 overflow-hidden relative"
+          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
           style={{
-            background: 'linear-gradient(115.05deg, rgba(124, 253, 50, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
+            background: 'linear-gradient(115.05deg, rgba(238, 253, 50, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             border: '1px solid rgba(255, 255, 255, 0.05)'
           }}
         >
-          <h3 className="text-lg font-black text-white text-left">목표 달성 트레이닝</h3>
-          <p className="text-xs text-gray-500 text-left mt-1">설정하신 목표 달성에 필요한 최적의 훈련을 시작해요.</p>
+          <h3 className="text-[22px] font-bold text-white leading-[26px]">목표 달성 트레이닝</h3>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">설정하신 목표 달성에 필요한 최적의 훈련을 시작해요.</p>
+          <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
 
-        {/* 부위별 집중 강화 */}
+        {/* 3. 부위별 집중 강화 (Blue) */}
         <button
           onClick={() => handleInputClick('part')}
-          className="w-full py-6 px-5 rounded-2xl transition active:scale-95 overflow-hidden relative"
+          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
           style={{
-            background: 'linear-gradient(116.58deg, rgba(35, 212, 224, 0.2) 9.25%, rgba(0, 0, 0, 0.2) 42.06%), #1F1F1F',
+            background: 'linear-gradient(115.05deg, rgba(35, 212, 224, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             border: '1px solid rgba(255, 255, 255, 0.05)'
           }}
         >
-          <h3 className="text-lg font-black text-white text-left">부위별 집중 강화</h3>
-          <p className="text-xs text-gray-500 text-left mt-1">오늘 더 훈련하고 싶은 부위만 골라 운동을 구성하세요.</p>
+          <h3 className="text-[22px] font-bold text-white leading-[26px]">부위별 집중 강화</h3>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 더 훈련하고 싶은 부위만 골라 운동을 구성하세요.</p>
+          <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
       </div>
     </main>

@@ -6,16 +6,16 @@ import { useApp } from '@/app/context/AppContext';
 
 // 닉네임 기반 프로필 배경색 생성 (OnboardingPage와 동일)
 const backgroundColors = [
-  '#FF6B6B', // 빨강
-  '#4ECDC4', // 청록
-  '#45B7D1', // 파랑
-  '#FFA07A', // 라이트 산호
-  '#98D8C8', // 민트
-  '#F7DC6F', // 노랑
-  '#BB8FCE', // 보라
-  '#85C1E2', // 하늘
-  '#F8B88B', // 살구
-  '#ABEBC6', // 라임
+  '#F43000', // Neon Red (Balance)
+  '#EEFD32', // Neon Yellow (Goal)
+  '#00DCEB', // Neon Cyan (Part)
+  '#FF00FF', // Hot Pink
+  '#39FF14', // Lime Green
+  '#007FFF', // Electric Blue
+  '#FF5E00', // Neon Orange
+  '#BF00FF', // Electric Purple
+  '#FFD700', // Gold
+  '#00FF7F', // Spring Green
 ];
 
 const getRandomColor = (seed: string) => {
@@ -29,7 +29,7 @@ export function Header() {
   const { userProfileImage, userNickname } = useApp();
 
   // 특정 화면에서는 글로벌 헤더를 숨김 (페이지 자체 헤더/플로우 사용)
-  const hideHeaderPrefixes = ['/onboarding', '/goal-care', '/balance-care', '/part-care'];
+  const hideHeaderPrefixes = ['/onboarding', '/goal-care', '/balance-care', '/part-care', '/profile', '/history'];
   if (hideHeaderPrefixes.some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
     return null;
   }
@@ -37,12 +37,10 @@ export function Header() {
   return (
     <header className="h-16 flex justify-between items-center px-6 z-20 sticky top-0 bg-black">
       <div
-        className="font-extrabold text-lg tracking-tight cursor-pointer flex items-center hover:opacity-80 transition italic text-white"
+        className="font-extrabold text-lg tracking-tight cursor-pointer flex items-center hover:opacity-80 transition text-white"
         onClick={() => router.replace('/')}
-        style={{ fontFamily: 'SF Pro, sans-serif', fontWeight: 900, letterSpacing: '-0.02em' }}
       >
-        <i className="fa-solid fa-dumbbell mr-2.5 text-[#f43000]"></i>
-        AFTERWOD
+        {/* Logo and Text removed as requested */}
       </div>
       <div className="flex gap-3 items-center">
         <button
@@ -58,9 +56,9 @@ export function Header() {
           style={
             !userProfileImage && userNickname
               ? {
-                  backgroundColor: getRandomColor(userNickname),
-                  color: '#000000',
-                }
+                backgroundColor: getRandomColor(userNickname),
+                color: '#000000',
+              }
               : { backgroundColor: '#1F1F1F', color: '#9CA3AF' }
           }
           title="프로필"

@@ -30,16 +30,16 @@ const walkthroughStepper = defineStepper(
 
 // 랜덤 배경 색상 생성
 const backgroundColors = [
-  '#FF6B6B', // 빨강
-  '#4ECDC4', // 청록
-  '#45B7D1', // 파랑
-  '#FFA07A', // 라이트 산호
-  '#98D8C8', // 민트
-  '#F7DC6F', // 노랑
-  '#BB8FCE', // 보라
-  '#85C1E2', // 하늘
-  '#F8B88B', // 살구
-  '#ABEBC6', // 라임
+  '#F43000', // Neon Red (Balance)
+  '#EEFD32', // Neon Yellow (Goal)
+  '#00DCEB', // Neon Cyan (Part)
+  '#FF00FF', // Hot Pink
+  '#39FF14', // Lime Green
+  '#007FFF', // Electric Blue
+  '#FF5E00', // Neon Orange
+  '#BF00FF', // Electric Purple
+  '#FFD700', // Gold
+  '#00FF7F', // Spring Green
 ];
 
 const getRandomColor = (seed: string) => {
@@ -205,19 +205,15 @@ export function OnboardingPage() {
           }`}>
           <div className="flex flex-col items-center justify-center">
             {/* AFTERWOD 로고 */}
-            <div className="mb-8 px-8 max-w-sm">
-              <div className="bg-[#f43000] px-16 py-6 flex flex-col items-center rounded-lg">
-                <h1 className="text-5xl font-black text-black mb-3 italic" style={{ fontFamily: 'SF Pro, sans-serif', fontWeight: 900, letterSpacing: '-0.02em' }}>
-                  AFTERWOD
-                </h1>
-                <div className="flex items-center gap-3 w-full">
-                  {/* 왼쪽 선 */}
-                  <div className="flex-1 h-1 bg-black"></div>
-                  <p className="text-xl font-bold text-black whitespace-nowrap">CLUB</p>
-                  {/* 오른쪽 선 */}
-                  <div className="flex-1 h-1 bg-black"></div>
-                </div>
-              </div>
+            <div className="mb-8 px-8 max-w-sm w-full flex justify-center">
+              <Image
+                src="/logo-splash.svg"
+                alt="AFTERWOD CLUB"
+                width={300}
+                height={150}
+                className="w-full h-auto max-w-[280px]"
+                priority
+              />
             </div>
           </div>
         </main>
@@ -316,84 +312,82 @@ export function OnboardingPage() {
             </div>
 
             {/* 프로필 카드 */}
-            <div
-              className="relative rounded-3xl p-8 mb-8 overflow-hidden"
+            {/* 프로필 카드 Container - Border & Background Separation */}
+            <div className="relative w-full max-w-[305px] h-[420px] mx-auto mb-8 rounded-[30px] p-[3px]"
               style={{
-                background: `linear-gradient(125.7deg, rgba(244, 48, 0, 0.2) 3.2%, rgba(0, 0, 0, 0.2) 35.5%), linear-gradient(90deg, rgb(31, 31, 31) 0%, rgb(31, 31, 31) 100%)`,
-                border: '1px solid rgba(255, 255, 255, 0.05)',
-                boxShadow: '0 0 32px rgba(244, 48, 0, 0.15)'
+                // 은색 위주의 메탈릭 그라데이션 테두리
+                background: `conic-gradient(from 180deg at 50% 50%, 
+                     #707070 0deg, 
+                     #FFFFFF 45deg, 
+                     #9E9E9E 110deg, 
+                     #FFFFFF 160deg, 
+                     #707070 210deg, 
+                     #FFFFFF 260deg, 
+                     #9E9E9E 310deg, 
+                     #FFFFFF 360deg)`
               }}
             >
-              {/* MEMBER 라벨 */}
-              <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-6 text-center opacity-50">
-                Member
-              </p>
+              {/* Inner Content (빨강-검정 배경) */}
+              <div
+                className="w-full h-full rounded-[27px] flex flex-col items-center relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(134.49deg, rgba(244, 48, 0, 0.2) 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F',
+                }}
+              >
+                {/* Logo (Top) */}
+                <div className="mt-[36px] mb-6 opacity-30">
+                  <Image
+                    src="/logo-gray.svg"
+                    alt="AFTERWOD CLUB"
+                    width={78}
+                    height={26}
+                    className="h-[22px] w-auto"
+                  />
+                </div>
 
-              {/* 프로필 이미지 */}
-              <div className="flex justify-center mb-8 relative">
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="group relative"
-                >
-                  <div
-                    className="w-24 h-24 rounded-full relative flex items-center justify-center overflow-hidden cursor-pointer hover:brightness-90 transition"
-                    style={{ backgroundColor: profileBgColor }}
-                  >
-                    {profileImage ? (
-                      <Image
-                        src={profileImage}
-                        alt="프로필"
-                        fill
-                        sizes="96px"
-                        className="object-cover"
-                        unoptimized
-                      />
-                    ) : (
-                      <span className="text-4xl font-bold text-black">
-                        {firstChar}
-                      </span>
-                    )}
-                  </div>
-                  {/* 카메라 아이콘 */}
-                  <div className="absolute bottom-0 right-0 w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-500 transition">
-                    <i className="fa-solid fa-camera text-white text-xs"></i>
-                  </div>
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-              </div>
+                {/* Member Label */}
+                <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[20px] font-sf-pro">
+                  Member
+                </p>
 
-              {/* 닉네임 입력 */}
-              <div className="mb-6">
-                <label className="block text-xs font-bold text-gray-500 mb-3">
+                {/* Profile Image */}
+                <div className="relative mb-[24px]">
+                  <button onClick={() => fileInputRef.current?.click()} className="group relative">
+                    <div
+                      className="w-[88px] h-[88px] rounded-full relative flex items-center justify-center overflow-hidden cursor-pointer shadow-xl transition hover:brightness-110"
+                      style={{ backgroundColor: profileBgColor }}
+                    >
+                      {profileImage ? (
+                        <Image src={profileImage} alt="프로필" fill className="object-cover" unoptimized />
+                      ) : (
+                        <span className="text-[40px] font-extrabold text-black font-apple-sd leading-none mt-1">
+                          {firstChar}
+                        </span>
+                      )}
+                    </div>
+                    {/* Camera Icon */}
+                    <div className="absolute bottom-0 right-0 w-[30px] h-[30px] bg-[#4E4E4E] border border-white/5 rounded-full flex items-center justify-center shadow-lg hover:bg-[#666] transition">
+                      <i className="fa-solid fa-camera text-white text-[12px]"></i>
+                    </div>
+                  </button>
+                  <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                </div>
+
+                {/* Nickname Input Label */}
+                <label className="text-[12px] font-bold text-[#959595] mb-2 tracking-tight font-apple-sd">
                   닉네임 ({nickname.length}/10)
                 </label>
-                <input
-                  type="text"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value.slice(0, 10))}
-                  placeholder="닉네임을 입력하세요"
-                  maxLength={10}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-2xl text-white font-medium placeholder-gray-600 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-600"
-                />
-              </div>
 
-              {/* 로고 */}
-              <div className="flex flex-col items-center justify-center pt-6 border-t border-gray-700">
-                <div className="mt-4 opacity-40 flex flex-col items-center">
-                  <p className="text-sm font-bold text-white tracking-wide italic mb-2" style={{ fontSize: '14px', letterSpacing: '0.08em' }}>
-                    AFTERWOD
-                  </p>
-                  <div className="flex items-center gap-2 w-full">
-                    <div className="flex-1 h-0.5 bg-white"></div>
-                    <p className="text-xs font-bold text-white whitespace-nowrap" style={{ fontSize: '10px' }}>CLUB</p>
-                    <div className="flex-1 h-0.5 bg-white"></div>
-                  </div>
+                {/* Nickname Input Field */}
+                <div className="w-[231px] h-[50px] relative">
+                  <input
+                    type="text"
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value.slice(0, 10))}
+                    placeholder="닉네임 입력"
+                    maxLength={10}
+                    className="w-full h-full bg-white/5 border border-white/5 rounded-[16px] text-center text-[17px] font-extrabold text-white placeholder-white/20 focus:outline-none focus:border-[#F43000]/50 transition-colors font-apple-sd"
+                  />
                 </div>
               </div>
             </div>

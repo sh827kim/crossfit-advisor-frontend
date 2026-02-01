@@ -1,23 +1,23 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
-// 닉네임 기반 프로필 배경색 생성 (Header/OnboardingPage와 동일)
+// 닉네임 기반 프로필 배경색 생성
 const backgroundColors = [
-  '#FF6B6B', // 빨강
-  '#4ECDC4', // 청록
-  '#45B7D1', // 파랑
-  '#FFA07A', // 라이트 산호
-  '#98D8C8', // 민트
-  '#F7DC6F', // 노랑
-  '#BB8FCE', // 보라
-  '#85C1E2', // 하늘
-  '#F8B88B', // 살구
-  '#ABEBC6', // 라임
+  '#F43000', // Neon Red (Balance)
+  '#EEFD32', // Neon Yellow (Goal)
+  '#00DCEB', // Neon Cyan (Part)
+  '#FF00FF', // Hot Pink
+  '#39FF14', // Lime Green
+  '#007FFF', // Electric Blue
+  '#FF5E00', // Neon Orange
+  '#BF00FF', // Electric Purple
+  '#FFD700', // Gold
+  '#00FF7F', // Spring Green
 ];
 
 const getRandomColor = (seed: string) => {
@@ -28,31 +28,44 @@ const getRandomColor = (seed: string) => {
 export function ProfilePage() {
   const router = useRouter();
   const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage } = useApp();
+
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
   const [showResetPopup, setShowResetPopup] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 현재 월의 기록 개수 계산
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
+  // Stats Calculation
+  const stats = useMemo(() => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
 
-  const thisMonthCount = isLoadingHistory ? 0 : workoutHistory.filter(record => {
-    const recordDate = new Date(record.date);
-    return recordDate.getFullYear() === currentYear && recordDate.getMonth() + 1 === currentMonth;
-  }).length;
+    const thisMonthRecords = workoutHistory.filter(r => {
+      const d = new Date(r.date);
+      return d.getFullYear() === currentYear && d.getMonth() + 1 === currentMonth;
+    });
 
-  const handleSaveName = () => {
-    if (tempName.trim()) {
-      setUserNickname(tempName.trim());
+    const thisMonthCount = thisMonthRecords.length;
+    // Calculate duration for this month (minutes)
+    const thisMonthDuration = Math.ceil(thisMonthRecords.reduce((acc, r) => acc + (r.duration || 0), 0) / 60);
+
+    const totalCount = workoutHistory.length;
+    // Total Duration (minutes)
+    const totalDuration = Math.ceil(workoutHistory.reduce((acc, r) => acc + (r.duration || 0), 0) / 60);
+
+    return { thisMonthCount, thisMonthDuration, totalCount, totalDuration };
+  }, [workoutHistory]);
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      // Save changes
+      if (tempName.trim()) setUserNickname(tempName.trim());
       setIsEditing(false);
+    } else {
+      // Enter edit mode
+      setTempName(userNickname);
+      setIsEditing(true);
     }
-  };
-
-  const handleCancel = () => {
-    setTempName(userNickname);
-    setIsEditing(false);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,13 +75,8 @@ export function ProfilePage() {
       reader.onload = (event) => {
         const base64 = event.target?.result as string;
         compressImage(base64, 300, 300, 0.8)
-          .then(compressedBase64 => {
-            setUserProfileImage(compressedBase64);
-          })
-          .catch(error => {
-            console.error('이미지 압축 실패:', error);
-            setUserProfileImage(base64);
-          });
+          .then(res => setUserProfileImage(res))
+          .catch(() => setUserProfileImage(base64));
       };
       reader.readAsDataURL(file);
     }
@@ -80,147 +88,185 @@ export function ProfilePage() {
     router.replace('/onboarding?reset=true');
   };
 
-  // Fallback Profile Style
-  const fallbackStyle = !userProfileImage && userNickname
-    ? {
-      backgroundColor: getRandomColor(userNickname),
-      color: '#000000',
-    }
-    : {};
+  const fallbackColor = useMemo(() => getRandomColor(userNickname || 'User'), [userNickname]);
 
   return (
-    <main className="px-6 pb-6 flex-grow flex flex-col bg-black text-white h-[calc(100vh-64px)] overflow-hidden">
-
-      {/* Main Content Container - Centered and Full Height */}
-      <div className="flex-1 flex flex-col items-center justify-center py-4">
-        <div className="bg-[#1F1F1F] rounded-3xl p-6 shadow-2xl border border-white/5 flex flex-col items-center justify-center w-full max-h-full overflow-y-auto relative">
-
-          {/* Decorative Gradient */}
-          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#F43000]/10 to-transparent pointer-events-none"></div>
-
-          {/* Profile Image */}
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="group relative z-10 shrink-0 mt-2"
-          >
-            <div
-              className={`w-24 h-24 rounded-full relative flex items-center justify-center mx-auto mb-2 text-4xl border-4 border-[#1F1F1F] shadow-[0_0_20px_rgba(244,48,0,0.3)] overflow-hidden cursor-pointer group-hover:brightness-110 transition ring-2 ring-[#F43000] ${!userProfileImage ? '' : 'bg-[#333]'}`}
-              style={fallbackStyle}
-            >
-              {userProfileImage ? (
-                <Image
-                  src={userProfileImage}
-                  alt="프로필"
-                  fill
-                  sizes="96px"
-                  className="object-cover"
-                  unoptimized
-                />
-              ) : (
-                <span className="font-bold">{(userNickname || '신').charAt(0)}</span>
-              )}
-            </div>
-            <div className="text-xs text-[#F43000] text-center font-bold mt-1 opacity-80 group-hover:opacity-100 transition">
-              사진 변경
-            </div>
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-          />
-
-          {/* 닉네임 표시/편집 */}
-          {isEditing ? (
-            <div className="w-full max-w-xs mb-4 z-10 mt-4 shrink-0">
-              <input
-                type="text"
-                value={tempName}
-                onChange={(e) => setTempName(e.target.value.slice(0, 10))}
-                maxLength={10}
-                className="w-full px-4 py-2 bg-[#333] border border-white/10 rounded-xl text-center font-bold text-lg text-white focus:outline-none focus:border-[#F43000] focus:ring-1 focus:ring-[#F43000] transition"
-                autoFocus
-              />
-              <div className="flex gap-2 mt-2">
-                <button
-                  onClick={handleSaveName}
-                  className="flex-1 py-3 bg-[#F43000] hover:bg-[#d92a00] text-black text-sm font-bold rounded-xl transition active:scale-95"
-                >
-                  저장
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="flex-1 py-3 bg-[#333] hover:bg-[#444] text-white text-sm font-bold rounded-xl transition active:scale-95"
-                >
-                  취소
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="mb-6 mt-4 z-10 shrink-0">
-              <div className="flex items-center justify-center gap-2">
-                <h2 className="text-2xl font-black text-white">{userNickname}</h2>
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="p-1.5 bg-[#333] hover:bg-[#444] rounded-full transition text-white/60 hover:text-[#F43000]"
-                  title="닉네임 변경"
-                >
-                  <i className="fa-solid fa-pen-to-square text-xs"></i>
-                </button>
-              </div>
-            </div>
-          )}
-
-          <p className="text-xs text-white/40 mb-3 font-bold uppercase tracking-wider shrink-0">Workout Stats</p>
-
-          <div className="bg-[#111] border border-white/5 rounded-2xl p-5 mb-6 w-full max-w-sm relative overflow-hidden shrink-0">
-            <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#F43000]"></div>
-            <p className="text-[#F43000] text-xs font-bold mb-1">THIS MONTH</p>
-            <div className="flex items-baseline gap-2">
-              <p className="text-3xl font-black text-white font-sf-pro">
-                {isLoadingHistory ? '-' : thisMonthCount}
-              </p>
-              <span className="text-white/60 text-sm font-bold">Workouts</span>
-            </div>
-          </div>
-
-          <div className="mt-auto pt-4 border-t border-white/5 w-full shrink-0">
-            <button
-              onClick={() => setShowResetPopup(true)}
-              className="text-xs font-medium text-white/40 hover:text-red-500 transition flex items-center justify-center w-full py-3"
-            >
-              <i className="fa-solid fa-trash mr-2"></i> 데이터 초기화
-            </button>
-          </div>
-        </div>
+    <main className="min-h-screen bg-[#010101] text-white font-sf-pro flex flex-col relative overflow-hidden">
+      {/* Header */}
+      <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
+        <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center">
+          <i className="fa-solid fa-xmark text-[24px] text-gray-400"></i>
+        </button>
+        <h1 className="text-[17px] font-bold absolute left-1/2 -translate-x-1/2">Profile</h1>
+        <button
+          onClick={handleEditToggle}
+          className={`text-[16px] font-bold w-[60px] text-right transition-colors text-white hover:text-gray-300`}
+        >
+          {isEditing ? '완료' : '편집'}
+        </button>
       </div>
 
-      {/* 초기화 확인 팝업 */}
-      {showResetPopup && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-6 animate-fadeIn">
-          <div className="bg-[#1F1F1F] rounded-[32px] p-8 shadow-2xl max-w-sm w-full border border-white/10 text-center">
-            <h3 className="text-xl font-bold text-white mb-2 leading-snug">
-              정말로<br />초기화 하시겠습니까?
-            </h3>
-            <p className="text-sm text-white/60 mb-8 leading-relaxed">
-              지금까지의 운동 기록과 닉네임,<br />프로필 정보가 모두 사라집니다.
-            </p>
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={confirmReset}
-                className="w-full py-4 bg-[#F43000] text-black font-bold rounded-2xl transition hover:brightness-110 active:scale-95"
-              >
-                초기화하기
-              </button>
-              <button
-                onClick={() => setShowResetPopup(false)}
-                className="w-full py-4 bg-[#333] hover:bg-[#444] text-white font-bold rounded-2xl transition active:scale-95"
-              >
-                취소
-              </button>
+      <div className="flex-1 overflow-y-auto px-6 pb-10 flex flex-col items-center pt-[60px]">
+        {/* Profile Card Container (Onboarding Style) */}
+        <div className="relative w-full max-w-[325px] rounded-[32px] p-[3px] mb-8"
+          style={{
+            background: `conic-gradient(from 180deg at 50% 50%, 
+                 #707070 0deg, 
+                 #FFFFFF 45deg, 
+                 #9E9E9E 110deg, 
+                 #FFFFFF 160deg, 
+                 #707070 210deg, 
+                 #FFFFFF 260deg, 
+                 #9E9E9E 310deg, 
+                 #FFFFFF 360deg)`
+          }}
+        >
+          {/* Inner Content */}
+          <div className="w-full h-full rounded-[29px] flex flex-col items-center relative overflow-hidden bg-[#1F1F1F] px-4 py-8"
+            style={{ background: 'linear-gradient(134.49deg, rgba(244, 48, 0, 0.2) 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F' }}>
+
+            {/* 1. Logo (Top) */}
+            <div className="mb-4 opacity-30 mt-2">
+              <Image src="/logo-gray.svg" alt="AFTERWOD" width={78} height={26} className="h-[22px] w-auto" />
             </div>
+
+            {/* 2. Member Label */}
+            <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[24px] font-sf-pro">
+              Member
+            </p>
+
+            {/* 3. Profile Image & Camera Button */}
+            <div className="relative mb-[24px]">
+              <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex items-center justify-center relative shadow-2xl border border-white/5"
+                style={{ backgroundColor: userProfileImage ? 'transparent' : fallbackColor }}>
+                {userProfileImage ? (
+                  <Image src={userProfileImage} alt="Profile" fill className="object-cover" unoptimized />
+                ) : (
+                  <span className="text-[44px] font-extrabold text-black font-apple-sd mt-1">
+                    {(userNickname || 'U').charAt(0)}
+                  </span>
+                )}
+              </div>
+              {/* Camera Button (Only in Edit Mode) */}
+              {isEditing && (
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#333] border border-[#555] rounded-full flex items-center justify-center shadow-lg hover:bg-[#444] transition z-20"
+                >
+                  <i className="fa-solid fa-camera text-white text-[14px]"></i>
+                </button>
+              )}
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+            </div>
+
+            {/* 4. Nickname */}
+            <div className="w-full flex justify-center mb-8">
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={tempName}
+                  onChange={(e) => setTempName(e.target.value)}
+                  className="w-[180px] bg-white/5 border border-white/10 rounded-[12px] py-2 text-center text-[20px] font-extrabold text-white placeholder-white/20 focus:outline-none focus:border-[#F43000]/50 transition-colors font-apple-sd"
+                  maxLength={10}
+                  placeholder="닉네임"
+                />
+              ) : (
+                <h2 className="text-[24px] font-extrabold text-white font-apple-sd">{userNickname}</h2>
+              )}
+            </div>
+
+            {/* 5. Decoration Line */}
+            <div className="w-full h-[1px] bg-white/5 mb-8"></div>
+
+            {/* 6. Stats Section (Inside Card - Corrected as per feedback) */}
+            <div className="w-full mt-4 px-2">
+              {isEditing ? (
+                <div className="grid grid-cols-2 gap-y-6 gap-x-4 opacity-40 pointer-events-none grayscale">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="flex flex-col items-start justify-center animate-pulse">
+                      {/* Label Skeleton */}
+                      <div className="w-24 h-4 bg-white/20 rounded mb-2"></div>
+                      {/* Value Skeleton */}
+                      <div className="w-16 h-6 bg-white/20 rounded"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                  {/* Item 1 */}
+                  <div className="flex flex-col items-start justify-center">
+                    <span className="text-[13px] text-white font-medium mb-1">이번 달 운동 횟수</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.thisMonthCount}</span>
+                    </div>
+                  </div>
+                  {/* Item 2 */}
+                  <div className="flex flex-col items-start justify-center">
+                    <span className="text-[13px] text-white font-medium mb-1">이번 달 운동 시간</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.thisMonthDuration}</span>
+                      <span className="text-[15px] text-white font-medium">분</span>
+                    </div>
+                  </div>
+                  {/* Item 3 */}
+                  <div className="flex flex-col items-start justify-center">
+                    <span className="text-[13px] text-white font-medium mb-1">총 운동 횟수</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.totalCount}</span>
+                    </div>
+                  </div>
+                  {/* Item 4 */}
+                  <div className="flex flex-col items-start justify-center">
+                    <span className="text-[13px] text-white font-medium mb-1">총 운동 시간</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.totalDuration}</span>
+                      <span className="text-[15px] text-white font-medium">분</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+        {/* Reset Button (Outside) */}
+        {!isEditing && (
+          <div className="mt-auto pb-6">
+            <button
+              onClick={() => setShowResetPopup(true)}
+              className="text-[#555] text-[13px] underline decoration-[#555] underline-offset-4 hover:text-[#666] transition"
+            >
+              운동 기록 초기화
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Reset Modal */}
+      {showResetPopup && (
+        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 animate-fadeIn">
+          <div className="w-[280px] bg-[#1F1F1F] border border-white/10 rounded-[32px] p-8 flex flex-col items-center text-center shadow-2xl">
+            <h2 className="text-white text-[18px] font-bold leading-[26px] mb-3">
+              정말로<br />초기화 하시겠습니까?
+            </h2>
+            <p className="text-[#888] text-[13px] mb-8 leading-relaxed">
+              지금까지의 운동 기록과<br />프로필 정보가 모두 사라집니다.
+            </p>
+
+            <button
+              onClick={confirmReset}
+              className="w-full bg-[#f43000] text-black font-bold h-[52px] rounded-2xl text-[15px] hover:brightness-110 active:scale-95 transition mb-3"
+            >
+              초기화하기
+            </button>
+
+            <button
+              onClick={() => setShowResetPopup(false)}
+              className="text-white font-bold text-[15px] opacity-60 hover:opacity-100 p-3 transition"
+            >
+              취소
+            </button>
           </div>
         </div>
       )}

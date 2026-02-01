@@ -230,6 +230,28 @@ export async function addWorkoutRecord(record: Omit<WorkoutRecordDB, 'id'>): Pro
 }
 
 /**
+ * 운동 기록 삭제 (단건)
+ * @param id 삭제할 기록의 ID
+ */
+export async function deleteWorkoutRecord(id: number): Promise<void> {
+  const db = await openDatabase();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const objectStore = transaction.objectStore(STORE_NAME);
+    const request = objectStore.delete(id);
+
+    request.onsuccess = () => {
+      resolve();
+    };
+
+    request.onerror = () => {
+      reject(request.error);
+    };
+  });
+}
+
+/**
  * 당월 운동 기록 100건 제한 적용
  * - 당월 기록이 100건을 초과하면 오래된 기록 삭제
  * - 이전 달 기록은 모두 삭제

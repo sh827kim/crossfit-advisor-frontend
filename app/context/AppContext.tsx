@@ -53,6 +53,7 @@ interface AppContextType {
   isLoadingHistory: boolean;
   historyError: string | null;
   addWorkoutRecord: (record: WorkoutRecord) => Promise<void>;
+  deleteWorkoutRecord: (id: number) => Promise<void>;
 
   // 사용자 프로필
   hasVisited: boolean;
@@ -355,6 +356,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const deleteWorkoutRecord = useCallback(async (id: number) => {
+    if (!storageRef.current) {
+      console.error('Storage adapter not initialized');
+      return;
+    }
+
+    try {
+      await storageRef.current.delete(id);
+      const updatedRecords = await storageRef.current.getAll();
+      setWorkoutHistory(updatedRecords);
+    } catch (error) {
+      console.error('Failed to delete workout record:', error);
+      throw error;
+    }
+  }, []);
+
   const resetInputState = useCallback(() => {
     setWodList([]);
     setSelectedGoal(null);
@@ -447,6 +464,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         isLoadingHistory,
         historyError,
         addWorkoutRecord,
+        deleteWorkoutRecord,
         hasVisited,
         userNickname,
         userProfileImage,

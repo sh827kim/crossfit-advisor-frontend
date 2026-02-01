@@ -12,6 +12,7 @@ import {
   getRecordsByDate,
   getRecordsByMonth,
   addWorkoutRecord as addToIndexedDB,
+  deleteWorkoutRecord as deleteFromIndexedDB,
   cleanupMonthlyRecords,
   WorkoutRecordDB
 } from './indexeddb';
@@ -37,6 +38,9 @@ export interface WorkoutStorageAdapter {
 
   /** 기록 추가 */
   add(record: WorkoutRecord): Promise<void>;
+
+  /** 기록 삭제 */
+  delete(id: number): Promise<void>;
 
   /** 정리 작업 (100건 제한 등) */
   cleanup(): Promise<void>;
@@ -76,6 +80,10 @@ class IndexedDBAdapter implements WorkoutStorageAdapter {
 
     // 기록 추가 후 정리 작업 실행
     await this.cleanup();
+  }
+
+  async delete(id: number): Promise<void> {
+    await deleteFromIndexedDB(id);
   }
 
   async cleanup(): Promise<void> {
@@ -134,6 +142,12 @@ class LocalStorageAdapter implements WorkoutStorageAdapter {
     // 정리 후 저장
     const cleaned = cleanupAndSaveWorkoutRecords(records);
     this.saveRecords(cleaned);
+  }
+
+  async delete(id: number): Promise<void> {
+    const records = this.loadRecords();
+    const newRecords = records.filter(r => r.id !== id);
+    this.saveRecords(newRecords);
   }
 
   async cleanup(): Promise<void> {

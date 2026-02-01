@@ -177,7 +177,7 @@ export default function PartRunnerPage() {
                     {/* Rounds Quality Header */}
                     <div className="text-left mb-6 z-10 pl-2">
                         <h2 className="font-extrabold text-[20px] mb-2" style={{ color: THEME_COLOR }}>타겟 집중 운동</h2>
-                        <p className="text-[40px] font-black italic text-white leading-none font-sf-pro mb-4">
+                        <p className="text-[40px] font-black text-white leading-none font-sf-pro mb-4">
                             {generatedPlan.rounds || 1} Rounds Quality
                         </p>
 
@@ -198,7 +198,7 @@ export default function PartRunnerPage() {
                             <IntroStepper.Stepper.Provider
                                 initialStep={generatedPlan.exercises[0]?.movementId || '0'}
                                 variant="vertical"
-                                indicatorClassName={`w-9 h-9 text-black font-bold italic`}
+                                indicatorClassName={`w-9 h-9 text-black font-bold`}
                                 separatorClassName={`bg-[${THEME_DARK_COLOR}]`}
                                 separatorCompletedClassName={`bg-[${THEME_DARK_COLOR}]`}
                             >
@@ -207,7 +207,7 @@ export default function PartRunnerPage() {
                                         {generatedPlan.exercises.map((ex, idx) => (
                                             <div key={idx} className="flex items-center gap-4 relative z-10">
                                                 <div
-                                                    className="relative flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-black font-black italic text-lg transition-all"
+                                                    className="relative flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-black font-black text-lg transition-all"
                                                     style={{ backgroundColor: THEME_COLOR, boxShadow: `0 0 10px ${THEME_SHADOW}` }}
                                                 >
                                                     {idx + 1}
@@ -241,7 +241,7 @@ export default function PartRunnerPage() {
             {/* STAGE 2: COUNTDOWN */}
             {stage === 'countdown' && (
                 <div className="flex flex-col items-center justify-center h-full bg-black">
-                    <div className="text-[160px] font-black italic animate-bounce" style={{ color: THEME_COLOR }}>
+                    <div className="text-[160px] font-black animate-bounce" style={{ color: THEME_COLOR }}>
                         {countdown}
                     </div>
                 </div>
@@ -255,8 +255,8 @@ export default function PartRunnerPage() {
                         <div className="text-white font-bold opacity-0">Placeholder</div>
                         <div className="flex flex-col items-center">
                             <span className="font-bold text-sm tracking-widest uppercase" style={{ color: THEME_COLOR }}>ROUND</span>
-                            <span className="text-white font-bold text-xl font-sf-pro italic">
-                                {currentRound} <span className="text-gray-500 text-sm not-italic">/ {generatedPlan.rounds || 1}</span>
+                            <span className="text-white font-bold text-xl font-sf-pro">
+                                {currentRound} <span className="text-gray-500 text-sm">/ {generatedPlan.rounds || 1}</span>
                             </span>
                         </div>
                         <div className="w-10"></div>
@@ -286,7 +286,7 @@ export default function PartRunnerPage() {
                                         )}>
                                             <div
                                                 className={cn(
-                                                    "w-9 h-9 rounded-full flex items-center justify-center text-black font-black italic text-lg transition-all",
+                                                    "w-9 h-9 rounded-full flex items-center justify-center text-black font-black text-lg transition-all",
                                                     isActive ? "" : "brightness-50"
                                                 )}
                                                 style={{ backgroundColor: THEME_COLOR, boxShadow: `0 0 10px ${THEME_SHADOW}` }}
@@ -389,46 +389,60 @@ export default function PartRunnerPage() {
 
             {/* STAGE 5: DONE */}
             {stage === 'done' && (
-                <div className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000, ${THEME_COLOR})` }}>
+                <div className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
                     <h1 className="text-[32px] font-extrabold text-white text-center mb-2 leading-[40px]">
                         오늘도<br />수고많으셨습니다!
                     </h1>
-                    <p className="text-white/60 text-sm font-bold mb-8">
+                    <p className="text-white/60 text-sm font-bold mb-12">
                         {dateString}
                     </p>
 
-                    <div className="relative w-full max-w-sm bg-[#1F1F1F] border border-white/10 rounded-[30px] h-[424px] pt-8 px-8 pb-8 overflow-hidden mb-8 shadow-2xl flex flex-col">
-                        <div className="absolute inset-0 pointer-events-none" style={{ background: `linear-gradient(135deg, ${THEME_COLOR}33, #00000033)` }}></div>
+                    <div className="relative w-full max-w-[325px] rounded-[32px] p-[3px] mb-8"
+                        style={{
+                            background: `conic-gradient(from 180deg at 50% 50%, 
+                              #707070 0deg, 
+                              #FFFFFF 45deg, 
+                              #9E9E9E 110deg, 
+                              #FFFFFF 160deg, 
+                              #707070 210deg, 
+                              #FFFFFF 260deg, 
+                              #9E9E9E 310deg, 
+                              #FFFFFF 360deg)`
+                        }}
+                    >
+                        <div className="w-full h-[424px] rounded-[29px] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
+                            style={{ background: 'linear-gradient(134.49deg, rgba(0, 220, 235, 0.2) 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F' }}>
 
-                        <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
-                            <div className="flex flex-col items-start mb-4 flex-none">
-                                <div className="text-[72px] font-black text-white leading-none tracking-tight font-sf-pro">
-                                    {formatTime(timer)}
+                            <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
+                                <div className="flex flex-col items-start mb-4 flex-none">
+                                    <div className="text-[60px] font-black text-white leading-none tracking-tight font-sf-pro">
+                                        {formatTime(timer)}
+                                    </div>
+                                    <div className="text-[15px] font-bold text-white mt-1">운동시간</div>
                                 </div>
-                                <div className="text-[15px] font-bold text-white mt-1">운동시간</div>
-                            </div>
 
-                            <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>
+                                <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>
 
-                            <div className="text-left mb-4 flex-none">
-                                <h2 className="font-extrabold text-[15px] mb-1" style={{ color: THEME_COLOR }}>파트 케어 운동</h2>
-                                <p className="text-[32px] font-black text-white italic font-sf-pro whitespace-nowrap">
-                                    {generatedPlan.rounds || 1} Rounds Quality
-                                </p>
-                            </div>
+                                <div className="text-left mb-4 flex-none">
+                                    <h2 className="font-extrabold text-[15px] mb-1" style={{ color: THEME_COLOR }}>파트 케어 운동</h2>
+                                    <p className="text-[32px] font-black text-white font-sf-pro whitespace-nowrap">
+                                        {generatedPlan.rounds || 1} Rounds Quality
+                                    </p>
+                                </div>
 
-                            <div className="text-left mb-4 flex flex-col gap-1 flex-1 overflow-y-auto w-full no-scrollbar min-h-0">
-                                {generatedPlan.exercises.map((ex, i) => (
-                                    <span key={i} className="text-white text-[15px] font-normal leading-relaxed flex-shrink-0">
-                                        {ex.name}
-                                    </span>
-                                ))}
-                            </div>
+                                <div className="text-left mb-4 flex flex-col gap-1 flex-1 overflow-y-auto w-full no-scrollbar min-h-0">
+                                    {generatedPlan.exercises.map((ex, i) => (
+                                        <span key={i} className="text-white text-[15px] font-normal leading-relaxed flex-shrink-0">
+                                            {ex.name}
+                                        </span>
+                                    ))}
+                                </div>
 
-                            <div className="text-left flex-none">
-                                <p className="text-white text-[13px] font-normal opacity-55">
-                                    {dateTimeString}
-                                </p>
+                                <div className="text-left flex-none">
+                                    <p className="text-white text-[13px] font-normal opacity-55">
+                                        {dateTimeString}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -441,14 +455,14 @@ export default function PartRunnerPage() {
                         >
                             기록하기
                         </button>
-
-                        <button
-                            onClick={() => router.push('/')}
-                            className="text-white/80 font-bold text-[17px] hover:text-white transition"
-                        >
-                            처음으로 돌아가기
-                        </button>
                     </div>
+
+                    <button
+                        onClick={() => router.push('/')}
+                        className="text-white/80 font-bold text-[17px] hover:text-white transition"
+                    >
+                        처음으로 돌아가기
+                    </button>
                 </div>
             )}
 
