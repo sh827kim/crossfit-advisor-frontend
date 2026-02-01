@@ -107,7 +107,8 @@ export default function HomePage() {
           className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(244, 48, 0, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
-            border: '1px solid rgba(255, 255, 255, 0.05)'
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundClip: 'padding-box'
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">애프터와드 밸런스 케어</h3>
@@ -123,7 +124,8 @@ export default function HomePage() {
           className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(238, 253, 50, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
-            border: '1px solid rgba(255, 255, 255, 0.05)'
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundClip: 'padding-box'
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">목표 달성 트레이닝</h3>
@@ -137,7 +139,8 @@ export default function HomePage() {
           className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(35, 212, 224, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
-            border: '1px solid rgba(255, 255, 255, 0.05)'
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundClip: 'padding-box'
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">부위별 집중 강화</h3>
