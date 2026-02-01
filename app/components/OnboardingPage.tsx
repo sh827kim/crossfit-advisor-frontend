@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
@@ -28,25 +28,7 @@ const walkthroughStepper = defineStepper(
   }
 );
 
-// 랜덤 배경 색상 생성
-const backgroundColors = [
-  '#F43000', // Neon Red (Balance)
-  '#EEFD32', // Neon Yellow (Goal)
-  '#00DCEB', // Neon Cyan (Part)
-  '#FF00FF', // Hot Pink
-  '#39FF14', // Lime Green
-  '#007FFF', // Electric Blue
-  '#FF5E00', // Neon Orange
-  '#BF00FF', // Electric Purple
-  '#FFD700', // Gold
-  '#00FF7F', // Spring Green
-];
-
-const getRandomColor = (seed: string) => {
-  // 닉네임의 첫 글자를 기반으로 일관된 색상 선택
-  const charCode = seed.charCodeAt(0) || 0;
-  return backgroundColors[charCode % backgroundColors.length];
-};
+import { getProfileColor } from '@/app/lib/profile-colors';
 
 export function OnboardingPage() {
   const router = useRouter();
@@ -62,6 +44,8 @@ export function OnboardingPage() {
 
   // Walkthrough 애니메이션 상태 (타이핑 로직 제거 -> 단계별 표시만 유지)
   const [visibleSteps, setVisibleSteps] = useState<number>(0);
+
+  const fallbackColor = useMemo(() => getProfileColor(nickname || '신'), [nickname]);
 
   // 초기화 요청 시 데이터 초기화
   useEffect(() => {
@@ -291,7 +275,6 @@ export function OnboardingPage() {
     // 프로필 설정 화면
     if (currentStep === 'profile') {
       const firstChar = nickname.charAt(0) || '신';
-      const profileBgColor = getRandomColor(nickname || '신');
 
       return (
         <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-8 pt-8 overflow-y-auto">
@@ -355,7 +338,7 @@ export function OnboardingPage() {
                   <button onClick={() => fileInputRef.current?.click()} className="group relative">
                     <div
                       className="w-[88px] h-[88px] rounded-full relative flex items-center justify-center overflow-hidden cursor-pointer shadow-xl transition hover:brightness-110"
-                      style={{ backgroundColor: profileBgColor }}
+                      style={{ backgroundColor: fallbackColor }}
                     >
                       {profileImage ? (
                         <Image src={profileImage} alt="프로필" fill className="object-cover" unoptimized />

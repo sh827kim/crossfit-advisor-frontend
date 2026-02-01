@@ -1,14 +1,14 @@
 export const PROFILE_BACKGROUND_COLORS = [
-    '#FF3B30', // Red
-    '#FF9500', // Orange
+    '#F43000', // Neon Red
     '#EEFD32', // Neon Yellow
-    '#39FF14', // Neon Green
-    '#00DCEB', // Cyan
-    '#007AFF', // Blue
-    '#5856D6', // Purple
-    '#FF2D55', // Pink
-    '#FF00FF', // Magenta
-    '#F43000', // Theme Red
+    '#00DCEB', // Neon Cyan
+    '#FF00FF', // Hot Pink
+    '#39FF14', // Lime Green
+    '#007FFF', // Electric Blue
+    '#FF5E00', // Neon Orange
+    '#BF00FF', // Electric Purple
+    '#FFD700', // Gold
+    '#00FF7F', // Spring Green
 ];
 
 export const getProfileColor = (seed: string) => {

@@ -4,24 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 
-// 닉네임 기반 프로필 배경색 생성 (OnboardingPage와 동일)
-const backgroundColors = [
-  '#F43000', // Neon Red (Balance)
-  '#EEFD32', // Neon Yellow (Goal)
-  '#00DCEB', // Neon Cyan (Part)
-  '#FF00FF', // Hot Pink
-  '#39FF14', // Lime Green
-  '#007FFF', // Electric Blue
-  '#FF5E00', // Neon Orange
-  '#BF00FF', // Electric Purple
-  '#FFD700', // Gold
-  '#00FF7F', // Spring Green
-];
-
-const getRandomColor = (seed: string) => {
-  const charCode = seed.charCodeAt(0) || 0;
-  return backgroundColors[charCode % backgroundColors.length];
-};
+import { PROFILE_BACKGROUND_COLORS, getProfileColor } from '@/app/lib/profile-colors';
 
 export function Header() {
   const router = useRouter();
@@ -56,7 +39,7 @@ export function Header() {
           style={
             !userProfileImage && userNickname
               ? {
-                backgroundColor: getRandomColor(userNickname),
+                backgroundColor: getProfileColor(userNickname),
                 color: '#000000',
               }
               : { backgroundColor: '#1F1F1F', color: '#9CA3AF' }

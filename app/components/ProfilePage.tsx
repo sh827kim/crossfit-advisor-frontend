@@ -6,24 +6,7 @@ import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
-// 닉네임 기반 프로필 배경색 생성
-const backgroundColors = [
-  '#F43000', // Neon Red (Balance)
-  '#EEFD32', // Neon Yellow (Goal)
-  '#00DCEB', // Neon Cyan (Part)
-  '#FF00FF', // Hot Pink
-  '#39FF14', // Lime Green
-  '#007FFF', // Electric Blue
-  '#FF5E00', // Neon Orange
-  '#BF00FF', // Electric Purple
-  '#FFD700', // Gold
-  '#00FF7F', // Spring Green
-];
-
-const getRandomColor = (seed: string) => {
-  const charCode = seed.charCodeAt(0) || 0;
-  return backgroundColors[charCode % backgroundColors.length];
-};
+import { getProfileColor } from '@/app/lib/profile-colors';
 
 export function ProfilePage() {
   const router = useRouter();
@@ -88,7 +71,7 @@ export function ProfilePage() {
     router.replace('/onboarding?reset=true');
   };
 
-  const fallbackColor = useMemo(() => getRandomColor(userNickname || 'User'), [userNickname]);
+  const fallbackColor = useMemo(() => getProfileColor(userNickname || 'User'), [userNickname]);
 
   return (
     <main className="min-h-screen bg-[#010101] text-white font-sf-pro flex flex-col relative overflow-hidden">
