@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={barlowCondensed.variable}>
+    <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
@@ -59,7 +59,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="애프터와드" />
       </head>
-      <body className="bg-gray-100 font-sans">
+      <body className={`bg-gray-100 font-sans ${barlowCondensed.variable}`}>
         <AppProvider>
           <PWAInitializer />
           <BackButtonHandler />
