@@ -4,6 +4,8 @@ export type WorkoutMode = 'BALANCE' | 'GOAL' | 'PART';
 
 export type MuscleGroup = 'CORE' | 'LEGS' | 'BACK' | 'CHEST' | 'CARDIO';
 
+export type MovementType = 'WEIGHTLIFTING' | 'DUMBBELL_KB' | 'GYMNASTICS_EQUIP' | 'GYMNASTICS_BODY' | 'CARDIO';
+
 export type Equipment =
   | 'BODYWEIGHT'
   | 'BAR'
@@ -22,6 +24,7 @@ export type Equipment =
 export interface Movement {
   id: string;
   name: string;
+  type?: MovementType; // Optional for compatibility, but should be populated
   muscleGroups: MuscleGroup[];
   equipment: Equipment;
   minReps?: number | null;
@@ -36,6 +39,27 @@ export interface Exercise {
   maxReps?: number | null;
   equipment: Equipment;
   muscleGroups: MuscleGroup[];
+}
+
+// --- Goal Management Entities ---
+export interface GoalEntity {
+  id: string;
+  name: string;
+  category: 'SKILL' | 'STRENGTH' | 'ENDURANCE';
+  primaryMuscles: MuscleGroup[];
+  secondaryMuscles: MuscleGroup[];
+  recommendedRoutines: GoalRoutine[];
+}
+
+export interface GoalRoutine {
+  id: string;
+  goalId: string;
+  level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  movements: {
+    movementId: string;
+    role: 'MAIN' | 'ACCESSORY' | 'DRILL';
+    guidance?: string;
+  }[];
 }
 
 export interface WorkoutGenerateBalanceRequest {

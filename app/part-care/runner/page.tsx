@@ -177,7 +177,7 @@ export default function PartRunnerPage() {
                     {/* Rounds Quality Header */}
                     <div className="text-left mb-6 z-10 pl-2">
                         <h2 className="font-extrabold text-[20px] mb-2" style={{ color: THEME_COLOR }}>타겟 집중 운동</h2>
-                        <p className="text-[40px] font-black text-white leading-none font-sf-pro mb-4">
+                        <p className="text-[40px] font-black text-white leading-none font-barlow mb-4">
                             {generatedPlan.rounds || 1} Rounds Quality
                         </p>
 
@@ -241,7 +241,7 @@ export default function PartRunnerPage() {
             {/* STAGE 2: COUNTDOWN */}
             {stage === 'countdown' && (
                 <div className="flex flex-col items-center justify-center h-full bg-black">
-                    <div className="text-[160px] font-black animate-bounce" style={{ color: THEME_COLOR }}>
+                    <div className="text-[160px] font-black animate-bounce-subtle font-barlow" style={{ color: THEME_COLOR }}>
                         {countdown}
                     </div>
                 </div>
@@ -255,7 +255,7 @@ export default function PartRunnerPage() {
                         <div className="text-white font-bold opacity-0">Placeholder</div>
                         <div className="flex flex-col items-center">
                             <span className="font-bold text-sm tracking-widest uppercase" style={{ color: THEME_COLOR }}>ROUND</span>
-                            <span className="text-white font-bold text-xl font-sf-pro">
+                            <span className="text-white font-bold text-xl font-barlow">
                                 {currentRound} <span className="text-gray-500 text-sm">/ {generatedPlan.rounds || 1}</span>
                             </span>
                         </div>
@@ -264,7 +264,7 @@ export default function PartRunnerPage() {
 
                     {/* Big Timer */}
                     <div className="flex flex-col items-center justify-center mb-8">
-                        <div className="text-[80px] font-black text-white leading-none tracking-tight font-sf-pro">
+                        <div className="text-[80px] font-black text-white leading-none tracking-tight font-barlow">
                             {formatTime(timer)}
                         </div>
                     </div>
@@ -415,7 +415,7 @@ export default function PartRunnerPage() {
 
                             <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
                                 <div className="flex flex-col items-start mb-4 flex-none">
-                                    <div className="text-[60px] font-black text-white leading-none tracking-tight font-sf-pro">
+                                    <div className="text-[60px] font-black text-white leading-none tracking-tight font-barlow">
                                         {formatTime(timer)}
                                     </div>
                                     <div className="text-[15px] font-bold text-white mt-1">운동시간</div>
@@ -425,7 +425,7 @@ export default function PartRunnerPage() {
 
                                 <div className="text-left mb-4 flex-none">
                                     <h2 className="font-extrabold text-[15px] mb-1" style={{ color: THEME_COLOR }}>파트 케어 운동</h2>
-                                    <p className="text-[32px] font-black text-white font-sf-pro whitespace-nowrap">
+                                    <p className="text-[32px] font-black text-white font-barlow whitespace-nowrap">
                                         {generatedPlan.rounds || 1} Rounds Quality
                                     </p>
                                 </div>

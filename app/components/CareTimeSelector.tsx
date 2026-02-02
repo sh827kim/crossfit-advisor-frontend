@@ -120,7 +120,7 @@ export function CareTimeSelector({
       <div
         key={itemValue}
         style={style}
-        className={`flex items-center justify-center select-none font-sf-pro leading-none cursor-pointer ${textStyleClass}`}
+        className={`flex items-center justify-center select-none font-barlow leading-none cursor-pointer ${textStyleClass}`}
         onClick={() => onChange(itemValue)}
       >
         {itemValue}

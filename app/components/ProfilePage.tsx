@@ -7,6 +7,7 @@ import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
 import { getProfileColor } from '@/app/lib/profile-colors';
+import { ConfirmDialog } from '@/app/components/shared/ConfirmDialog';
 
 export function ProfilePage() {
   const router = useRouter();
@@ -74,7 +75,7 @@ export function ProfilePage() {
   const fallbackColor = useMemo(() => getProfileColor(userNickname || 'User'), [userNickname]);
 
   return (
-    <main className="min-h-screen bg-[#010101] text-white font-sf-pro flex flex-col relative overflow-hidden">
+    <main className="min-h-screen bg-[#010101] text-white flex flex-col relative overflow-hidden">
       {/* Header */}
       <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
         <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center">
@@ -114,7 +115,7 @@ export function ProfilePage() {
             </div>
 
             {/* 2. Member Label */}
-            <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[24px] font-sf-pro">
+            <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[24px]">
               Member
             </p>
 
@@ -180,14 +181,14 @@ export function ProfilePage() {
                   <div className="flex flex-col items-start justify-center">
                     <span className="text-[13px] text-white font-medium mb-1">이번 달 운동 횟수</span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.thisMonthCount}</span>
+                      <span className="text-[30px] font-bold text-white font-barlow">{stats.thisMonthCount}</span>
                     </div>
                   </div>
                   {/* Item 2 */}
                   <div className="flex flex-col items-start justify-center">
                     <span className="text-[13px] text-white font-medium mb-1">이번 달 운동 시간</span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.thisMonthDuration}</span>
+                      <span className="text-[30px] font-bold text-white font-barlow">{stats.thisMonthDuration}</span>
                       <span className="text-[15px] text-white font-medium">분</span>
                     </div>
                   </div>
@@ -195,14 +196,14 @@ export function ProfilePage() {
                   <div className="flex flex-col items-start justify-center">
                     <span className="text-[13px] text-white font-medium mb-1">총 운동 횟수</span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.totalCount}</span>
+                      <span className="text-[30px] font-bold text-white font-barlow">{stats.totalCount}</span>
                     </div>
                   </div>
                   {/* Item 4 */}
                   <div className="flex flex-col items-start justify-center">
                     <span className="text-[13px] text-white font-medium mb-1">총 운동 시간</span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-sf-pro">{stats.totalDuration}</span>
+                      <span className="text-[30px] font-bold text-white font-barlow">{stats.totalDuration}</span>
                       <span className="text-[15px] text-white font-medium">분</span>
                     </div>
                   </div>
@@ -227,32 +228,16 @@ export function ProfilePage() {
       </div>
 
       {/* Reset Modal */}
-      {showResetPopup && (
-        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 animate-fadeIn">
-          <div className="w-[280px] bg-[#1F1F1F] border border-white/10 rounded-[32px] p-8 flex flex-col items-center text-center shadow-2xl">
-            <h2 className="text-white text-[18px] font-bold leading-[26px] mb-3">
-              정말로<br />초기화 하시겠습니까?
-            </h2>
-            <p className="text-[#888] text-[13px] mb-8 leading-relaxed">
-              지금까지의 운동 기록과<br />프로필 정보가 모두 사라집니다.
-            </p>
-
-            <button
-              onClick={confirmReset}
-              className="w-full bg-[#f43000] text-black font-bold h-[52px] rounded-2xl text-[15px] hover:brightness-110 active:scale-95 transition mb-3"
-            >
-              초기화하기
-            </button>
-
-            <button
-              onClick={() => setShowResetPopup(false)}
-              className="text-white font-bold text-[15px] opacity-60 hover:opacity-100 p-3 transition"
-            >
-              취소
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        isOpen={showResetPopup}
+        title={<>정말로<br />초기화 하시겠습니까?</>}
+        description={<>지금까지의 운동 기록과<br />프로필 정보가 모두 사라집니다.</>}
+        confirmText="초기화하기"
+        cancelText="취소"
+        onConfirm={confirmReset}
+        onCancel={() => setShowResetPopup(false)}
+        confirmColor="#f43000"
+      />
     </main>
   );
 }

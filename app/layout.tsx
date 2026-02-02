@@ -33,13 +33,21 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+import { Barlow_Condensed } from "next/font/google";
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-barlow",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={barlowCondensed.variable}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
@@ -50,7 +58,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="애프터와드" />
       </head>
-      <body className="bg-gray-100 font-sans" style={{ fontFamily: "'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif" }}>
+      <body className="bg-gray-100 font-sans">
         <AppProvider>
           <PWAInitializer />
           <BackButtonHandler />

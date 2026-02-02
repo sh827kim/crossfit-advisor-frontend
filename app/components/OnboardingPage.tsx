@@ -329,7 +329,7 @@ export function OnboardingPage() {
                 </div>
 
                 {/* Member Label */}
-                <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[20px] font-sf-pro">
+                <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[20px]">
                   Member
                 </p>
 

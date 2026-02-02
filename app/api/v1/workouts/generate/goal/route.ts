@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const { duration, goalMovementId } = body;
 
     // 유효성 검사
-    if (!duration || ![1, 5, 10, 15, 20, 25, 30].includes(duration)) {
+    if (!duration || ![5, 10, 15, 20, 25, 30, 35, 40].includes(duration)) {
       return NextResponse.json({
         success: false,
         message: '요청 데이터가 유효하지 않습니다.',
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     // 운동 계획 생성
     const { exercises, rounds, targetTimePerRound } = generateGoalPlan(
       duration,
-      goalMovement.name,
+      goalMovement.id,
       allMovements
     );
 

@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { ConfirmDialog } from '@/app/components/shared/ConfirmDialog';
 
 export function HistoryPage() {
   const router = useRouter();
@@ -107,8 +108,7 @@ export function HistoryPage() {
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <main className="min-h-screen bg-[#010101] text-white font-sf-pro relative overflow-hidden flex flex-col">
-      {/* Header */}
+    <main className="min-h-screen bg-[#010101] text-white relative overflow-hidden flex flex-col">
       {/* Header */}
       <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
         <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center text-white hover:opacity-80 transition">
@@ -122,7 +122,7 @@ export function HistoryPage() {
         <button onClick={handlePrevMonth} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-full transition">
           <i className="fa-solid fa-chevron-left text-[16px] text-gray-500 hover:text-white transition"></i>
         </button>
-        <h1 className="text-[20px] font-bold font-sf-pro tabular-nums tracking-wide text-center pt-1">
+        <h1 className="text-[20px] font-bold font-barlow tabular-nums tracking-wide text-center pt-1">
           {year}.{String(month + 1).padStart(2, '0')}
         </h1>
         <button onClick={handleNextMonth} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-full transition">
@@ -135,7 +135,7 @@ export function HistoryPage() {
         {/* Weekdays */}
         <div className="grid grid-cols-7 mb-4 text-center">
           {weekDays.map(d => (
-            <div key={d} className="text-[12px] text-white/30 font-bold uppercase tracking-widest font-sf-pro">
+            <div key={d} className="text-[12px] text-white/30 font-bold uppercase tracking-widest">
               {d}
             </div>
           ))}
@@ -157,7 +157,7 @@ export function HistoryPage() {
                 className="flex flex-col items-center cursor-pointer relative py-2 w-full"
                 onClick={() => setSelectedDate(dateStr)}
               >
-                <div className={`w-[30px] h-[30px] flex items-center justify-center rounded-full text-[14px] transition-all font-sf-pro
+                <div className={`w-[30px] h-[30px] flex items-center justify-center rounded-full text-[14px] transition-all font-barlow
                     ${isSelected
                     ? 'bg-white text-black font-bold shadow-lg'
                     : isToday
@@ -181,7 +181,7 @@ export function HistoryPage() {
 
       {/* Selected Date Header */}
       <div className='px-6 mb-4'>
-        <h3 className='text-[14px] font-bold text-white/40 tracking-wide font-sf-pro'>{selectedDate.replace(/-/g, '.')}</h3>
+        <h3 className='text-[14px] font-bold text-white/40 tracking-wide font-barlow'>{selectedDate.replace(/-/g, '.')}</h3>
       </div>
 
       {/* Floating Card List */}
@@ -200,14 +200,14 @@ export function HistoryPage() {
                       <div className={`w-[6px] h-[6px] rounded-full ${record.mode === 'BALANCE' ? 'bg-[#F43000] shadow-[0_0_8px_#F43000]' :
                         record.mode === 'GOAL' ? 'bg-[#EEFD32] shadow-[0_0_8px_#EEFD32]' : 'bg-[#00DCEB] shadow-[0_0_8px_#00DCEB]'
                         }`} />
-                      <span className={`text-[12px] font-bold tracking-wider font-sf-pro ${record.mode === 'BALANCE' ? 'text-[#F43000]' :
+                      <span className={`text-[12px] font-bold tracking-wider ${record.mode === 'BALANCE' ? 'text-[#F43000]' :
                         record.mode === 'GOAL' ? 'text-[#EEFD32]' : 'text-[#00DCEB]'
                         }`}>
                         {record.mode === 'BALANCE' ? '밸런스 케어 운동' :
                           record.mode === 'GOAL' ? '목표 관리 운동' :
                             record.mode === 'PART' ? '부위별 운동' : '자유 운동'}
                       </span>
-                      <span className="text-[12px] text-gray-500 font-medium ml-1 border-l border-white/10 pl-2 font-sf-pro">
+                      <span className="text-[12px] text-gray-500 font-medium ml-1 border-l border-white/10 pl-2 font-barlow">
                         {dateDisplay}
                       </span>
                     </div>
@@ -226,7 +226,7 @@ export function HistoryPage() {
                   </div>
 
                   {/* Main Title */}
-                  <div className="text-[20px] font-extrabold text-white mb-2 font-sf-pro tracking-tight">
+                  <div className="text-[20px] font-extrabold text-white mb-2 font-barlow tracking-tight">
                     {record.rounds
                       ? `${record.rounds} Rounds`
                       : `${Math.ceil(record.duration / 60)}분 운동`
@@ -272,32 +272,16 @@ export function HistoryPage() {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 animate-fadeIn">
-          <div className="w-[280px] bg-[#1F1F1F] border border-white/10 rounded-[32px] p-8 flex flex-col items-center text-center shadow-2xl">
-            <h2 className="text-white text-[18px] font-bold leading-[26px] mb-3">
-              기록 삭제
-            </h2>
-            <p className="text-[#888] text-[13px] mb-8 leading-relaxed">
-              선택한 운동 기록이 영구적으로 삭제됩니다.<br />계속하시겠습니까?
-            </p>
-
-            <button
-              onClick={confirmDelete}
-              className="w-full bg-[#f43000] text-black font-bold h-[52px] rounded-2xl text-[15px] hover:brightness-110 active:scale-95 transition mb-3"
-            >
-              삭제하기
-            </button>
-
-            <button
-              onClick={cancelDelete}
-              className="text-white font-bold text-[15px] opacity-60 hover:opacity-100 p-3 transition"
-            >
-              취소
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="기록 삭제"
+        description={<>선택한 운동 기록이 영구적으로 삭제됩니다.<br />계속하시겠습니까?</>}
+        confirmText="삭제하기"
+        cancelText="취소"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        confirmColor="#f43000"
+      />
     </main>
   );
 }

@@ -31,6 +31,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
         mono: ["var(--font-mono)", ...defaultTheme.fontFamily.mono],
+        barlow: ["var(--font-barlow)", ...defaultTheme.fontFamily.sans, "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
