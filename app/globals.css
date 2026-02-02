@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @layer base {
   :root {
     /* 기본 레이아웃 토큰 */
@@ -80,8 +81,7 @@
 
   /* 한글 줄바꿈 처리 - 기본 설정 */
   html,
-  body,
-  * {
+  body {
     word-break: keep-all;
     overflow-wrap: break-word;
     font-style: normal !important;
