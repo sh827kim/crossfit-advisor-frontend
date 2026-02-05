@@ -39,15 +39,9 @@ export default function HomePage() {
           // @ts-ignore
           window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'EXIT_APP' }));
         } else {
-          // 브라우저 환경: 바로 닫기 시도 (동작 안할 수 있음) 후 안내
-          window.close();
-          const confirmed = window.confirm('앱을 종료하시겠습니까?');
-          if (confirmed) {
-            window.close();
-          } else {
-            // 종료 취소 시 다시 가드 상태 푸시하여 메인 유지
-            window.history.pushState({ page: 'home-guard' }, '', '/');
-          }
+          // 브라우저 환경: 뒤로가기 시 아무런 동작 없이 현재 페이지 유지 (이력 클리어 효과)
+          // 알림창 없이 조용히 다시 가드 상태를 푸시하여 뒤로가기를 막음
+          window.history.pushState({ page: 'home-guard' }, '', '/');
         }
       };
 
