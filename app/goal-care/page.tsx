@@ -7,6 +7,7 @@ import type { Movement } from '@/app/lib/types/workout.types';
 import { CarePageLayout } from '@/app/components/shared/CarePageLayout';
 import { CareBottomPanel } from '@/app/components/shared/CareBottomPanel';
 import { SelectionCard } from '@/app/components/shared/SelectionCard';
+import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 
 export default function GoalCarePage() {
@@ -17,6 +18,7 @@ export default function GoalCarePage() {
   const [selectedTime, setSelectedTime] = useState(20);
   const [goals, setGoals] = useState<Movement[]>([]);
   const [isLoadingGoals, setIsLoadingGoals] = useState(true);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   // 목표 운동 목록 로드
   useEffect(() => {
@@ -37,7 +39,7 @@ export default function GoalCarePage() {
 
   const handleGenerate = () => {
     if (!selectedGoal) {
-      alert('목표를 선택해주세요.');
+      setIsAlertOpen(true);
       return;
     }
 
@@ -67,58 +69,67 @@ export default function GoalCarePage() {
   };
 
   return (
-    <CarePageLayout
-      title="달성할 목표를"
-      subtitle="선택해주세요."
-      description="연습하고 싶은 스킬을 선택해주세요"
-      onBack={handleBack}
-      bottomControls={
-        <CareBottomPanel
-          selectedTime={selectedTime}
-          onTimeChange={setSelectedTime}
-          onGenerate={handleGenerate}
-          isGenerating={isLoading}
-          error={error}
-          buttonText="목표 달성 운동 생성하기"
-          themeColor={THEME_ACCENT}
-          gradientOverlay="linear-gradient(121deg, rgba(124, 253, 50, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
-        />
-      }
-    >
-      {/* 목표 선택 (Card Grid) */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
-        {isLoadingGoals ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            <div className="flex flex-col items-center gap-2">
-              <i className="fa-solid fa-spinner fa-spin text-lg"></i>
-              <p className="text-sm">목표를 불러오는 중...</p>
+    <>
+      <CarePageLayout
+        title="달성할 목표를"
+        subtitle="선택해주세요."
+        description="연습하고 싶은 스킬을 선택해주세요"
+        onBack={handleBack}
+        bottomControls={
+          <CareBottomPanel
+            selectedTime={selectedTime}
+            onTimeChange={setSelectedTime}
+            onGenerate={handleGenerate}
+            isGenerating={isLoading}
+            error={error}
+            buttonText="목표 달성 운동 생성하기"
+            themeColor={THEME_ACCENT}
+            gradientOverlay="linear-gradient(121deg, rgba(124, 253, 50, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
+          />
+        }
+      >
+        {/* 목표 선택 (Card Grid) */}
+        <div className="flex-1 overflow-y-auto px-4 pb-4">
+          {isLoadingGoals ? (
+            <div className="flex items-center justify-center h-full text-gray-500">
+              <div className="flex flex-col items-center gap-2">
+                <i className="fa-solid fa-spinner fa-spin text-lg"></i>
+                <p className="text-sm">목표를 불러오는 중...</p>
+              </div>
             </div>
-          </div>
-        ) : goals.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            <p className="text-sm">목표 목록이 없습니다</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {goals.map(goal => {
-              const isSelected = selectedGoal?.id === goal.id;
-              return (
-                <SelectionCard
-                  key={goal.id}
-                  selected={isSelected}
-                  onClick={() => setSelectedGoal(isSelected ? null : goal)}
-                  label={goal.name}
-                  themeColor={THEME_ACCENT}
-                >
-                  {/* Pass Icon as children */}
-                  {getGoalIcon(goal.name)}
-                </SelectionCard>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </CarePageLayout>
+          ) : goals.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-gray-500">
+              <p className="text-sm">목표 목록이 없습니다</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {goals.map(goal => {
+                const isSelected = selectedGoal?.id === goal.id;
+                return (
+                  <SelectionCard
+                    key={goal.id}
+                    selected={isSelected}
+                    onClick={() => setSelectedGoal(isSelected ? null : goal)}
+                    label={goal.name}
+                    themeColor={THEME_ACCENT}
+                  >
+                    {/* Pass Icon as children */}
+                    {getGoalIcon(goal.name)}
+                  </SelectionCard>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </CarePageLayout>
+      <AlertDialog
+        isOpen={isAlertOpen}
+        title="목표 선택 필요"
+        description="목표를 선택해주세요."
+        onConfirm={() => setIsAlertOpen(false)}
+        confirmColor="#EEFD32"
+      />
+    </>
   );
 }
 

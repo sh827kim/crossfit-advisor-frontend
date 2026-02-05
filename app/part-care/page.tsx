@@ -7,6 +7,7 @@ import type { MuscleGroup } from '@/app/lib/types/workout.types';
 import { CarePageLayout } from '@/app/components/shared/CarePageLayout';
 import { CareBottomPanel } from '@/app/components/shared/CareBottomPanel';
 import { SelectionCard } from '@/app/components/shared/SelectionCard';
+import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 
 const MUSCLE_GROUPS: { id: MuscleGroup; label: string; icon: string }[] = [
@@ -23,6 +24,7 @@ export default function PartCarePage() {
 
   const [selectedPart, setSelectedPart] = useState<MuscleGroup | null>(null);
   const [selectedTime, setSelectedTime] = useState(20);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleSelectPart = (part: MuscleGroup) => {
     setSelectedPart(prev => (prev === part ? null : part));
@@ -30,7 +32,7 @@ export default function PartCarePage() {
 
   const handleGenerate = () => {
     if (!selectedPart) {
-      alert('운동할 부위를 선택해주세요.');
+      setIsAlertOpen(true);
       return;
     }
 
@@ -52,40 +54,49 @@ export default function PartCarePage() {
   const THEME_ACCENT = '#00DCEB'; // Cyan
 
   return (
-    <CarePageLayout
-      title="집중할 부위를"
-      subtitle="선택해주세요."
-      description="집중적으로 운동할 부위를 선택하세요"
-      onBack={handleBack}
-      bottomControls={
-        <CareBottomPanel
-          selectedTime={selectedTime}
-          onTimeChange={setSelectedTime}
-          onGenerate={handleGenerate}
-          isGenerating={isLoading}
-          error={error}
-          buttonText="나만의 부위별 운동 생성하기"
-          themeColor={THEME_ACCENT}
-          gradientOverlay="linear-gradient(121deg, rgba(35, 212, 224, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
-        />
-      }
-    >
-      {/* 부위 선택 (Grid) */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
-        <div className="grid grid-cols-1 gap-3">
-          {MUSCLE_GROUPS.map(group => (
-            <SelectionCard
-              key={group.id}
-              selected={selectedPart === group.id}
-              onClick={() => handleSelectPart(group.id)}
-              label={group.label}
-              themeColor={THEME_ACCENT}
-              icon={group.icon}
-            />
-          ))}
+    <>
+      <CarePageLayout
+        title="집중할 부위를"
+        subtitle="선택해주세요."
+        description="집중적으로 운동할 부위를 선택하세요"
+        onBack={handleBack}
+        bottomControls={
+          <CareBottomPanel
+            selectedTime={selectedTime}
+            onTimeChange={setSelectedTime}
+            onGenerate={handleGenerate}
+            isGenerating={isLoading}
+            error={error}
+            buttonText="나만의 부위별 운동 생성하기"
+            themeColor={THEME_ACCENT}
+            gradientOverlay="linear-gradient(121deg, rgba(35, 212, 224, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
+          />
+        }
+      >
+        {/* 부위 선택 (Grid) */}
+        <div className="flex-1 overflow-y-auto px-4 pb-4">
+          <div className="grid grid-cols-1 gap-3">
+            {MUSCLE_GROUPS.map(group => (
+              <SelectionCard
+                key={group.id}
+                selected={selectedPart === group.id}
+                onClick={() => handleSelectPart(group.id)}
+                label={group.label}
+                themeColor={THEME_ACCENT}
+                icon={group.icon}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </CarePageLayout>
+      </CarePageLayout>
+      <AlertDialog
+        isOpen={isAlertOpen}
+        title="부위 선택 필요"
+        description="운동할 부위를 선택해주세요."
+        onConfirm={() => setIsAlertOpen(false)}
+        confirmColor="#00DCEB"
+      />
+    </>
   );
 }
 
