@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
-import { defineStepper } from '@/components/ui/stepper';
 import { cn } from '@/app/lib/utils';
 import { RunnerIntro } from '@/app/components/shared/runner/RunnerIntro';
 import { RunnerControls } from '@/app/components/shared/runner/RunnerControls';
@@ -33,8 +32,6 @@ export default function GoalRunnerPage() {
         setDateString(now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }));
         setDateTimeString(now.toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true }));
     }, []);
-
-
 
     const handleStartCountdown = () => {
         setStage('countdown');
@@ -78,6 +75,17 @@ export default function GoalRunnerPage() {
                 setStage('done');
                 setIsTimerRunning(false);
             }
+        }
+    };
+
+    const handlePrevExercise = () => {
+        if (!generatedPlan) return;
+
+        if (currentExerciseIndex > 0) {
+            setCurrentExerciseIndex(prev => prev - 1);
+        } else if (currentRound > 1) {
+            setCurrentRound(prev => prev - 1);
+            setCurrentExerciseIndex(generatedPlan.exercises.length - 1);
         }
     };
 
@@ -260,9 +268,11 @@ export default function GoalRunnerPage() {
                             isRunning={isTimerRunning}
                             onTogglePlay={() => setIsTimerRunning(!isTimerRunning)}
                             onNext={handleNextExercise}
+                            onPrev={handlePrevExercise}
                             onFinish={handleRequestFinish}
                             isLastExercise={currentExerciseIndex === generatedPlan.exercises.length - 1}
                             isLastRound={currentRound === (generatedPlan.rounds || 1)}
+                            isFirstLevel={currentRound === 1 && currentExerciseIndex === 0}
                             themeColor={THEME_COLOR}
                         />
                     </div>
@@ -308,14 +318,14 @@ export default function GoalRunnerPage() {
                     <div className="relative w-full max-w-[325px] rounded-[32px] p-[3px] mb-8"
                         style={{
                             background: `conic-gradient(from 180deg at 50% 50%, 
-                              #707070 0deg, 
-                              #FFFFFF 45deg, 
-                              #9E9E9E 110deg, 
-                              #FFFFFF 160deg, 
-                              #707070 210deg, 
-                              #FFFFFF 260deg, 
-                              #9E9E9E 310deg, 
-                              #FFFFFF 360deg)`
+                               #707070 0deg, 
+                               #FFFFFF 45deg, 
+                               #9E9E9E 110deg, 
+                               #FFFFFF 160deg, 
+                               #707070 210deg, 
+                               #FFFFFF 260deg, 
+                               #9E9E9E 310deg, 
+                               #FFFFFF 360deg)`
                         }}
                     >
                         <div className="w-full h-[424px] rounded-[29px] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"

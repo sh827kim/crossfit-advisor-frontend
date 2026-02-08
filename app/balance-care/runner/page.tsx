@@ -18,9 +18,6 @@ export default function RunnerPage() {
     const router = useRouter();
     const { generatedPlan, addWorkoutRecord } = useApp();
     const [stage, setStage] = useState<Stage>('intro');
-    // ... (lines 15-127 are unchanged, skipping them in replacement chunk if possible, but replace_file_content needs contiguous block or multi_replace. Let's use multi_replace for safety or two chunks if replacing small parts. 
-    // Actually, I can just replace the useApp line and the handleSaveAndExit block separately. But wait, replace_file_content does one contiguous block. 
-    // I will use `multi_replace_file_content` to make these two changes cleanly.)
     const [countdown, setCountdown] = useState(3);
     const [timer, setTimer] = useState(0);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -39,8 +36,6 @@ export default function RunnerPage() {
         setDateString(now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }));
         setDateTimeString(now.toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true }));
     }, []);
-
-
 
     const handleStartCountdown = () => {
         setStage('countdown');
@@ -84,6 +79,17 @@ export default function RunnerPage() {
                 setStage('done');
                 setIsTimerRunning(false);
             }
+        }
+    };
+
+    const handlePrevExercise = () => {
+        if (!generatedPlan) return;
+
+        if (currentExerciseIndex > 0) {
+            setCurrentExerciseIndex(prev => prev - 1);
+        } else if (currentRound > 1) {
+            setCurrentRound(prev => prev - 1);
+            setCurrentExerciseIndex(generatedPlan.exercises.length - 1);
         }
     };
 
@@ -253,9 +259,11 @@ export default function RunnerPage() {
                             isRunning={isTimerRunning}
                             onTogglePlay={() => setIsTimerRunning(!isTimerRunning)}
                             onNext={handleNextExercise}
+                            onPrev={handlePrevExercise}
                             onFinish={handleRequestFinish}
                             isLastExercise={currentExerciseIndex === generatedPlan.exercises.length - 1}
                             isLastRound={currentRound === (generatedPlan.rounds || 1)}
+                            isFirstLevel={currentRound === 1 && currentExerciseIndex === 0}
                             themeColor={THEME_COLOR}
                         />
                     </div>

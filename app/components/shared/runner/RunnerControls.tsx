@@ -5,9 +5,11 @@ interface RunnerControlsProps {
     isRunning: boolean;
     onTogglePlay: () => void;
     onNext: () => void;
+    onPrev: () => void;
     onFinish: () => void;
     isLastExercise: boolean;
     isLastRound: boolean;
+    isFirstLevel: boolean;
     themeColor: string;
     className?: string;
 }
@@ -16,19 +18,34 @@ export function RunnerControls({
     isRunning,
     onTogglePlay,
     onNext,
+    onPrev,
     onFinish,
     isLastExercise,
     isLastRound,
+    isFirstLevel,
     themeColor,
     className
 }: RunnerControlsProps) {
     const isWorkoutComplete = isLastRound && isLastExercise;
 
     return (
-        <div className={cn("flex items-center justify-center gap-8 w-full", className)}>
-            {/* Finish Button (Left) */}
-            {/* Finish Button Removed - Moved to Top Left X Button */}
-            <div className="w-14"></div> {/* Spacer to keep balance if needed, or just remove */}
+        <div className={cn("flex items-center justify-center gap-6 w-full", className)}>
+            {/* Previous Button (Left) */}
+            <button
+                onClick={onPrev}
+                disabled={isFirstLevel}
+                className={cn(
+                    "w-14 h-14 rounded-full bg-black flex items-center justify-center active:scale-95 transition-all",
+                    isFirstLevel ? "opacity-20 pointer-events-none" : "opacity-100"
+                )}
+                aria-label="Previous Exercise"
+            >
+                {/* Skip Backward Icon */}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 20L9 12L19 4V20Z" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5 19V5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </button>
 
             {/* Play/Pause Button (Center, Large) */}
             <button
@@ -57,7 +74,11 @@ export function RunnerControls({
             {/* Next Button (Right) - Always visible, handles finish on last step */}
             <button
                 onClick={onNext}
-                className="w-14 h-14 rounded-full bg-black flex items-center justify-center active:scale-95 transition-transform"
+                disabled={!isRunning}
+                className={cn(
+                    "w-14 h-14 rounded-full bg-black flex items-center justify-center active:scale-95 transition-all",
+                    !isRunning ? "opacity-20 pointer-events-none" : "opacity-100"
+                )}
                 aria-label={isWorkoutComplete ? "Finish Workout" : "Next Exercise"}
             >
                 {/* Skip Forward Icon (Music Player Style) */}

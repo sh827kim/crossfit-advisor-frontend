@@ -20,7 +20,7 @@ export function EncouragedOverlay({
     return (
         <div className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex flex-col pt-[140px] px-6 animate-fadeIn pointer-events-auto cursor-default">
             {/* First Line */}
-            <span className="text-[42px] font-black leading-[1.1] text-white font-barlow tracking-tight block">
+            <span className="text-3xl font-black text-white block">
                 {firstWord}
             </span>
 
@@ -28,14 +28,14 @@ export function EncouragedOverlay({
             <div className="flex flex-row flex-wrap items-baseline gap-x-3">
                 {/* Rest of Label */}
                 {restLabel && (
-                    <span className="text-[42px] font-black leading-[1.1] text-white font-barlow tracking-tight">
+                    <span className="text-3xl font-black text-white">
                         {restLabel}
                     </span>
                 )}
 
                 {/* Title - Theme Color */}
                 <h1
-                    className="text-[42px] font-black leading-[1.1] uppercase font-barlow tracking-tight"
+                    className="text-3xl font-black uppercase"
                     style={{ color: themeColor }}
                 >
                     {title}
