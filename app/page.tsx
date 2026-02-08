@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { analytics } from '@/app/lib/analytics';
 
 export default function HomePage() {
   const router = useRouter();
@@ -54,6 +55,17 @@ export default function HomePage() {
   }, [isClient, hasVisited]);
 
   const handleInputClick = (mode: 'wod' | 'goal' | 'part') => {
+    let target = '';
+    if (mode === 'wod') target = 'workout_1';
+    else if (mode === 'goal') target = 'workout_2';
+    else if (mode === 'part') target = 'workout_3';
+
+    analytics.logEvent('click', {
+      screen_name: 'main',
+      event_category: 'main',
+      target: target
+    });
+
     resetInputState();
     setCurrentMode(mode);
 

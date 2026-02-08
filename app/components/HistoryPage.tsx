@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 import { ConfirmDialog } from '@/app/components/shared/ConfirmDialog';
+import { analytics } from '@/app/lib/analytics';
 
 export function HistoryPage() {
   const router = useRouter();
@@ -155,7 +156,18 @@ export function HistoryPage() {
     <main className="h-screen bg-[#010101] text-white relative overflow-hidden flex flex-col">
       {/* Header */}
       <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
-        <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center text-white hover:opacity-80 transition">
+        <button
+          onClick={() => {
+            analytics.logEvent('click', {
+              screen_name: 'calendar',
+              target: 'header_back',
+              event_category: 'navigation',
+              target_no: 1
+            });
+            router.push('/');
+          }}
+          className="w-10 h-10 flex items-center justify-center text-white hover:opacity-80 transition"
+        >
           <i className="fa-solid fa-xmark text-[24px] text-gray-400" />
         </button>
         <div className="w-10" />

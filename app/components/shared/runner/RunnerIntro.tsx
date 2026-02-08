@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { VerticalStepper } from '@/app/components/shared/VerticalStepper';
 import { TimeIcon } from '@/app/components/shared/icons/TimeIcon';
 import { EquipmentIcon } from '@/app/components/shared/icons/EquipmentIcon';
+import { analytics } from '@/app/lib/analytics';
 import { cn } from '@/app/lib/utils';
 
 interface Exercise {
@@ -71,7 +72,21 @@ export function RunnerIntro({
         const roundSeconds = Math.floor(totalSeconds / (plan.rounds || 1));
         const m = Math.floor(roundSeconds / 60);
         const s = roundSeconds % 60;
-        return `${m}분 ${s > 0 ? `${s}초` : ''}`;
+        return `${m}분 ${s > 0 ? `${s}초` : ''} `;
+    };
+
+    const handleStart = () => {
+        // Analytics
+        const screenName = 'workout_ready';
+
+        analytics.logEvent('click', {
+            screen_name: screenName,
+            event_category: 'start_workout',
+            target: 'start_button',
+            time_select: plan?.duration
+        });
+
+        onStart();
     };
 
     return (
@@ -80,7 +95,16 @@ export function RunnerIntro({
             <div className="flex justify-between items-center mb-4 min-h-[28px]">
                 <div className="flex gap-2">
                     <button
-                        onClick={onBack}
+                        onClick={() => {
+                            const screenName = 'workout_ready';
+
+                            analytics.logEvent('click', {
+                                screen_name: screenName,
+                                event_category: 'header',
+                                target: 'back'
+                            });
+                            onBack();
+                        }}
                         className="w-10 h-10 flex items-center justify-center rounded-full active:bg-white/10 transition"
                     >
                         <i className="fa-solid fa-chevron-left text-white text-xl"></i>
@@ -136,9 +160,9 @@ export function RunnerIntro({
                 <div className="w-full max-w-sm z-10 space-y-8 relative pt-4 pb-4">
                     <VerticalStepper
                         steps={plan.exercises.map((ex, idx) => ({
-                            id: ex.movementId || `ex-${idx}`,
+                            id: ex.movementId || `ex - ${idx} `,
                             title: ex.name,
-                            description: `${ex.minCount || 10} - ${ex.maxCount || 15} ${ex.unit || 'reps'}`
+                            description: `${ex.minCount || 10} - ${ex.maxCount || 15} ${ex.unit || 'reps'} `
                         }))}
                         themeColor={themeColor}
                         themeDarkColor={themeDarkColor}
@@ -150,11 +174,11 @@ export function RunnerIntro({
 
             <div className="mt-4 pb-8 pt-4">
                 <button
-                    onClick={onStart}
-                    className="w-full text-black font-bold py-4 rounded-2xl text-lg transition active:scale-95 hover:brightness-110 shadow-lg"
-                    style={{ backgroundColor: themeColor, boxShadow: `0 10px 15px -3px ${themeShadow}` }}
+                    onClick={handleStart}
+                    className="w-full text-black font-bold h-[62px] rounded-2xl text-[18px] hover:brightness-110 active:scale-95 transition shadow-lg relative z-20"
+                    style={{ backgroundColor: themeColor, boxShadow: `0 0 20px ${themeShadow}` }}
                 >
-                    시작하기
+                    운동 시작하기
                 </button>
             </div>
         </div>

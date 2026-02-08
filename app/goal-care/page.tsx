@@ -10,6 +10,7 @@ import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { EncouragedOverlay } from '@/app/components/shared/EncouragedOverlay';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
+import { analytics } from '@/app/lib/analytics';
 
 export default function GoalCarePage() {
   const router = useRouter();
@@ -44,6 +45,14 @@ export default function GoalCarePage() {
       return;
     }
 
+    analytics.logEvent('click', {
+      screen_name: 'recommend_2',
+      event_category: 'recommend_workout',
+      target: 'create_workout_button',
+      time_select: selectedTime,
+      selected_goal: selectedGoal.name
+    });
+
     generateWorkout(
       '/api/v1/workouts/generate/goal',
       {
@@ -55,11 +64,12 @@ export default function GoalCarePage() {
   };
 
   const handleBack = () => {
-    if (selectedGoal) {
-      setSelectedGoal(null);
-    } else {
-      router.push('/');
-    }
+    analytics.logEvent('click', {
+      screen_name: 'recommend_2',
+      event_category: 'header',
+      target: 'back'
+    });
+    router.push('/');
   };
 
   // Theme Constants

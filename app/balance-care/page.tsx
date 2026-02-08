@@ -9,6 +9,7 @@ import { CareBottomPanel } from '@/app/components/shared/CareBottomPanel';
 import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
+import { analytics } from '../lib/analytics';
 
 // 한글 초성 추출 함수
 function getChosung(str: string): string {
@@ -84,6 +85,20 @@ export default function BalanceCarePage() {
       return;
     }
 
+    // Get movement names for logging
+    const selectedNames = selectedExercises
+      .map(id => allMovements.find(m => m.id === id)?.name)
+      .filter(Boolean)
+      .join(',');
+
+    analytics.logEvent('click', {
+      screen_name: 'recommend_1',
+      event_category: 'recommend_workout',
+      target: 'create_workout_button',
+      time_select: selectedTime,
+      selected_wod: selectedNames
+    });
+
     generateWorkout(
       '/api/v1/workouts/generate/balance',
       {
@@ -95,6 +110,11 @@ export default function BalanceCarePage() {
   };
 
   const handleBack = () => {
+    analytics.logEvent('click', {
+      screen_name: 'recommend_1',
+      event_category: 'header',
+      target: 'back'
+    });
     router.push('/');
   };
 
