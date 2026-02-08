@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 
 import { getProfileColorByIndex } from '@/app/lib/profile-colors';
+import { analytics } from '@/app/lib/analytics'; // Added this line
 import { CalendarIcon } from '@/app/components/shared/icons/CalendarIcon';
 
 export function Header() {
@@ -18,6 +19,8 @@ export function Header() {
     return null;
   }
 
+
+
   return (
     <header className="h-16 flex justify-between items-center px-6 z-20 sticky top-0 bg-black">
       <div
@@ -25,6 +28,7 @@ export function Header() {
         onClick={() => router.replace('/')}
       >
         {/* Logo and Text removed as requested */}
+        <div onClick={() => router.replace('/')}></div>
       </div>
       <div className="flex gap-4 items-center">
         <button

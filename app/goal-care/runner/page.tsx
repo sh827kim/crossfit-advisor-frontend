@@ -9,6 +9,7 @@ import { RunnerControls } from '@/app/components/shared/runner/RunnerControls';
 import { RoundTargetInfo } from '@/app/components/shared/runner/RoundTargetInfo';
 import { WorkoutSummaryCard } from '@/app/components/shared/runner/WorkoutSummaryCard';
 import { shareWorkoutCard } from '@/app/lib/share-utils';
+import { analytics } from '@/app/lib/analytics';
 
 type Stage = 'intro' | 'countdown' | 'workout' | 'paused' | 'done';
 
@@ -128,6 +129,25 @@ export default function GoalRunnerPage() {
                 });
             }, 1000);
             return () => clearInterval(interval);
+        }
+    }, [stage]);
+
+    // Analytics: Stage Tracking
+    const lastLoggedStageRef = useRef<Stage | null>(null);
+
+    useEffect(() => {
+        if (lastLoggedStageRef.current === stage) return;
+
+        lastLoggedStageRef.current = stage;
+
+        if (stage === 'intro') {
+            analytics.logEvent('pageview', {
+                screen_name: 'workout_ready'
+            });
+        } else if (stage === 'done') {
+            analytics.logEvent('pageview', {
+                screen_name: 'workout_result'
+            });
         }
     }, [stage]);
 

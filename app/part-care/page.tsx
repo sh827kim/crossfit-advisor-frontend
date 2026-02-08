@@ -10,6 +10,7 @@ import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { EncouragedOverlay } from '@/app/components/shared/EncouragedOverlay';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
+import { analytics } from '../lib/analytics';
 
 const MUSCLE_GROUPS: { id: MuscleGroup; label: string; icon: string }[] = [
   { id: 'CORE', label: '복근 / 코어', icon: 'fa-cube' },
@@ -32,22 +33,35 @@ export default function PartCarePage() {
   };
 
   const handleGenerate = () => {
-    if (!selectedPart) {
+    if (!selectedPart) { // Changed from selectedTargets.length === 0 to !selectedPart to match existing state
       setIsAlertOpen(true);
       return;
     }
+
+    analytics.logEvent('click', {
+      screen_name: 'recommend_3',
+      event_category: 'recommend_workout',
+      target: 'create_workout_button',
+      time_select: selectedTime,
+      selected_target: selectedPart
+    });
 
     generateWorkout(
       '/api/v1/workouts/generate/part',
       {
         duration: selectedTime,
-        targetMuscleGroups: [selectedPart]
+        targetMuscleGroups: [selectedPart] // Changed from targetMuscles: selectedTargets to targetMuscleGroups: [selectedPart] to match existing state
       },
       '/part-care/runner'
     );
   };
 
   const handleBack = () => {
+    analytics.logEvent('click', {
+      screen_name: 'recommend_3',
+      event_category: 'header',
+      target: 'back'
+    });
     if (selectedPart) {
       setSelectedPart(null);
     } else {

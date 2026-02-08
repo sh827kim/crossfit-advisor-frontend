@@ -36,6 +36,10 @@ const barlowCondensed = Barlow_Condensed({
   variable: "--font-barlow",
 });
 
+import { GlobalPageTracker } from "@/app/components/GlobalPageTracker";
+
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -56,6 +60,7 @@ export default function RootLayout({
       </head>
       <body className={`bg-gray-100 font-sans ${barlowCondensed.variable}`}>
         <AppProvider>
+          <GlobalPageTracker />
           <PWAInitializer />
           <BackButtonHandler />
           <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
@@ -63,6 +68,7 @@ export default function RootLayout({
             {children}
           </div>
         </AppProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>
     </html>
   );
