@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
 import { cn } from '@/app/lib/utils';
 import { RunnerIntro } from '@/app/components/shared/runner/RunnerIntro';
+import { RunnerControls } from '@/app/components/shared/runner/RunnerControls';
+import { RoundTargetInfo } from '@/app/components/shared/runner/RoundTargetInfo';
 
 type Stage = 'intro' | 'countdown' | 'workout' | 'paused' | 'done';
 
@@ -181,31 +183,31 @@ export default function RunnerPage() {
 
             {/* STAGE 3: WORKOUT */}
             {stage === 'workout' && (
-                <div className="flex flex-col h-full bg-black p-6 relative">
-                    {/* Header: Rounds Status */}
-                    <div className="flex justify-between items-center z-10 mb-8">
-                        <div className="text-white font-bold opacity-0">Placeholder</div>
-                        <div className="flex flex-col items-center">
-                            <span className="text-[#F43000] font-bold text-sm tracking-widest uppercase">ROUND</span>
-                            <span className="text-white font-bold text-xl font-barlow">
-                                {currentRound} <span className="text-gray-500 text-sm">/ {generatedPlan.rounds || 1}</span>
-                            </span>
-                        </div>
-                        <div className="w-10"></div>
-                    </div>
+                <div className="flex flex-col h-full p-6 relative" style={{ background: `linear-gradient(to bottom, #000000 0%, #000000 50%, ${THEME_COLOR} 100%)` }}>
+                    {/* Header: Rounds Status (Removed per feedback) */}
+                    <div className="w-full h-8"></div>
 
                     {/* Big Timer */}
-                    <div className="flex flex-col items-center justify-center mb-8">
-                        <div className="text-[80px] font-black text-white leading-none tracking-tight font-barlow">
+                    <div className="flex flex-col items-center justify-center mb-6">
+                        <div className="text-[120px] font-bold text-white leading-none tracking-tight font-barlow">
                             {formatTime(timer)}
                         </div>
+                    </div>
+
+                    {/* Round Target Info */}
+                    <div className="mb-12">
+                        <RoundTargetInfo
+                            duration={generatedPlan.duration}
+                            rounds={generatedPlan.rounds || 1}
+                            currentRound={currentRound}
+                        />
                     </div>
 
                     {/* Exercise List */}
                     <div className="flex-1 flex flex-col items-center relative overflow-y-auto w-full no-scrollbar">
                         <div className="w-full pl-0 z-10 space-y-6 relative">
                             {/* Continuous Line */}
-                            <div className="absolute left-[30px] top-[18px] bottom-[30px] w-[2px] bg-[#921D00] z-0"></div>
+                            <div className="absolute left-[30px] top-[18px] bottom-[10px] w-[2px] bg-[#921D00] z-0"></div>
 
                             {generatedPlan.exercises.map((ex, idx) => {
                                 const isActive = idx === currentExerciseIndex;
@@ -225,7 +227,7 @@ export default function RunnerPage() {
                                         </div>
 
                                         <div className={cn("flex flex-col transition-opacity duration-300", isActive ? "opacity-100" : "opacity-40")}>
-                                            <span className={cn("text-2xl font-bold text-white leading-tight", isActive ? "text-[#F43000]" : "text-white")}>{ex.name}</span>
+                                            <span className={cn("text-xl font-bold text-white leading-tight", isActive ? "text-[#F43000]" : "text-white")}>{ex.name}</span>
                                             <span className="text-base text-gray-400 font-medium">
                                                 {ex.minReps || 10} - {ex.maxReps || 15} reps
                                             </span>
@@ -236,49 +238,17 @@ export default function RunnerPage() {
                         </div>
                     </div>
 
-                    {/* Controls Area (Inline) */}
-                    <div className="mt-6 z-20 flex gap-3 h-[72px]">
-                        {isTimerRunning ? (
-                            <>
-                                {/* Pause Button */}
-                                <button
-                                    onClick={() => setIsTimerRunning(false)}
-                                    className="w-[72px] h-full bg-[#333] hover:bg-[#444] rounded-2xl flex items-center justify-center transition active:scale-95"
-                                >
-                                    <i className="fa-solid fa-pause text-white text-2xl"></i>
-                                </button>
-
-                                {/* Next Button */}
-                                <button
-                                    onClick={handleNextExercise}
-                                    className="flex-1 bg-[#f43000] hover:bg-[#d92a00] text-black font-bold rounded-2xl text-xl transition active:scale-95 shadow-lg shadow-orange-900/20"
-                                >
-                                    {(currentRound === (generatedPlan.rounds || 1) && currentExerciseIndex === generatedPlan.exercises.length - 1)
-                                        ? '운동 완료'
-                                        : '다음 운동'
-                                    }
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                {/* Resume Button */}
-                                <button
-                                    onClick={() => setIsTimerRunning(true)}
-                                    className="flex-1 bg-[#f43000] hover:bg-[#d92a00] text-black font-bold rounded-2xl text-xl transition active:scale-95 shadow-lg shadow-orange-900/20 flex items-center justify-center gap-2"
-                                >
-                                    <i className="fa-solid fa-play"></i>
-                                    <span>재시작</span>
-                                </button>
-
-                                {/* Stop/Finish Button */}
-                                <button
-                                    onClick={handleRequestFinish}
-                                    className="w-[72px] h-full bg-[#333] hover:bg-[#444] rounded-2xl flex items-center justify-center transition active:scale-95"
-                                >
-                                    <i className="fa-solid fa-flag-checkered text-white text-2xl"></i>
-                                </button>
-                            </>
-                        )}
+                    {/* Controls Area */}
+                    <div className="mt-8 z-20 pb-8">
+                        <RunnerControls
+                            isRunning={isTimerRunning}
+                            onTogglePlay={() => setIsTimerRunning(!isTimerRunning)}
+                            onNext={handleNextExercise}
+                            onFinish={handleRequestFinish}
+                            isLastExercise={currentExerciseIndex === generatedPlan.exercises.length - 1}
+                            isLastRound={currentRound === (generatedPlan.rounds || 1)}
+                            themeColor={THEME_COLOR}
+                        />
                     </div>
 
                     {/* Quit Confirmation Modal */}

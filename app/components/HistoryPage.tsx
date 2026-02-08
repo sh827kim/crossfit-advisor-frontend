@@ -9,12 +9,17 @@ export function HistoryPage() {
   const router = useRouter();
   const { workoutHistory, deleteWorkoutRecord } = useApp();
 
-  // Initialize Date
-  const [currentDate, setCurrentDate] = useState(new Date()); // For Calendar Month view
-  const [selectedDate, setSelectedDate] = useState<string>(() => {
+  // Initialize State: combine viewDate and selectedDate
+  const [historyState, setHistoryState] = useState(() => {
     const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    return {
+      viewDate: now,
+      selectedDate: dateStr
+    };
   });
+
+  const { viewDate: currentDate, selectedDate } = historyState;
 
   // 삭제 메뉴 상태
   const [activeMenuRecordId, setActiveMenuRecordId] = useState<number | null>(null);
@@ -24,11 +29,50 @@ export function HistoryPage() {
   const month = currentDate.getMonth();
 
   // Month Navigation
+  const now = new Date();
+  const isCurrentMonth = year === now.getFullYear() && month === now.getMonth();
+
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
+    const prevDate = new Date(year, month - 1, 1);
+    const newYear = prevDate.getFullYear();
+    const newMonth = prevDate.getMonth();
+
+    // Check if we navigated back to current month
+    const isNowCurrentMonth = newYear === now.getFullYear() && newMonth === now.getMonth();
+
+    let newSelectedDate = '';
+    if (isNowCurrentMonth) {
+      newSelectedDate = `${newYear}-${String(newMonth + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    } else {
+      newSelectedDate = `${newYear}-${String(newMonth + 1).padStart(2, '0')}-01`;
+    }
+
+    setHistoryState({
+      viewDate: prevDate,
+      selectedDate: newSelectedDate
+    });
   };
+
   const handleNextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
+    if (isCurrentMonth) return; // Prevent going to future
+
+    const nextDate = new Date(year, month + 1, 1);
+    const newYear = nextDate.getFullYear();
+    const newMonth = nextDate.getMonth();
+
+    const isNowCurrentMonth = newYear === now.getFullYear() && newMonth === now.getMonth();
+
+    let newSelectedDate = '';
+    if (isNowCurrentMonth) {
+      newSelectedDate = `${newYear}-${String(newMonth + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    } else {
+      newSelectedDate = `${newYear}-${String(newMonth + 1).padStart(2, '0')}-01`;
+    }
+
+    setHistoryState({
+      viewDate: nextDate,
+      selectedDate: newSelectedDate
+    });
   };
 
   // Stats for the displayed month
@@ -108,7 +152,7 @@ export function HistoryPage() {
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <main className="min-h-screen bg-[#010101] text-white relative overflow-hidden flex flex-col">
+    <main className="h-screen bg-[#010101] text-white relative overflow-hidden flex flex-col">
       {/* Header */}
       <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
         <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center text-white hover:opacity-80 transition">
@@ -125,7 +169,11 @@ export function HistoryPage() {
         <h1 className="text-[20px] font-bold font-barlow tabular-nums tracking-wide text-center pt-1">
           {year}.{String(month + 1).padStart(2, '0')}
         </h1>
-        <button onClick={handleNextMonth} className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-full transition">
+        <button
+          onClick={handleNextMonth}
+          disabled={isCurrentMonth}
+          className={`w-8 h-8 flex items-center justify-center rounded-full transition ${isCurrentMonth ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/5'}`}
+        >
           <i className="fa-solid fa-chevron-right text-[16px] text-gray-500 hover:text-white transition"></i>
         </button>
       </div>
@@ -142,7 +190,7 @@ export function HistoryPage() {
         </div>
 
         {/* Days */}
-        <div className="grid grid-cols-7 gap-y-2 justify-items-center">
+        <div className="grid grid-cols-7 gap-y-2 justify-items-center" key={`${year}-${month}`}>
           {calendarDays.map((day, idx) => {
             if (!day) return <div key={`empty-${idx}`} />;
 
@@ -155,7 +203,7 @@ export function HistoryPage() {
               <div
                 key={day}
                 className="flex flex-col items-center cursor-pointer relative py-2 w-full"
-                onClick={() => setSelectedDate(dateStr)}
+                onClick={() => setHistoryState(prev => ({ ...prev, selectedDate: dateStr }))}
               >
                 <div className={`w-[30px] h-[30px] flex items-center justify-center rounded-full text-[14px] transition-all font-barlow
                     ${isSelected

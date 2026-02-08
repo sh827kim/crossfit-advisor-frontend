@@ -149,7 +149,7 @@ export function RunnerIntro({
             <div className="flex-1 flex flex-col items-center relative overflow-y-auto no-scrollbar mask-gradient-b">
                 <div className="w-full max-w-sm z-10 space-y-8 relative pt-4 pb-4">
                     {/* Vertical Line */}
-                    <div className="absolute left-[17px] top-4 bottom-4 w-[2px] z-0" style={{ backgroundColor: themeDarkColor }}></div>
+                    <div className="absolute left-[17px] top-[34px] bottom-[10px] w-[2px] z-0" style={{ backgroundColor: themeDarkColor }}></div>
 
                     <IntroStepper.Stepper.Provider
                         initialStep={plan.exercises[0]?.movementId || '0'}

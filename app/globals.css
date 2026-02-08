@@ -149,15 +149,16 @@
 }
 
 /* 스크롤바 숨기기 (스크롤은 가능) */
-.hide-scrollbar {
+.hide-scrollbar,
+.no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+.hide-scrollbar::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* 타이핑 페이드 인 (글자별) */
