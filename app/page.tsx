@@ -98,7 +98,7 @@ export default function HomePage() {
         {/* 1. 애프터와드 밸런스 케어 (Red) */}
         <button
           onClick={() => handleInputClick('wod')}
-          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
+          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] pr-[24px] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(244, 48, 0, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.08)',
@@ -106,7 +106,7 @@ export default function HomePage() {
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">애프터와드 밸런스 케어</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 운동을 분석해 균형 잡힌 마무리 운동을 추천해요.</p>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 와드 기반으로 균형 잡힌 보강 운동을 추천해요.</p>
 
           {/* Hover/Active Effect Overlay */}
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
@@ -115,7 +115,7 @@ export default function HomePage() {
         {/* 2. 목표 달성 트레이닝 (Yellow) */}
         <button
           onClick={() => handleInputClick('goal')}
-          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
+          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] pr-[24px] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(238, 253, 50, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.08)',
@@ -123,14 +123,14 @@ export default function HomePage() {
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">목표 달성 트레이닝</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">설정하신 목표 달성에 필요한 최적의 훈련을 시작해요.</p>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">설정한 목표 달성에 필요한 최적의 훈련을 시작해요.</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
 
         {/* 3. 부위별 집중 강화 (Blue) */}
         <button
           onClick={() => handleInputClick('part')}
-          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] flex flex-col justify-center gap-1 group"
+          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] pr-[24px] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(35, 212, 224, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.08)',
@@ -138,7 +138,7 @@ export default function HomePage() {
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">부위별 집중 강화</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 더 훈련하고 싶은 부위만 골라 운동을 구성하세요.</p>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 더 훈련하고 싶은 부위만 골라 운동을 구성해요.</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
       </div>
