@@ -8,7 +8,14 @@ export const shareWorkoutCard = async (element: HTMLElement | null, fileName: st
         const dataUrl = await toPng(element, {
             cacheBust: true,
             pixelRatio: 2, // High resolution
-            // backgroundColor: undefined // default is transparent
+            // backgroundColor: undefined // default is transparent, we capture element's background
+            filter: (node) => {
+                // Exclude elements with 'no-share' class
+                if (node instanceof HTMLElement && node.classList.contains('no-share')) {
+                    return false;
+                }
+                return true;
+            }
         });
 
         // Convert dataURL to Blob

@@ -308,32 +308,33 @@ export default function RunnerPage() {
 
             {/* STAGE 5: DONE */}
             {stage === 'done' && (
-                <div className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, #551100 100%)` }}>
-                    <h1 className="text-[32px] font-extrabold text-white text-center mb-2 leading-[40px]">
-                        오늘도<br />수고많으셨습니다!
-                    </h1>
-                    <p className="text-white/60 text-sm font-bold mb-12">
-                        {dateString}
-                    </p>
-                    {/* Main Content Area */}
-                    <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
-                        <WorkoutSummaryCard
-                            ref={cardRef}
-                            mode="BALANCE"
-                            rounds={generatedPlan.rounds || 1}
-                            durationSeconds={timer}
-                            dateString={dateString}
-                            exercises={generatedPlan.exercises}
-                            theme={{
-                                color: '#F43000',
-                                gradientStart: 'rgba(244, 48, 0, 0.2)',
-                                textColor: '#F43000'
-                            }}
-                            dateTimeString={dateTimeString}
-                        />
+                <div ref={cardRef} className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
+                    <div className="w-full flex flex-col items-center pb-12">
+                        <h1 className="text-[32px] font-extrabold text-white text-center mb-8 leading-[40px]">
+                            오늘도<br />수고많으셨습니다!
+                        </h1>
+                        <p className="text-white/60 text-sm font-bold mb-8">
+                            {dateString}
+                        </p>
+                        {/* Main Content Area */}
+                        <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
+                            <WorkoutSummaryCard
+                                mode="BALANCE"
+                                rounds={5}
+                                durationSeconds={timer}
+                                dateString={dateString}
+                                exercises={generatedPlan.exercises}
+                                theme={{
+                                    color: THEME_COLOR,
+                                    gradientStart: 'rgba(244, 48, 0, 0.2)',
+                                    textColor: THEME_COLOR
+                                }}
+                                dateTimeString={dateTimeString}
+                            />
+                        </div>
                     </div>
 
-                    <div className="flex flex-col w-full max-w-sm gap-3 items-center pb-8 flex-none">
+                    <div className="flex flex-col w-full max-w-sm gap-3 items-center pb-8 flex-none no-share">
                         <div className="flex w-full gap-3">
                             <button
                                 onClick={handleShare}
