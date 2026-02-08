@@ -37,6 +37,8 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 import { GlobalPageTracker } from "@/app/components/GlobalPageTracker";
+import { ErrorProvider } from "@/app/context/ErrorContext";
+import { GlobalErrorModal } from "@/app/components/shared/GlobalErrorModal";
 
 import { GoogleAnalytics } from '@next/third-parties/google';
 
@@ -60,13 +62,16 @@ export default function RootLayout({
       </head>
       <body className={`bg-gray-100 font-sans ${barlowCondensed.variable}`}>
         <AppProvider>
-          <GlobalPageTracker />
-          <PWAInitializer />
-          <BackButtonHandler />
-          <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
-            <Header />
-            {children}
-          </div>
+          <ErrorProvider>
+            <GlobalPageTracker />
+            <PWAInitializer />
+            <BackButtonHandler />
+            <GlobalErrorModal />
+            <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
+              <Header />
+              {children}
+            </div>
+          </ErrorProvider>
         </AppProvider>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>

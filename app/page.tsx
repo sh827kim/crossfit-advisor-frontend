@@ -95,13 +95,13 @@ export default function HomePage() {
         </div>
         {/* Text */}
         <h1 className="text-[24px] font-bold leading-tight text-white mb-1">
-          오늘도 잊지 않으셨네요!
+          오늘도 잘 오셨어요!
         </h1>
         <h2 className="text-[24px] font-bold leading-tight text-white mb-2">
-          운동을 선택해 보세요
+          어떤 운동을 할까요?
         </h2>
         <p className="text-[14px] text-gray-500 font-normal">
-          상황에 맞는 최적의 루틴을 추천해드려요
+          목표에 맞는 운동 플랜을 설계해 드릴게요.
         </p>
       </div>
 
@@ -117,8 +117,8 @@ export default function HomePage() {
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[22px] font-bold text-white leading-[26px]">애프터와드 밸런스 케어</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 와드 기반으로 균형 잡힌 보강 운동을 추천해요.</p>
+          <h3 className="text-[22px] font-bold text-white leading-[26px]">밸런스 케어</h3>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">목표에 맞는 운동 플랜을 설계해 드릴게요.</p>
 
           {/* Hover/Active Effect Overlay */}
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
@@ -134,8 +134,8 @@ export default function HomePage() {
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[22px] font-bold text-white leading-[26px]">목표 달성 트레이닝</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">설정한 목표 달성에 필요한 최적의 훈련을 시작해요.</p>
+          <h3 className="text-[22px] font-bold text-white leading-[26px]">스킬 마스터</h3>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">체계적인 플랜으로 목표 동작 달성</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
 
@@ -149,8 +149,8 @@ export default function HomePage() {
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[22px] font-bold text-white leading-[26px]">부위별 집중 강화</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">오늘 더 훈련하고 싶은 부위만 골라 운동을 구성해요.</p>
+          <h3 className="text-[22px] font-bold text-white leading-[26px]">포커스 트레이닝</h3>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">원하는 신체 부위의 근력을 효과적으로 강화</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
       </div>

@@ -14,18 +14,18 @@ type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
 const walkthroughStepper = defineStepper(
   {
     id: 'plan',
-    title: '운동 계획 추천',
-    description: 'WOD, 목표, 부위별로 선택하여\n맞춤형 워크아웃을 추천받으세요.'
+    title: '맞춤형 운동 설계',
+    description: '목표에 맞는 운동과\n시간을 선택해요'
   },
   {
     id: 'progress',
-    title: '운동 진행',
-    description: '타이머와 체크박스로 운동을\n체계적으로 진행하세요.'
+    title: '집중 훈련',
+    description: '오늘의 운동을 시간안에\n끝내요.'
   },
   {
     id: 'record',
-    title: '기록하기',
-    description: '완료한 운동을 기록하여\n당신의 운동 데이터를 관리하세요.'
+    title: '오늘의 운동 기록',
+    description: '하루 하루 꾸준히,\n성장을 기록해요!'
   }
 );
 
@@ -168,17 +168,17 @@ export function OnboardingPage() {
           <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
             <div className="mb-8 animate-fadeIn" style={{ animation: 'fadeIn 0.8s ease-out' }}>
-              <p className="text-lg font-bold text-[#f43000] mb-2">
+              {/* <p className="text-lg font-bold text-[#f43000] mb-2">
                 애프터 와드는
-              </p>
+              </p> */}
               <h2 className="text-3xl font-bold leading-tight mb-2">
-                당신을 위한
+                WOD가 끝나고
               </h2>
               <h2 className="text-3xl font-bold leading-tight mb-4">
-                보강운동 추천해드려요.
+                시작되는 나만의 훈련
               </h2>
               <p className="text-sm text-gray-400">
-                Crossfiter를 위한 맞춤형 워크아웃 추천해드려요.
+                오늘보다 더 강한 내일, 애프터와드와 함께해요!
               </p>
             </div>
 
@@ -219,16 +219,16 @@ export function OnboardingPage() {
           <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
             <div className="mb-8">
-              <p className="text-lg font-bold text-[#f43000] mb-2">
+              {/* <p className="text-lg font-bold text-[#f43000] mb-2">
                 거의 다 왔어요!
-              </p>
+              </p> */}
               <h2 className="text-3xl font-bold leading-tight mb-4">
                 프로필을
                 <br />
                 등록해주세요.
               </h2>
               <p className="text-sm text-gray-400">
-                Crossfiter를 위한 맞춤형 워크아웃 추천
+                닉네임은 언제든 수정할 수 있어요.
               </p>
             </div>
 
@@ -317,7 +317,7 @@ export function OnboardingPage() {
             onClick={handleStart}
             className="w-full bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-4 rounded-2xl transition active:scale-95 text-lg"
           >
-            시작하기
+            애프터와드 시작하기
           </button>
         </main>
       );
