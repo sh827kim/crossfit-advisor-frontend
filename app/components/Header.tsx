@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 
 import { PROFILE_BACKGROUND_COLORS, getProfileColor } from '@/app/lib/profile-colors';
+import { CalendarIcon } from '@/app/components/shared/icons/CalendarIcon';
 
 export function Header() {
   const router = useRouter();
@@ -25,17 +26,17 @@ export function Header() {
       >
         {/* Logo and Text removed as requested */}
       </div>
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-4 items-center">
         <button
           onClick={() => router.push('/history')}
-          className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-500 hover:text-[#f43000] hover:bg-gray-800 transition"
+          className="flex items-center justify-center text-white hover:opacity-80 transition"
           title="운동 기록"
         >
-          <i className="fa-solid fa-calendar-days text-lg"></i>
+          <CalendarIcon className="w-6 h-6" />
         </button>
         <button
           onClick={() => router.push('/profile')}
-          className="w-10 h-10 rounded-full relative flex items-center justify-center text-xs font-bold overflow-hidden border border-gray-700 hover:border-gray-600 hover:opacity-80 transition"
+          className="w-8 h-8 rounded-full relative flex items-center justify-center text-[10px] font-bold overflow-hidden border border-gray-700 hover:border-gray-600 hover:opacity-80 transition"
           style={
             !userProfileImage && userNickname
               ? {
@@ -51,7 +52,7 @@ export function Header() {
               src={userProfileImage}
               alt="프로필"
               fill
-              sizes="40px"
+              sizes="32px"
               className="object-cover"
               unoptimized
             />
