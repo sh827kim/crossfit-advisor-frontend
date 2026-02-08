@@ -156,18 +156,29 @@ export default function BalanceCarePage() {
           {frequentMovements.length > 0 && !searchInput.trim() && (
             <div className="flex-shrink-0 pb-4">
               <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">자주하는 운동</p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 {frequentMovements.map(movement => (
-                  <button
+                  <SelectionCard
                     key={movement.id}
+                    selected={selectedExercises.includes(movement.id)}
                     onClick={() => handleAddFrequent(movement)}
-                    className={`px-2 py-1.5 rounded-lg text-xs font-semibold transition ${selectedExercises.includes(movement.id)
-                      ? 'bg-gray-800 text-white border border-gray-700'
-                      : 'bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700'
-                      }`}
+                    label={movement.name}
+                    themeColor="#f43000"
+                    icon={undefined} // No specific icon for frequent movements in data, or use default logic?
+                  // SelectionCard requires icon or children for correct layout if we want it to look exactly like GoalCare card.
+                  // GoalCare passes children (icon).
+                  // Recent movements don't carry icon data in the JSON usually, but let's check.
+                  // frequent-movements.json has id, name, muscleGroups, equipment... no icon.
+                  // We can render a default icon or just text? 
+                  // SelectionCard structure: Icon box -> Text -> Checkmark.
+                  // If we pass no icon/children, the icon box will be empty opacity-40.
+                  // Let's pass a generic activity icon or just leave it empty.
+                  // "fa-person-running" seems appropriate or muscle group icon?
+                  // Let's deduce icon from muscle group like GoalCare does? 
+                  // Goal Care uses `getGoalIcon`. We can define similar helper or just use a dot/star.
                   >
-                    {movement.name}
-                  </button>
+                    <i className="fa-solid fa-person-running" />
+                  </SelectionCard>
                 ))}
               </div>
             </div>

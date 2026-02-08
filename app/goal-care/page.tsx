@@ -8,6 +8,7 @@ import { CarePageLayout } from '@/app/components/shared/CarePageLayout';
 import { CareBottomPanel } from '@/app/components/shared/CareBottomPanel';
 import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
+import { EncouragedOverlay } from '@/app/components/shared/EncouragedOverlay';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 
 export default function GoalCarePage() {
@@ -54,7 +55,11 @@ export default function GoalCarePage() {
   };
 
   const handleBack = () => {
-    router.push('/');
+    if (selectedGoal) {
+      setSelectedGoal(null);
+    } else {
+      router.push('/');
+    }
   };
 
   // Theme Constants
@@ -71,10 +76,19 @@ export default function GoalCarePage() {
   return (
     <>
       <CarePageLayout
-        title="달성할 목표를"
-        subtitle="선택해주세요."
-        description="연습하고 싶은 스킬을 선택해주세요"
+        title="달성하고 싶은"
+        subtitle="운동 목표를 알려주세요."
+        description=""
         onBack={handleBack}
+        overlayNode={
+          selectedGoal ? (
+            <EncouragedOverlay
+              label="선택한 운동 목표"
+              title={selectedGoal.name}
+              themeColor={THEME_ACCENT}
+            />
+          ) : undefined
+        }
         bottomControls={
           <CareBottomPanel
             selectedTime={selectedTime}

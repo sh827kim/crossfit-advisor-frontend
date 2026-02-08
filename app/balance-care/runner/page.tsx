@@ -3,8 +3,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
-import { defineStepper } from '@/components/ui/stepper';
 import { cn } from '@/app/lib/utils';
+import { RunnerIntro } from '@/app/components/shared/runner/RunnerIntro';
 
 type Stage = 'intro' | 'countdown' | 'workout' | 'paused' | 'done';
 
@@ -38,18 +38,7 @@ export default function RunnerPage() {
         setDateTimeString(now.toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true }));
     }, []);
 
-    // Intro Stage Stepper
-    const IntroStepper = useMemo(() => {
-        if (!generatedPlan?.exercises) return null;
 
-        const steps = generatedPlan.exercises.map((ex, idx) => ({
-            id: ex.movementId || `ex-${idx}`,
-            title: ex.name,
-            description: `${ex.minReps || 10} - ${ex.maxReps || 15} reps`,
-        }));
-
-        return defineStepper(...steps);
-    }, [generatedPlan]);
 
     const handleStartCountdown = () => {
         setStage('countdown');
@@ -127,7 +116,7 @@ export default function RunnerPage() {
         }
     }, [stage]);
 
-    if (!generatedPlan || !IntroStepper) {
+    if (!generatedPlan) {
         return (
             <div className="flex items-center justify-center h-screen bg-black text-white">
                 Loading...
@@ -170,74 +159,15 @@ export default function RunnerPage() {
 
             {/* STAGE 1: INTRO */}
             {stage === 'intro' && (
-                <div className="flex flex-col h-full p-6 animate-fadeIn">
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-4 min-h-[28px]">
-                        <div className="flex gap-2"></div>
-                    </div>
-
-                    {/* Rounds Quality Header */}
-                    <div className="text-left mb-6 z-10 pl-2">
-                        <h2 className="font-extrabold text-[20px] mb-2" style={{ color: THEME_COLOR }}>오늘의 추천와드</h2>
-                        <p className="text-[40px] font-black text-white leading-none font-barlow mb-4">
-                            {generatedPlan.rounds || 1} Rounds Quality
-                        </p>
-
-                        <div className="flex items-center gap-2">
-                            <i className="fa-regular fa-clock text-white text-lg"></i>
-                            <span className="text-white text-[15px] font-medium">
-                                {generatedPlan.duration}분
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Stepper Content */}
-                    <div className="flex-1 flex flex-col justify-center items-center relative">
-                        <div className="w-full max-w-sm z-10 space-y-8 relative">
-                            {/* Vertical Line */}
-                            <div className="absolute left-[17px] top-4 bottom-4 w-[2px] z-0" style={{ backgroundColor: THEME_DARK_COLOR }}></div>
-
-                            <IntroStepper.Stepper.Provider
-                                initialStep={generatedPlan.exercises[0]?.movementId || '0'}
-                                variant="vertical"
-                                indicatorClassName={`w-9 h-9 text-black font-bold`}
-                                separatorClassName={`bg-[${THEME_DARK_COLOR}]`}
-                                separatorCompletedClassName={`bg-[${THEME_DARK_COLOR}]`}
-                            >
-                                {() => (
-                                    <div className="flex flex-col gap-6">
-                                        {generatedPlan.exercises.map((ex, idx) => (
-                                            <div key={idx} className="flex items-center gap-4 relative z-10">
-                                                <div
-                                                    className="relative flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-black font-black text-lg transition-all"
-                                                    style={{ backgroundColor: THEME_COLOR, boxShadow: `0 0 10px ${THEME_SHADOW}` }}
-                                                >
-                                                    {idx + 1}
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-xl font-bold text-white leading-tight">{ex.name}</span>
-                                                    <span className="text-sm text-gray-400 opacity-60 font-medium">
-                                                        {ex.minReps || 10} - {ex.maxReps || 15} reps
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </IntroStepper.Stepper.Provider>
-                        </div>
-                    </div>
-
-                    <div className="mt-4 pb-8">
-                        <button
-                            onClick={handleStartCountdown}
-                            className="w-full text-black font-bold py-4 rounded-2xl text-lg transition active:scale-95 hover:brightness-110"
-                            style={{ backgroundColor: THEME_COLOR }}
-                        >
-                            시작하기
-                        </button>
-                    </div>
-                </div>
+                <RunnerIntro
+                    title="오늘의 추천와드"
+                    plan={generatedPlan}
+                    themeColor={THEME_COLOR}
+                    themeDarkColor={THEME_DARK_COLOR}
+                    themeShadow={THEME_SHADOW}
+                    onStart={handleStartCountdown}
+                    onBack={() => router.back()}
+                />
             )}
 
             {/* STAGE 2: COUNTDOWN */}

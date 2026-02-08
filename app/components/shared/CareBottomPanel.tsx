@@ -27,7 +27,7 @@ export function CareBottomPanel({
     // Assuming themeColor is a valid CSS color string.
 
     return (
-        <div className="flex-shrink-0 relative w-full mt-auto">
+        <div className="flex-shrink-0 relative w-full mt-auto z-50">
             <div className="absolute top-[-30px] left-0 right-0 h-[30px] bg-gradient-to-b from-transparent to-black pointer-events-none"></div>
 
             <div className="w-full bg-[#1F1F1F] rounded-t-[32px] border-t border-white/10 shadow-[0_-6px_44px_rgba(0,0,0,0.8)] relative overflow-hidden pb-6 pt-2">
