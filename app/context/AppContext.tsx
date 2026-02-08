@@ -59,8 +59,10 @@ interface AppContextType {
   hasVisited: boolean;
   userNickname: string;
   userProfileImage: string | null;
+  userProfileColorIndex: number;
   setUserNickname: (nickname: string) => void;
   setUserProfileImage: (image: string | null) => void;
+  setUserProfileColorIndex: (index: number) => void;
   markAsVisited: () => void;
 
   // 리셋
@@ -177,6 +179,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return localStorage.getItem('cf_user_profile_image');
   });
 
+  const [userProfileColorIndex, setUserProfileColorIndex] = useState<number>(() => {
+    if (typeof window === 'undefined') return 0;
+    const saved = localStorage.getItem('cf_user_profile_color_index');
+    return saved ? parseInt(saved) : Math.floor(Math.random() * 10);
+  });
+
   // Storage Adapter 참조 (IndexedDB 또는 LocalStorage)
   const storageRef = useRef<WorkoutStorageAdapter | null>(null);
 
@@ -236,6 +244,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem('cf_user_profile_image');
     }
   }, [userProfileImage]);
+
+  // 프로필 색상 인덱스 저장
+  useEffect(() => {
+    localStorage.setItem('cf_user_profile_color_index', userProfileColorIndex.toString());
+  }, [userProfileColorIndex]);
 
   // 생성된 계획 저장
   useEffect(() => {
@@ -404,6 +417,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setHasVisited(false);
     setUserNickname(generateRandomNickname());
     setUserProfileImage(null);
+    setUserProfileColorIndex(Math.floor(Math.random() * 10));
     setWorkoutHistory([]);
     setHistoryError(null);
     setIsLoadingHistory(true);
@@ -468,8 +482,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         hasVisited,
         userNickname,
         userProfileImage,
+        userProfileColorIndex,
         setUserNickname,
         setUserProfileImage,
+        setUserProfileColorIndex,
         markAsVisited,
         resetInputState,
         resetAllData

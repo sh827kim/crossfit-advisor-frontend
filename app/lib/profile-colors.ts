@@ -16,3 +16,7 @@ export const getProfileColor = (seed: string) => {
     const charCode = seed.charCodeAt(0) || 0;
     return PROFILE_BACKGROUND_COLORS[charCode % PROFILE_BACKGROUND_COLORS.length];
 };
+
+export const getProfileColorByIndex = (index: number) => {
+    return PROFILE_BACKGROUND_COLORS[index % PROFILE_BACKGROUND_COLORS.length];
+};

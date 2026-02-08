@@ -6,12 +6,12 @@ import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 
-import { getProfileColor } from '@/app/lib/profile-colors';
+import { getProfileColorByIndex } from '@/app/lib/profile-colors';
 import { ConfirmDialog } from '@/app/components/shared/ConfirmDialog';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileImage, setUserProfileImage } = useApp();
+  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileColorIndex, setUserProfileColorIndex } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
@@ -52,18 +52,12 @@ export function ProfilePage() {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64 = event.target?.result as string;
-        compressImage(base64, 300, 300, 0.8)
-          .then(res => setUserProfileImage(res))
-          .catch(() => setUserProfileImage(base64));
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleRefreshColor = () => {
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * 11);
+    } while (nextIndex === userProfileColorIndex);
+    setUserProfileColorIndex(nextIndex);
   };
 
   const confirmReset = () => {
@@ -72,7 +66,7 @@ export function ProfilePage() {
     router.replace('/onboarding?reset=true');
   };
 
-  const fallbackColor = useMemo(() => getProfileColor(userNickname || 'User'), [userNickname]);
+  const fallbackColor = useMemo(() => getProfileColorByIndex(userProfileColorIndex), [userProfileColorIndex]);
 
   return (
     <main className="min-h-screen bg-[#010101] text-white flex flex-col relative overflow-hidden">
@@ -119,28 +113,23 @@ export function ProfilePage() {
               Member
             </p>
 
-            {/* 3. Profile Image & Camera Button */}
+            {/* 3. Profile Image & Refresh Button */}
             <div className="relative mb-[24px]">
               <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex items-center justify-center relative shadow-2xl border border-white/5"
-                style={{ backgroundColor: userProfileImage ? 'transparent' : fallbackColor }}>
-                {userProfileImage ? (
-                  <Image src={userProfileImage} alt="Profile" fill className="object-cover" unoptimized />
-                ) : (
-                  <span className="text-[44px] font-extrabold text-black font-apple-sd mt-1">
-                    {(userNickname || 'U').charAt(0)}
-                  </span>
-                )}
+                style={{ backgroundColor: fallbackColor }}>
+                <span className="text-[44px] font-extrabold text-black font-apple-sd mt-1">
+                  {(userNickname || 'U').charAt(0)}
+                </span>
               </div>
-              {/* Camera Button (Only in Edit Mode) */}
+              {/* Refresh Color Button (Only in Edit Mode) */}
               {isEditing && (
                 <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#333] border border-[#555] rounded-full flex items-center justify-center shadow-lg hover:bg-[#444] transition z-20"
+                  onClick={handleRefreshColor}
+                  className="absolute bottom-0 right-0 w-[34px] h-[34px] bg-[#333] border border-[#555] rounded-full flex items-center justify-center shadow-lg hover:bg-[#444] transition z-20 active:rotate-180 duration-300"
                 >
-                  <i className="fa-solid fa-camera text-white text-[14px]"></i>
+                  <i className="fa-solid fa-rotate text-white text-[14px]"></i>
                 </button>
               )}
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
             </div>
 
             {/* 4. Nickname */}

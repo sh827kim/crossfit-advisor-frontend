@@ -29,23 +29,21 @@ const walkthroughStepper = defineStepper(
   }
 );
 
-import { getProfileColor } from '@/app/lib/profile-colors';
+import { getProfileColorByIndex } from '@/app/lib/profile-colors';
 
 export function OnboardingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const shouldReset = searchParams.get('reset') === 'true';
-  const { hasVisited, userNickname, userProfileImage, setUserNickname, setUserProfileImage, markAsVisited, resetAllData } = useApp();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { hasVisited, userNickname, setUserNickname, markAsVisited, resetAllData, userProfileColorIndex, setUserProfileColorIndex } = useApp();
   const hasHandledResetRef = useRef(false);
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('splash');
   const [showContent, setShowContent] = useState(false);
   const [nickname, setNickname] = useState(userNickname);
-  const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
 
   // Walkthrough 애니메이션 상태
 
-  const fallbackColor = useMemo(() => getProfileColor(nickname || '신'), [nickname]);
+  const fallbackColor = useMemo(() => getProfileColorByIndex(userProfileColorIndex), [userProfileColorIndex]);
 
   // 초기화 요청 시 데이터 초기화
   useEffect(() => {
@@ -111,41 +109,21 @@ export function OnboardingPage() {
   }, [hasVisited, shouldReset]);
 
 
-  // userProfileImage 변경 감지
-  useEffect(() => {
-    setProfileImage(userProfileImage);
-  }, [userProfileImage]);
-
   // userNickname 변경 감지 (데이터 초기화 후 입력값 동기화)
   useEffect(() => {
     setNickname(userNickname);
   }, [userNickname]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64 = event.target?.result as string;
-        // Promise 체인으로 비동기 처리
-        compressImage(base64, 300, 300, 0.8)
-          .then(compressedBase64 => {
-            setProfileImage(compressedBase64);
-          })
-          .catch(error => {
-            console.error('이미지 압축 실패:', error);
-            setProfileImage(base64);
-          });
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleRefreshColor = () => {
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * 11); // 11 colors in lib
+    } while (nextIndex === userProfileColorIndex);
+    setUserProfileColorIndex(nextIndex);
   };
 
   const handleStart = () => {
     setUserNickname(nickname);
-    if (profileImage) {
-      setUserProfileImage(profileImage);
-    }
 
     // AppContext와 localStorage 모두 업데이트
     markAsVisited();
@@ -234,7 +212,7 @@ export function OnboardingPage() {
 
     // 프로필 설정 화면
     if (currentStep === 'profile') {
-      const firstChar = nickname.charAt(0) || '신';
+      const firstChar = (nickname || '신').charAt(0);
 
       return (
         <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-8 pt-8 overflow-y-auto">
@@ -295,25 +273,23 @@ export function OnboardingPage() {
 
                 {/* Profile Image */}
                 <div className="relative mb-[24px]">
-                  <button onClick={() => fileInputRef.current?.click()} className="group relative">
+                  <div className="group relative">
                     <div
-                      className="w-[88px] h-[88px] rounded-full relative flex items-center justify-center overflow-hidden cursor-pointer shadow-xl transition hover:brightness-110"
+                      className="w-[88px] h-[88px] rounded-full relative flex items-center justify-center overflow-hidden shadow-xl transition"
                       style={{ backgroundColor: fallbackColor }}
                     >
-                      {profileImage ? (
-                        <Image src={profileImage} alt="프로필" fill className="object-cover" unoptimized />
-                      ) : (
-                        <span className="text-[40px] font-extrabold text-black font-apple-sd leading-none mt-1">
-                          {firstChar}
-                        </span>
-                      )}
+                      <span className="text-[40px] font-extrabold text-black font-apple-sd leading-none mt-1">
+                        {firstChar}
+                      </span>
                     </div>
-                    {/* Camera Icon */}
-                    <div className="absolute bottom-0 right-0 w-[30px] h-[30px] bg-[#4E4E4E] border border-white/5 rounded-full flex items-center justify-center shadow-lg hover:bg-[#666] transition">
-                      <i className="fa-solid fa-camera text-white text-[12px]"></i>
-                    </div>
-                  </button>
-                  <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    {/* Refresh Color Icon */}
+                    <button
+                      onClick={handleRefreshColor}
+                      className="absolute bottom-0 right-0 w-[30px] h-[30px] bg-[#4E4E4E] border border-white/5 rounded-full flex items-center justify-center shadow-lg hover:bg-[#666] transition active:rotate-180 duration-300"
+                    >
+                      <i className="fa-solid fa-rotate text-white text-[12px]"></i>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Nickname Input Label */}
