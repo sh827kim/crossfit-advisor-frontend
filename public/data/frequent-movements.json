@@ -9,8 +9,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "clean",
@@ -21,8 +21,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "pullup",
@@ -31,8 +31,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 5,
-      "maxReps": 12
+      "minCount": 5,
+      "maxCount": 12
     },
     {
       "id": "rowing",
@@ -42,8 +42,9 @@
         "BACK"
       ],
       "equipment": "ROWING",
-      "minReps": null,
-      "maxReps": null
+      "minCount": 8,
+      "maxCount": 12,
+      "unit": "cal"
     },
     {
       "id": "double_under",
@@ -52,8 +53,8 @@
         "CARDIO"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 30,
-      "maxReps": 50
+      "minCount": 30,
+      "maxCount": 50
     },
     {
       "id": "wall_walk",
@@ -62,8 +63,8 @@
         "CHEST"
       ],
       "equipment": "WALL",
-      "minReps": 5,
-      "maxReps": 10
+      "minCount": 5,
+      "maxCount": 10
     },
     {
       "id": "box_jump",
@@ -73,8 +74,8 @@
         "CARDIO"
       ],
       "equipment": "BOX",
-      "minReps": 5,
-      "maxReps": 10
+      "minCount": 5,
+      "maxCount": 10
     },
     {
       "id": "burpee",
@@ -84,8 +85,8 @@
         "CHEST"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     }
   ]
 }

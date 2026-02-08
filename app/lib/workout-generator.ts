@@ -160,8 +160,9 @@ export function generateWorkoutPlan(
     exerciseId: index,
     movementId: movement.id,
     name: movement.name,
-    minReps: movement.minReps || 10,
-    maxReps: movement.maxReps || 20,
+    minCount: movement.minCount || 10,
+    maxCount: movement.maxCount || 20,
+    unit: movement.unit || 'reps',
     equipment: movement.equipment,
     muscleGroups: movement.muscleGroups
   }));

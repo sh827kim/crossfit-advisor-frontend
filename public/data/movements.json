@@ -10,8 +10,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "power_snatch",
@@ -23,8 +23,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "squat_snatch",
@@ -36,8 +36,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "hang_snatch",
@@ -49,8 +49,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "dumbbell_snatch",
@@ -62,8 +62,8 @@
         "CHEST"
       ],
       "equipment": "DUMBBELL",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "clean",
@@ -75,8 +75,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "power_clean",
@@ -88,8 +88,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "squat_clean",
@@ -101,8 +101,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "hang_clean",
@@ -114,8 +114,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "clean_and_jerk",
@@ -127,8 +127,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "jerk",
@@ -139,8 +139,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "push_jerk",
@@ -151,8 +151,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "split_jerk",
@@ -163,8 +163,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "deadlift",
@@ -175,8 +175,8 @@
         "BACK"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "sumo_deadlift",
@@ -187,8 +187,8 @@
         "BACK"
       ],
       "equipment": "BARBELL",
-      "minReps": 3,
-      "maxReps": 5
+      "minCount": 3,
+      "maxCount": 5
     },
     {
       "id": "squat",
@@ -198,8 +198,8 @@
         "LEGS"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 15,
-      "maxReps": 20
+      "minCount": 15,
+      "maxCount": 20
     },
     {
       "id": "back_squat",
@@ -209,8 +209,8 @@
         "LEGS"
       ],
       "equipment": "BARBELL",
-      "minReps": 5,
-      "maxReps": 8
+      "minCount": 5,
+      "maxCount": 8
     },
     {
       "id": "front_squat",
@@ -220,8 +220,8 @@
         "LEGS"
       ],
       "equipment": "BARBELL",
-      "minReps": 5,
-      "maxReps": 8
+      "minCount": 5,
+      "maxCount": 8
     },
     {
       "id": "overhead_squat",
@@ -232,8 +232,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 5,
-      "maxReps": 8
+      "minCount": 5,
+      "maxCount": 8
     },
     {
       "id": "air_squat",
@@ -243,8 +243,8 @@
         "LEGS"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 15,
-      "maxReps": 20
+      "minCount": 15,
+      "maxCount": 20
     },
     {
       "id": "lunge",
@@ -254,8 +254,8 @@
         "LEGS"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "overhead_lunge",
@@ -266,8 +266,8 @@
         "CHEST"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "dumbbell_lunge",
@@ -277,8 +277,8 @@
         "LEGS"
       ],
       "equipment": "DUMBBELL",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "thruster",
@@ -289,8 +289,8 @@
         "CHEST"
       ],
       "equipment": "BARBELL",
-      "minReps": 5,
-      "maxReps": 8
+      "minCount": 5,
+      "maxCount": 8
     },
     {
       "id": "dumbbell_thruster",
@@ -301,8 +301,8 @@
         "CHEST"
       ],
       "equipment": "DUMBBELL",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "wallball_shot",
@@ -314,8 +314,8 @@
         "CARDIO"
       ],
       "equipment": "WALLBALL",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "wall_walk",
@@ -325,8 +325,8 @@
         "CHEST"
       ],
       "equipment": "WALL",
-      "minReps": 5,
-      "maxReps": 10
+      "minCount": 5,
+      "maxCount": 10
     },
     {
       "id": "pullup",
@@ -336,8 +336,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 5,
-      "maxReps": 12
+      "minCount": 5,
+      "maxCount": 12
     },
     {
       "id": "strict_pullup",
@@ -347,8 +347,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 3,
-      "maxReps": 10
+      "minCount": 3,
+      "maxCount": 10
     },
     {
       "id": "kipping_pullup",
@@ -358,8 +358,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 5,
-      "maxReps": 15
+      "minCount": 5,
+      "maxCount": 15
     },
     {
       "id": "butterfly_pullup",
@@ -369,8 +369,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 3,
-      "maxReps": 10
+      "minCount": 3,
+      "maxCount": 10
     },
     {
       "id": "chest_to_bar",
@@ -380,8 +380,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 3,
-      "maxReps": 8
+      "minCount": 3,
+      "maxCount": 8
     },
     {
       "id": "muscle_up",
@@ -392,8 +392,8 @@
         "CHEST"
       ],
       "equipment": "BAR",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "bar_muscle_up",
@@ -404,8 +404,8 @@
         "CHEST"
       ],
       "equipment": "BAR",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "ring_muscle_up",
@@ -416,8 +416,8 @@
         "CHEST"
       ],
       "equipment": "RINGS",
-      "minReps": 2,
-      "maxReps": 5
+      "minCount": 2,
+      "maxCount": 5
     },
     {
       "id": "toes_to_bar",
@@ -428,8 +428,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "knees_to_elbow",
@@ -440,8 +440,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 12,
-      "maxReps": 18
+      "minCount": 12,
+      "maxCount": 18
     },
     {
       "id": "pushup",
@@ -451,8 +451,8 @@
         "CHEST"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 15,
-      "maxReps": 25
+      "minCount": 15,
+      "maxCount": 25
     },
     {
       "id": "handstand_pushup",
@@ -462,8 +462,8 @@
         "CHEST"
       ],
       "equipment": "WALL",
-      "minReps": 5,
-      "maxReps": 12
+      "minCount": 5,
+      "maxCount": 12
     },
     {
       "id": "ring_dips",
@@ -473,8 +473,8 @@
         "CHEST"
       ],
       "equipment": "RINGS",
-      "minReps": 8,
-      "maxReps": 15
+      "minCount": 8,
+      "maxCount": 15
     },
     {
       "id": "bar_dips",
@@ -484,8 +484,8 @@
         "CHEST"
       ],
       "equipment": "BAR",
-      "minReps": 8,
-      "maxReps": 15
+      "minCount": 8,
+      "maxCount": 15
     },
     {
       "id": "rowing",
@@ -496,8 +496,9 @@
         "BACK"
       ],
       "equipment": "ROWING",
-      "minReps": null,
-      "maxReps": null
+      "minCount": 8,
+      "maxCount": 12,
+      "unit": "cal"
     },
     {
       "id": "assault_bike",
@@ -508,8 +509,9 @@
         "LEGS"
       ],
       "equipment": "ASSAULT_BIKE",
-      "minReps": null,
-      "maxReps": null
+      "minCount": 7,
+      "maxCount": 10,
+      "unit": "cal"
     },
     {
       "id": "double_under",
@@ -519,8 +521,8 @@
         "CARDIO"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 30,
-      "maxReps": 50
+      "minCount": 30,
+      "maxCount": 50
     },
     {
       "id": "box_jump",
@@ -531,8 +533,8 @@
         "CARDIO"
       ],
       "equipment": "BOX",
-      "minReps": 5,
-      "maxReps": 10
+      "minCount": 5,
+      "maxCount": 10
     },
     {
       "id": "burpee",
@@ -543,8 +545,8 @@
         "CHEST"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "burpee_box_jump",
@@ -556,8 +558,8 @@
         "LEGS"
       ],
       "equipment": "BOX",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "hollow_rock",
@@ -567,8 +569,8 @@
         "CORE"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 20,
-      "maxReps": 30
+      "minCount": 20,
+      "maxCount": 30
     },
     {
       "id": "plank",
@@ -578,8 +580,9 @@
         "CORE"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": null,
-      "maxReps": null
+      "minCount": 20,
+      "maxCount": 40,
+      "unit": "sec"
     },
     {
       "id": "ghd_situp",
@@ -589,8 +592,8 @@
         "CORE"
       ],
       "equipment": "GHD",
-      "minReps": 10,
-      "maxReps": 20
+      "minCount": 10,
+      "maxCount": 20
     },
     {
       "id": "hanging_leg_raise",
@@ -600,8 +603,8 @@
         "CORE"
       ],
       "equipment": "BAR",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "vup",
@@ -611,8 +614,8 @@
         "CORE"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 12,
-      "maxReps": 18
+      "minCount": 12,
+      "maxCount": 18
     },
     {
       "id": "band_pulldown",
@@ -622,8 +625,8 @@
         "BACK"
       ],
       "equipment": "BAND",
-      "minReps": 12,
-      "maxReps": 18
+      "minCount": 12,
+      "maxCount": 18
     },
     {
       "id": "ring_row",
@@ -633,8 +636,8 @@
         "BACK"
       ],
       "equipment": "RINGS",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "scapular_pullup",
@@ -644,8 +647,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 5,
-      "maxReps": 10
+      "minCount": 5,
+      "maxCount": 10
     },
     {
       "id": "negative_pullup",
@@ -655,8 +658,8 @@
         "BACK"
       ],
       "equipment": "BAR",
-      "minReps": 5,
-      "maxReps": 10
+      "minCount": 5,
+      "maxCount": 10
     },
     {
       "id": "bent_over_barbell_row",
@@ -666,8 +669,8 @@
         "BACK"
       ],
       "equipment": "BARBELL",
-      "minReps": 6,
-      "maxReps": 10
+      "minCount": 6,
+      "maxCount": 10
     },
     {
       "id": "box_dips",
@@ -677,8 +680,8 @@
         "CHEST"
       ],
       "equipment": "BOX",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "dumbbell_bench_press",
@@ -688,8 +691,8 @@
         "CHEST"
       ],
       "equipment": "DUMBBELL",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "bulgarian_split_squat",
@@ -699,8 +702,8 @@
         "LEGS"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "goblet_squat",
@@ -710,8 +713,8 @@
         "LEGS"
       ],
       "equipment": "KETTLEBELL",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "handstand_hold",
@@ -721,8 +724,9 @@
         "CHEST"
       ],
       "equipment": "WALL",
-      "minReps": null,
-      "maxReps": null
+      "minCount": 20,
+      "maxCount": 30,
+      "unit": "sec"
     },
     {
       "id": "pike_pushup",
@@ -732,8 +736,8 @@
         "CHEST"
       ],
       "equipment": "BOX",
-      "minReps": 10,
-      "maxReps": 15
+      "minCount": 10,
+      "maxCount": 15
     },
     {
       "id": "dumbbell_shoulder_press",
@@ -743,8 +747,8 @@
         "CHEST"
       ],
       "equipment": "DUMBBELL",
-      "minReps": 8,
-      "maxReps": 12
+      "minCount": 8,
+      "maxCount": 12
     },
     {
       "id": "shoulder_taps",
@@ -755,8 +759,8 @@
         "CORE"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": 20,
-      "maxReps": 40
+      "minCount": 20,
+      "maxCount": 40
     },
     {
       "id": "handstand_walk",
@@ -767,8 +771,9 @@
         "CORE"
       ],
       "equipment": "BODYWEIGHT",
-      "minReps": null,
-      "maxReps": null
+      "minCount": 10,
+      "maxCount": 20,
+      "unit": "m"
     }
   ]
 }

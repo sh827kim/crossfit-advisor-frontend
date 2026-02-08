@@ -244,7 +244,7 @@ export default function PartRunnerPage() {
                                                 {ex.name}
                                             </span>
                                             <span className="text-base text-gray-400 font-medium">
-                                                {ex.minReps || 10} - {ex.maxReps || 15} reps
+                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}
                                             </span>
                                         </div>
                                     </div>

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { defineStepper } from '@/components/ui/stepper';
+import { VerticalStepper } from '@/app/components/shared/VerticalStepper';
 import { TimeIcon } from '@/app/components/shared/icons/TimeIcon';
 import { EquipmentIcon } from '@/app/components/shared/icons/EquipmentIcon';
 import { cn } from '@/app/lib/utils';
@@ -8,8 +8,9 @@ import { cn } from '@/app/lib/utils';
 interface Exercise {
     movementId?: string;
     name: string;
-    minReps?: number | null;
-    maxReps?: number | null;
+    minCount?: number | null;
+    maxCount?: number | null;
+    unit?: string;
     equipment?: string;
 }
 
@@ -38,21 +39,6 @@ export function RunnerIntro({
     onStart,
     onBack
 }: RunnerIntroProps) {
-
-    // Intro Stage Stepper
-    const IntroStepper = useMemo(() => {
-        if (!plan?.exercises) return null;
-
-        const steps = plan.exercises.map((ex, idx) => ({
-            id: ex.movementId || `ex-${idx}`,
-            title: ex.name,
-            description: `${ex.minReps || 10} - ${ex.maxReps || 15} reps`,
-        }));
-
-        return defineStepper(...steps);
-    }, [plan]);
-
-    if (!IntroStepper) return null;
 
     // Equipment Translation
     const getEquipmentSummary = () => {
@@ -148,37 +134,17 @@ export function RunnerIntro({
             {/* Stepper Content */}
             <div className="flex-1 flex flex-col items-center relative overflow-y-auto no-scrollbar mask-gradient-b">
                 <div className="w-full max-w-sm z-10 space-y-8 relative pt-4 pb-4">
-                    {/* Vertical Line */}
-                    <div className="absolute left-[17px] top-[34px] bottom-[10px] w-[2px] z-0" style={{ backgroundColor: themeDarkColor }}></div>
-
-                    <IntroStepper.Stepper.Provider
-                        initialStep={plan.exercises[0]?.movementId || '0'}
-                        variant="vertical"
-                        indicatorClassName={`w-9 h-9 text-black font-bold`}
-                        separatorClassName={`bg-[${themeDarkColor}]`}
-                        separatorCompletedClassName={`bg-[${themeDarkColor}]`}
-                    >
-                        {() => (
-                            <div className="flex flex-col gap-6">
-                                {plan.exercises.map((ex, idx) => (
-                                    <div key={idx} className="flex items-center gap-4 relative z-10">
-                                        <div
-                                            className="relative flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-black font-black text-lg transition-all"
-                                            style={{ backgroundColor: themeColor, boxShadow: `0 0 10px ${themeShadow}` }}
-                                        >
-                                            {idx + 1}
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-xl font-bold text-white leading-tight">{ex.name}</span>
-                                            <span className="text-sm text-gray-400 opacity-60 font-medium">
-                                                {ex.minReps || 10} - {ex.maxReps || 15} reps
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </IntroStepper.Stepper.Provider>
+                    <VerticalStepper
+                        steps={plan.exercises.map((ex, idx) => ({
+                            id: ex.movementId || `ex-${idx}`,
+                            title: ex.name,
+                            description: `${ex.minCount || 10} - ${ex.maxCount || 15} ${ex.unit || 'reps'}`
+                        }))}
+                        themeColor={themeColor}
+                        themeDarkColor={themeDarkColor}
+                        themeShadow={themeShadow}
+                        enableTextAnimation={false}
+                    />
                 </div>
             </div>
 

@@ -27,16 +27,18 @@ export interface Movement {
   type?: MovementType; // Optional for compatibility, but should be populated
   muscleGroups: MuscleGroup[];
   equipment: Equipment;
-  minReps?: number | null;
-  maxReps?: number | null;
+  minCount?: number | null;
+  maxCount?: number | null;
+  unit?: string;
 }
 
 export interface Exercise {
   exerciseId: number;
   movementId: string;
   name: string;
-  minReps?: number | null;
-  maxReps?: number | null;
+  minCount?: number | null;
+  maxCount?: number | null;
+  unit?: string;
   equipment: Equipment;
   muscleGroups: MuscleGroup[];
 }

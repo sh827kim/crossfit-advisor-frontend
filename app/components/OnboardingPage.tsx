@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useApp } from '@/app/context/AppContext';
 import { compressImage } from '@/app/lib/image-utils';
 import { defineStepper } from '@/components/ui/stepper';
+import { VerticalStepper } from '@/app/components/shared/VerticalStepper';
 
 // 온보딩 단계: splash → walkthrough → profile
 type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
@@ -42,8 +43,7 @@ export function OnboardingPage() {
   const [nickname, setNickname] = useState(userNickname);
   const [profileImage, setProfileImage] = useState<string | null>(userProfileImage);
 
-  // Walkthrough 애니메이션 상태 (타이핑 로직 제거 -> 단계별 표시만 유지)
-  const [visibleSteps, setVisibleSteps] = useState<number>(0);
+  // Walkthrough 애니메이션 상태
 
   const fallbackColor = useMemo(() => getProfileColor(nickname || '신'), [nickname]);
 
@@ -109,30 +109,6 @@ export function OnboardingPage() {
       return () => clearTimeout(timer);
     }
   }, [hasVisited, shouldReset]);
-
-  // Walkthrough 단계 진입 시 애니메이션 초기화
-  useEffect(() => {
-    if (currentStep !== 'walkthrough') {
-      return;
-    }
-
-    setVisibleSteps(0);
-
-    // 0.8초마다 한 단계씩 보이기
-    const stepTimer = setInterval(() => {
-      setVisibleSteps(prev => {
-        if (prev < walkthroughStepper.steps.length) {
-          return prev + 1;
-        }
-        clearInterval(stepTimer);
-        return prev;
-      });
-    }, 800);
-
-    return () => {
-      clearInterval(stepTimer);
-    };
-  }, [currentStep]);
 
 
   // userProfileImage 변경 감지
@@ -206,8 +182,8 @@ export function OnboardingPage() {
 
     // 워크스루 화면 - 3가지 기능 설명
     if (currentStep === 'walkthrough') {
-      const visibleWalkthroughSteps = walkthroughStepper.steps.slice(0, visibleSteps);
-      const canGoNext = visibleSteps === walkthroughStepper.steps.length;
+      // Steps are always fully visible now
+      const canGoNext = true;
 
       return (
         <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6 overflow-y-auto">
@@ -228,34 +204,18 @@ export function OnboardingPage() {
               </p>
             </div>
 
-            {/* 워크스루 단계 (Stepperize + shadcn-stepper) */}
-            <div className="mt-2">
-              <walkthroughStepper.Stepper.Provider
-                key="walkthrough-provider"
-                variant="vertical"
-                tracking={false}
-                initialStep={walkthroughStepper.steps[0].id}
-                indicatorClassName="h-7 w-7 bg-[#f43000] text-black hover:bg-[#d92a00]"
-                separatorClassName="bg-[#921d00]"
-                separatorCompletedClassName="bg-[#921d00]"
-              >
-                {() => (
-                  <walkthroughStepper.Stepper.Navigation aria-label="워크스루 단계">
-                    {visibleWalkthroughSteps.map((step) => (
-                      <walkthroughStepper.Stepper.Step key={step.id} of={step.id} className="animate-fadeIn">
-                        <walkthroughStepper.Stepper.Title className="text-lg font-bold text-white">
-                          {step.title}
-                        </walkthroughStepper.Stepper.Title>
-                        <walkthroughStepper.Stepper.Panel>
-                          <p className="text-sm text-gray-400 whitespace-pre-line leading-relaxed">
-                            {step.description}
-                          </p>
-                        </walkthroughStepper.Stepper.Panel>
-                      </walkthroughStepper.Stepper.Step>
-                    ))}
-                  </walkthroughStepper.Stepper.Navigation>
-                )}
-              </walkthroughStepper.Stepper.Provider>
+            {/* 워크스루 단계 (Common Component) */}
+            <div className="mt-2 relative">
+              <VerticalStepper
+                steps={walkthroughStepper.steps.map(step => ({
+                  id: step.id,
+                  title: step.title,
+                  description: step.description
+                }))}
+                themeColor="#f43000"
+                themeDarkColor="#921d00"
+                enableTextAnimation={true}
+              />
             </div>
           </div>
 

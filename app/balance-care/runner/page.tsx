@@ -238,7 +238,7 @@ export default function RunnerPage() {
                                         <div className={cn("flex flex-col transition-opacity duration-300", isActive ? "opacity-100" : "opacity-40")}>
                                             <span className={cn("text-xl font-bold text-white leading-tight", isActive ? "text-[#F43000]" : "text-white")}>{ex.name}</span>
                                             <span className="text-base text-gray-400 font-medium">
-                                                {ex.minReps || 10} - {ex.maxReps || 15} reps
+                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}
                                             </span>
                                         </div>
                                     </div>
