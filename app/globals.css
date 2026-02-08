@@ -80,11 +80,23 @@
   }
 
   /* 한글 줄바꿈 처리 - 기본 설정 */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   html,
   body {
     word-break: keep-all;
     overflow-wrap: break-word;
     font-style: normal !important;
+  }
+
+  /* 작은 모바일 기기에서의 텍스트 크기 최적화 */
+  @media (max-width: 380px) {
+    html {
+      font-size: 15px;
+    }
   }
 
   /* 텍스트 컨테이너 */
