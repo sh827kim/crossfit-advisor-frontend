@@ -7,6 +7,8 @@ import { cn } from '@/app/lib/utils';
 import { RunnerIntro } from '@/app/components/shared/runner/RunnerIntro';
 import { RunnerControls } from '@/app/components/shared/runner/RunnerControls';
 import { RoundTargetInfo } from '@/app/components/shared/runner/RoundTargetInfo';
+import { WorkoutSummaryCard } from '@/app/components/shared/runner/WorkoutSummaryCard';
+import { shareWorkoutCard } from '@/app/lib/share-utils';
 
 type Stage = 'intro' | 'countdown' | 'workout' | 'paused' | 'done';
 
@@ -22,6 +24,15 @@ export default function GoalRunnerPage() {
     const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
     const [currentRound, setCurrentRound] = useState(1);
     const [showQuitModal, setShowQuitModal] = useState(false);
+
+    // Share Ref
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    const handleShare = async () => {
+        if (cardRef.current) {
+            await shareWorkoutCard(cardRef.current, `goal-care-workout-${new Date().toISOString().split('T')[0]}.png`);
+        }
+    };
 
     // Hydration fix: Date strings
     const [dateString, setDateString] = useState<string>('');
@@ -315,72 +326,49 @@ export default function GoalRunnerPage() {
                         {dateString}
                     </p>
 
-                    <div className="relative w-full max-w-[325px] rounded-[32px] p-[3px] mb-8"
-                        style={{
-                            background: `conic-gradient(from 180deg at 50% 50%, 
-                               #707070 0deg, 
-                               #FFFFFF 45deg, 
-                               #9E9E9E 110deg, 
-                               #FFFFFF 160deg, 
-                               #707070 210deg, 
-                               #FFFFFF 260deg, 
-                               #9E9E9E 310deg, 
-                               #FFFFFF 360deg)`
-                        }}
-                    >
-                        <div className="w-full h-[424px] rounded-[29px] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
-                            style={{ background: 'linear-gradient(134.49deg, rgba(238, 253, 50, 0.2) 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F' }}>
-
-                            <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
-                                <div className="flex flex-col items-start mb-4 flex-none">
-                                    <div className="text-[60px] font-black text-white leading-none tracking-tight font-barlow">
-                                        {formatTime(timer)}
-                                    </div>
-                                    <div className="text-[15px] font-bold text-white mt-1">운동시간</div>
-                                </div>
-
-                                <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>
-
-                                <div className="text-left mb-4 flex-none">
-                                    <h2 className="font-extrabold text-[15px] mb-1" style={{ color: THEME_COLOR }}>골 케어 운동</h2>
-                                    <p className="text-[32px] font-black text-white font-barlow whitespace-nowrap">
-                                        {generatedPlan.rounds || 1} Rounds Quality
-                                    </p>
-                                </div>
-
-                                <div className="text-left mb-4 flex flex-col gap-1 flex-1 overflow-y-auto w-full no-scrollbar min-h-0">
-                                    {generatedPlan.exercises.map((ex, i) => (
-                                        <span key={i} className="text-white text-[15px] font-normal leading-relaxed flex-shrink-0">
-                                            {ex.name}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="text-left flex-none">
-                                    <p className="text-white text-[13px] font-normal opacity-55">
-                                        {dateTimeString}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    {/* Main Content Area */}
+                    <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0">
+                        <WorkoutSummaryCard
+                            ref={cardRef}
+                            mode="GOAL"
+                            rounds={generatedPlan.rounds || 1}
+                            durationSeconds={timer}
+                            dateString={dateString}
+                            exercises={generatedPlan.exercises}
+                            theme={{
+                                color: THEME_COLOR,
+                                gradientStart: 'rgba(238, 253, 50, 0.2)',
+                                textColor: THEME_COLOR
+                            }}
+                            dateTimeString={dateTimeString}
+                        />
                     </div>
 
-                    <div className="flex flex-col w-full max-w-sm gap-4 items-center pb-8">
+                    <div className="flex flex-col w-full max-w-sm gap-3 items-center pb-8 flex-none">
+                        <div className="flex w-full gap-3">
+                            <button
+                                onClick={handleShare}
+                                className="flex-1 bg-[#333] text-white font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px] flex items-center justify-center gap-2"
+                            >
+                                <i className="fa-solid fa-share-nodes text-lg" />
+                                <span>공유하기</span>
+                            </button>
+                            <button
+                                onClick={handleSaveAndExit}
+                                className="flex-[2] text-black font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px]"
+                                style={{ backgroundColor: THEME_COLOR }}
+                            >
+                                기록하기
+                            </button>
+                        </div>
+
                         <button
-                            onClick={handleSaveAndExit}
-                            className="w-full text-black font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px]"
-                            style={{ backgroundColor: THEME_COLOR }}
+                            onClick={() => router.push('/')}
+                            className="text-white/60 font-medium text-[15px] hover:text-white transition py-2"
                         >
-                            기록하기
+                            처음으로 돌아가기
                         </button>
                     </div>
-
-                    <button
-                        onClick={() => router.push('/')}
-                        className="text-white/80 font-bold text-[17px] hover:text-white transition"
-                    >
-                        처음으로 돌아가기
-                    </button>
                 </div>
             )}
 
