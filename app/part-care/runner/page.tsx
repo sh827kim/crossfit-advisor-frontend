@@ -327,7 +327,7 @@ export default function PartRunnerPage() {
                     </p>
 
                     {/* Main Content Area */}
-                    <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0">
+                    <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
                         <WorkoutSummaryCard
                             ref={cardRef}
                             mode="PART"
@@ -348,14 +348,14 @@ export default function PartRunnerPage() {
                         <div className="flex w-full gap-3">
                             <button
                                 onClick={handleShare}
-                                className="flex-1 bg-[#333] text-white font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px] flex items-center justify-center gap-2"
+                                className="w-[58px] bg-[#333] text-white font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 flex items-center justify-center"
+                                aria-label="공유하기"
                             >
-                                <i className="fa-solid fa-share-nodes text-lg" />
-                                <span>공유하기</span>
+                                <i className="fa-solid fa-share-nodes text-xl" />
                             </button>
                             <button
                                 onClick={handleSaveAndExit}
-                                className="flex-[2] text-black font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px]"
+                                className="flex-1 text-black font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px]"
                                 style={{ backgroundColor: THEME_COLOR }}
                             >
                                 기록하기

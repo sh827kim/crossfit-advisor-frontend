@@ -58,10 +58,10 @@ export const WorkoutSummaryCard = forwardRef<HTMLDivElement, WorkoutSummaryCardP
         return (
             <div
                 ref={ref}
-                className="relative w-full max-w-[325px] rounded-[32px] p-[3px] mb-8"
+                className="relative w-full max-w-[325px] h-[424px] shrink-0 rounded-[32px] p-[3px] mb-8"
                 style={borderStyle}
             >
-                <div className="w-full h-[424px] rounded-[29px] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
+                <div className="w-full h-full rounded-[29px] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
                     style={cardBgStyle}>
 
                     <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
