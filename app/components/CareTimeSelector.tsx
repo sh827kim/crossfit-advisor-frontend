@@ -120,10 +120,11 @@ export function CareTimeSelector({
       <div
         key={itemValue}
         style={style}
-        className={`flex items-center justify-center select-none font-barlow leading-none cursor-pointer ${textStyleClass}`}
+        className={`flex items-baseline justify-center select-none font-barlow leading-none cursor-pointer ${textStyleClass}`}
         onClick={() => onChange(itemValue)}
       >
         {itemValue}
+        {isCenter && <span className="text-[13px] font-bold ml-0.5">분</span>}
       </div>
     );
   };
@@ -140,15 +141,12 @@ export function CareTimeSelector({
       onMouseLeave={() => isDragging && handleDragEnd()}
     >
       {/* Label */}
-      <h3 className="text-[13px] font-extrabold text-white mb-4 font-apple">{label}</h3>
+      <h3 className="text-[13px] font-extrabold text-white mb-0 font-apple">{label}</h3>
 
       {/* Slider Area */}
       <div className="relative w-full h-[50px] flex items-center justify-center">
         {options.map((_, index) => renderItem(index - currentIndex))}
       </div>
-
-      {/* Unit */}
-      <span className="text-[11px] font-extrabold text-white mt-1">분</span>
     </div>
   );
 }

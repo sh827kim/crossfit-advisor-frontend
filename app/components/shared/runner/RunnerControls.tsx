@@ -27,13 +27,8 @@ export function RunnerControls({
     return (
         <div className={cn("flex items-center justify-center gap-8 w-full", className)}>
             {/* Finish Button (Left) */}
-            <button
-                onClick={onFinish}
-                className="w-14 h-14 rounded-full bg-black flex items-center justify-center active:scale-95 transition-transform"
-                aria-label="Finish Workout"
-            >
-                <div className="w-5 h-5 bg-white rounded-[2px]"></div>
-            </button>
+            {/* Finish Button Removed - Moved to Top Left X Button */}
+            <div className="w-14"></div> {/* Spacer to keep balance if needed, or just remove */}
 
             {/* Play/Pause Button (Center, Large) */}
             <button

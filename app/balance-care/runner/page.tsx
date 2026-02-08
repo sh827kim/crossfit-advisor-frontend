@@ -184,7 +184,16 @@ export default function RunnerPage() {
             {/* STAGE 3: WORKOUT */}
             {stage === 'workout' && (
                 <div className="flex flex-col h-full p-6 relative" style={{ background: `linear-gradient(to bottom, #000000 0%, #000000 50%, ${THEME_COLOR} 100%)` }}>
-                    {/* Header: Rounds Status (Removed per feedback) */}
+                    {/* Header: X Button */}
+                    <div className="absolute top-6 left-6 z-50">
+                        <button
+                            onClick={handleRequestFinish}
+                            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-white/20 transition"
+                        >
+                            <i className="fa-solid fa-xmark text-xl" />
+                        </button>
+                    </div>
+
                     <div className="w-full h-8"></div>
 
                     {/* Big Timer */}

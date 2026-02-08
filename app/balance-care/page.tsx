@@ -115,6 +115,7 @@ export default function BalanceCarePage() {
             buttonText="나만의 밸런스 운동 생성하기"
             themeColor="#f43000"
             gradientOverlay="linear-gradient(135deg, rgba(244, 48, 0, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
+            isDisabled={selectedExercises.length === 0}
           />
         }
       >

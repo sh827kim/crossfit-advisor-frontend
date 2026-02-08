@@ -84,6 +84,7 @@ export default function PartCarePage() {
             buttonText="타겟 부위 운동 생성하기"
             themeColor={THEME_ACCENT}
             gradientOverlay="linear-gradient(121deg, rgba(35, 212, 224, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
+            isDisabled={!selectedPart}
           />
         }
       >

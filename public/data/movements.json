@@ -340,6 +340,17 @@
       "maxReps": 12
     },
     {
+      "id": "strict_pullup",
+      "name": "스트릭 풀업",
+      "type": "GYMNASTICS_EQUIP",
+      "muscleGroups": [
+        "BACK"
+      ],
+      "equipment": "BAR",
+      "minReps": 3,
+      "maxReps": 10
+    },
+    {
       "id": "kipping_pullup",
       "name": "키핑 풀업",
       "type": "GYMNASTICS_EQUIP",

@@ -11,6 +11,7 @@ interface CareBottomPanelProps {
     buttonText: string;
     themeColor: string; // Hex color for button/accents
     gradientOverlay?: string; // Optional custom gradient override
+    isDisabled?: boolean;
 }
 
 export function CareBottomPanel({
@@ -21,7 +22,8 @@ export function CareBottomPanel({
     error,
     buttonText,
     themeColor,
-    gradientOverlay
+    gradientOverlay,
+    isDisabled = false
 }: CareBottomPanelProps) {
     // Convert hex to rgb for opacity handling if needed, or just use themeColor directly.
     // Assuming themeColor is a valid CSS color string.
@@ -37,7 +39,7 @@ export function CareBottomPanel({
                     style={{ background: gradientOverlay || `linear-gradient(121deg, ${themeColor}20 0%, rgba(10, 10, 10, 0.2) 100%)` }}
                 ></div>
 
-                <div className="relative z-10 flex flex-col items-center">
+                <div className="relative z-10 flex flex-col items-center pb-8">
                     <CareTimeSelector value={selectedTime} onChange={onTimeChange} />
 
                     {/* 에러 메시지 */}
@@ -50,14 +52,18 @@ export function CareBottomPanel({
                     <div className="px-6 w-full max-w-sm mt-2">
                         <button
                             onClick={onGenerate}
-                            disabled={isGenerating}
-                            className="w-full h-[58px] text-black font-extrabold rounded-2xl transition-all active:scale-95 text-[17px] hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center shadow-lg"
+                            disabled={isGenerating || isDisabled}
+                            className={`w-full h-[58px] font-extrabold rounded-2xl transition-all text-[17px] flex justify-center items-center shadow-lg
+                                ${isDisabled
+                                    ? 'cursor-not-allowed'
+                                    : 'active:scale-95 hover:brightness-110'
+                                }
+                                ${isGenerating ? 'opacity-80 cursor-wait' : ''}
+                            `}
                             style={{
-                                backgroundColor: themeColor,
-                                boxShadow: `0 10px 15px -3px ${themeColor}33` // 20% opacity approx for hex shorthand if simple, but here let's rely on solid color or rgba if passed. 
-                                // Note: The original code used specific rgba shadows. Here we try to approximate or use valid CSS.
-                                // To support transparency in shadow properly, themeColor should ideally be passed or we accept shadowColor.
-                                // For now, let's keep it simple.
+                                backgroundColor: isDisabled ? '#333333' : themeColor,
+                                color: isDisabled ? '#717171' : '#000000',
+                                boxShadow: isDisabled ? 'none' : `0 10px 15px -3px ${themeColor}33`
                             }}
                         >
                             {isGenerating ? (

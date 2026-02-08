@@ -99,6 +99,7 @@ export default function GoalCarePage() {
             buttonText="목표 달성 운동 생성하기"
             themeColor={THEME_ACCENT}
             gradientOverlay="linear-gradient(121deg, rgba(124, 253, 50, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
+            isDisabled={!selectedGoal}
           />
         }
       >
