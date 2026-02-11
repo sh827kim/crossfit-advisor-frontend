@@ -25,6 +25,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
 import { Barlow_Condensed } from "next/font/google";
@@ -67,7 +68,7 @@ export default function RootLayout({
             <PWAInitializer />
             <BackButtonHandler />
             <GlobalErrorModal />
-            <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg">
+            <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
               <Header />
               {children}
             </div>
