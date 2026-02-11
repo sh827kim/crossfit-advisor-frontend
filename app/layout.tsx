@@ -68,9 +68,11 @@ export default function RootLayout({
             <PWAInitializer />
             <BackButtonHandler />
             <GlobalErrorModal />
-            <div className="flex flex-col bg-white max-w-md mx-auto min-h-screen shadow-lg pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+            <div className="flex flex-col bg-black max-w-md mx-auto h-[100dvh] shadow-lg overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
               <Header />
-              {children}
+              <main className="flex-1 flex flex-col overflow-y-auto overscroll-none">
+                {children}
+              </main>
             </div>
           </ErrorProvider>
         </AppProvider>

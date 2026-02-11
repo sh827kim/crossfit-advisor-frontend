@@ -22,7 +22,7 @@ export function CarePageLayout({
     overlayNode
 }: CarePageLayoutProps) {
     return (
-        <main className="flex flex-col h-screen bg-black text-white relative">
+        <div className="flex flex-col h-full bg-black text-white relative">
             {/* 헤더 섹션 - z-index 제거하여 버튼의 z-50이 글로벌하게(혹은 상위 컨텍스트에서) 동작하도록 함. */
                 /* 단, main이 relative이므로 그 안에서의 순서가 중요. */
                 /* Overlay가 fixed이므로, fixed인 Overlay(z-40)보다 높으려면 버튼이 z-50이어야 함. */
@@ -51,6 +51,6 @@ export function CarePageLayout({
 
             {/* Bottom Controls Area */}
             {bottomControls}
-        </main>
+        </div>
     );
 }

@@ -139,7 +139,7 @@ export function OnboardingPage() {
     // 스플래시 화면 - AFTERWOD CLUB 로고
     if (currentStep === 'splash') {
       return (
-        <main className={`flex-grow flex flex-col justify-center items-center bg-black transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'
+        <div className={`flex-grow flex flex-col justify-center items-center bg-black transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'
           }`}>
           <div className="flex flex-col items-center justify-center">
             {/* AFTERWOD 로고 */}
@@ -154,7 +154,7 @@ export function OnboardingPage() {
               />
             </div>
           </div>
-        </main>
+        </div>
       );
     }
 
@@ -164,7 +164,7 @@ export function OnboardingPage() {
       const canGoNext = true;
 
       return (
-        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6 overflow-y-auto">
+        <div className="flex-grow flex flex-col justify-between bg-black text-white px-6 pt-8 pb-6">
           <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
             <div className="mb-8 animate-fadeIn" style={{ animation: 'fadeIn 0.8s ease-out' }}>
@@ -206,7 +206,7 @@ export function OnboardingPage() {
               <i className="fa-solid fa-arrow-right"></i>
             </button>
           )}
-        </main>
+        </div>
       );
     }
 
@@ -215,7 +215,7 @@ export function OnboardingPage() {
       const firstChar = (nickname || '신').charAt(0);
 
       return (
-        <main className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-8 pt-8 overflow-y-auto">
+        <div className="flex-grow flex flex-col justify-between bg-black text-white px-6 pb-8 pt-8">
           <div className="flex-1 flex flex-col justify-start">
             {/* 헤더 텍스트 */}
             <div className="mb-8">
@@ -319,7 +319,7 @@ export function OnboardingPage() {
           >
             애프터와드 시작하기
           </button>
-        </main>
+        </div>
       );
     }
   }

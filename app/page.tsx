@@ -86,7 +86,7 @@ export default function HomePage() {
 
   // Figma 디자인 기반 홈 페이지
   return (
-    <main className="min-h-screen flex flex-col bg-[#010101] text-white overflow-hidden relative font-apple-sd">
+    <div className="min-h-full flex flex-col bg-[#010101] text-white relative font-apple-sd">
       {/* 상단 로고 및 텍스트 영역 (Top spacing approx 130px from design considering header) */}
       <div className="pt-[80px] pl-[41px] mb-[40px]">
         {/* Logo */}
@@ -154,6 +154,6 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
       </div>
-    </main>
+    </div>
   );
 }

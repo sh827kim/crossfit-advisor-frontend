@@ -153,7 +153,7 @@ export function HistoryPage() {
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <main className="h-screen bg-[#010101] text-white relative overflow-hidden flex flex-col">
+    <div className="h-full bg-[#010101] text-white relative overflow-hidden flex flex-col">
       {/* Header */}
       <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
         <button
@@ -342,6 +342,6 @@ export function HistoryPage() {
         onCancel={cancelDelete}
         confirmColor="#f43000"
       />
-    </main>
+    </div>
   );
 }
