@@ -69,7 +69,7 @@ export function ProfilePage() {
   const fallbackColor = useMemo(() => getProfileColorByIndex(userProfileColorIndex), [userProfileColorIndex]);
 
   return (
-    <main className="min-h-screen bg-[#010101] text-white flex flex-col relative overflow-hidden">
+    <div className="h-full bg-[#010101] text-white flex flex-col relative overflow-hidden">
       {/* Header */}
       <div className="h-[60px] flex items-center justify-between px-5 relative z-10">
         <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center">
@@ -227,6 +227,6 @@ export function ProfilePage() {
         onCancel={() => setShowResetPopup(false)}
         confirmColor="#f43000"
       />
-    </main>
+    </div>
   );
 }
