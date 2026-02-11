@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AfterWOD</string>
+    <string name="title_activity_main">AfterWOD</string>
+    <string name="package_name">com.spark.afterwod</string>
+    <string name="custom_url_scheme">com.spark.afterwod</string>
+</resources>
