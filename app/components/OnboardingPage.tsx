@@ -14,18 +14,18 @@ type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
 const walkthroughStepper = defineStepper(
   {
     id: 'plan',
-    title: '맞춤형 운동 설계',
-    description: '목표에 맞는 운동과\n시간을 선택해요'
+    title: '운동 계획 추천',
+    description: 'WOD, 목표, 부위별로 선택하여\n맞춤형 워크아웃을 추천받으세요.'
   },
   {
     id: 'progress',
-    title: '집중 훈련',
-    description: '오늘의 운동을 시간안에\n끝내요.'
+    title: '운동 진행',
+    description: '타이머와 체크박스로 운동을\n체계적으로 진행하세요.'
   },
   {
     id: 'record',
-    title: '오늘의 운동 기록',
-    description: '하루 하루 꾸준히,\n성장을 기록해요!'
+    title: '기록하기',
+    description: '완료한 운동을 기록하여\n당신의 운동 데이터를 관리하세요.'
   }
 );
 
