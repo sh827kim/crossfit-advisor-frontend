@@ -332,7 +332,7 @@
     {
       "id": "wallball_shot",
       "name": "월볼 샷",
-      "type": "GYMNASTICS_EQUIP",
+      "type": "WEIGHTLIFTING",
       "muscleGroups": [
         "LEGS",
         "CHEST",
@@ -346,7 +346,7 @@
     {
       "id": "wall_walk",
       "name": "월워크",
-      "type": "GYMNASTICS_EQUIP",
+      "type": "GYMNASTICS_BODY",
       "muscleGroups": [
         "CHEST"
       ],
@@ -495,7 +495,7 @@
     {
       "id": "handstand_pushup",
       "name": "핸드스탠드 푸쉬업",
-      "type": "GYMNASTICS_EQUIP",
+      "type": "GYMNASTICS_BODY",
       "muscleGroups": [
         "CHEST"
       ],
@@ -584,7 +584,7 @@
     {
       "id": "burpee",
       "name": "버피",
-      "type": "GYMNASTICS_BODY",
+      "type": "CARDIO",
       "muscleGroups": [
         "CARDIO",
         "CHEST"
@@ -597,7 +597,7 @@
     {
       "id": "burpee_box_jump",
       "name": "버피 박스 점프",
-      "type": "GYMNASTICS_EQUIP",
+      "type": "CARDIO",
       "muscleGroups": [
         "CARDIO",
         "CHEST",
@@ -780,7 +780,7 @@
     {
       "id": "handstand_hold",
       "name": "핸드스탠드 홀드",
-      "type": "GYMNASTICS_EQUIP",
+      "type": "GYMNASTICS_BODY",
       "muscleGroups": [
         "CHEST"
       ],
@@ -830,7 +830,7 @@
     {
       "id": "handstand_walk",
       "name": "핸드스탠드 워크",
-      "type": "GYMNASTICS_EQUIP",
+      "type": "GYMNASTICS_BODY",
       "muscleGroups": [
         "CHEST",
         "CORE"

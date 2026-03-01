@@ -10,7 +10,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "type": "WEIGHTLIFTING"
     },
     {
       "id": "clean",
@@ -22,7 +23,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "type": "WEIGHTLIFTING"
     },
     {
       "id": "pullup",
@@ -32,7 +34,8 @@
       ],
       "equipment": "BAR",
       "minCount": 5,
-      "maxCount": 12
+      "maxCount": 12,
+      "type": "GYMNASTICS_EQUIP"
     },
     {
       "id": "rowing",
@@ -44,7 +47,8 @@
       "equipment": "ROWING",
       "minCount": 8,
       "maxCount": 12,
-      "unit": "cal"
+      "unit": "cal",
+      "type": "CARDIO"
     },
     {
       "id": "double_under",
@@ -54,7 +58,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 30,
-      "maxCount": 50
+      "maxCount": 50,
+      "type": "CARDIO"
     },
     {
       "id": "wall_walk",
@@ -64,7 +69,8 @@
       ],
       "equipment": "WALL",
       "minCount": 5,
-      "maxCount": 10
+      "maxCount": 10,
+      "type": "GYMNASTICS_BODY"
     },
     {
       "id": "box_jump",
@@ -75,7 +81,8 @@
       ],
       "equipment": "BOX",
       "minCount": 5,
-      "maxCount": 10
+      "maxCount": 10,
+      "type": "GYMNASTICS_EQUIP"
     },
     {
       "id": "burpee",
@@ -86,7 +93,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "type": "CARDIO"
     }
   ]
 }

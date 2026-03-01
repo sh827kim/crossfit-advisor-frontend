@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Movement } from '@/app/lib/types/workout.types';
 
@@ -11,7 +11,9 @@ import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { EncouragedOverlay } from '@/app/components/shared/EncouragedOverlay';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 import { useApp } from '@/app/context/AppContext';
+import { useError } from '@/app/context/ErrorContext';
 import { analytics } from '@/app/lib/analytics';
+import { getMovementIconPath } from '@/app/lib/iconUtils';
 
 // 한글 초성 추출 함수
 function getChosung(str: string): string {
@@ -30,6 +32,8 @@ export default function GoalCarePage() {
   const { generateWorkout, isLoading, error, setError } = useWorkoutGenerator();
   const { selectedGoal, setSelectedGoal, totalTime: selectedTime, setTotalTime: setSelectedTime } = useApp();
 
+  const { showError } = useError();
+
   const [goals, setGoals] = useState<Movement[]>([]);
   const [allMovements, setAllMovements] = useState<Movement[]>([]);
   const [searchInput, setSearchInput] = useState('');
@@ -38,27 +42,34 @@ export default function GoalCarePage() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   // 목표 운동 및 전체 운동 목록 로드
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [goalsRes, movementsRes] = await Promise.all([
-          fetch('/api/v1/movements/goals'),
-          fetch('/api/v1/movements')
-        ]);
-        const goalsData = await goalsRes.json();
-        const movementsData = await movementsRes.json();
-
-        setGoals(goalsData.data?.movements || []);
-        setAllMovements(movementsData.data?.movements || []);
-      } catch (err) {
-        console.error('Failed to fetch data:', err);
-      } finally {
-        setIsLoadingGoals(false);
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoadingGoals(true);
+      const [goalsRes, movementsRes] = await Promise.all([
+        fetch('/api/v1/movements/goals'),
+        fetch('/api/v1/movements')
+      ]);
+      if (!goalsRes.ok || !movementsRes.ok) {
+        throw new Error('API fetch error');
       }
-    };
 
+      const goalsData = await goalsRes.json();
+      const movementsData = await movementsRes.json();
+
+      setGoals(goalsData.data?.movements || []);
+      setAllMovements(movementsData.data?.movements || []);
+    } catch (err) {
+      console.error('Failed to fetch data:', err);
+      const isNetworkError = err instanceof TypeError;
+      showError(isNetworkError ? 'NETWORK' : 'UNKNOWN', fetchData);
+    } finally {
+      setIsLoadingGoals(false);
+    }
+  }, [showError]);
+
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   // 검색 필터링 (초성 검색 포함)
   const filteredMovements = searchInput.trim()
@@ -105,13 +116,7 @@ export default function GoalCarePage() {
   // Theme Constants
   const THEME_ACCENT = '#EEFD32'; // Yellow
 
-  // Helper to render icon for goal
-  const getGoalIcon = (name: string) => {
-    if (name.includes('Pull')) return <i className="fa-solid fa-person-running" />;
-    if (name.includes('Muscle')) return <i className="fa-solid fa-dumbbell" />;
-    if (name.includes('Hand')) return <i className="fa-solid fa-hands" />;
-    return <i className="fa-solid fa-bullseye" />;
-  };
+  // Helper to render icon for goal removed
 
   return (
     <>
@@ -183,9 +188,8 @@ export default function GoalCarePage() {
                         onClick={() => setSelectedGoal(isSelected ? null : movement)}
                         label={movement.name}
                         themeColor={THEME_ACCENT}
-                      >
-                        {getGoalIcon(movement.name)}
-                      </SelectionCard>
+                        icon={getMovementIconPath(movement)}
+                      />
                     );
                   })}
                 </div>
@@ -209,9 +213,8 @@ export default function GoalCarePage() {
                           onClick={() => setSelectedGoal(isSelected ? null : goal)}
                           label={goal.name}
                           themeColor={THEME_ACCENT}
-                        >
-                          {getGoalIcon(goal.name)}
-                        </SelectionCard>
+                          icon={getMovementIconPath(goal)}
+                        />
                       );
                     })}
                   </div>

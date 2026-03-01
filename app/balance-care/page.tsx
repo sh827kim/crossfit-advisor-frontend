@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Movement } from '@/app/lib/types/workout.types';
 
@@ -10,7 +10,9 @@ import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 import { useApp } from '@/app/context/AppContext';
+import { useError } from '@/app/context/ErrorContext';
 import { analytics } from '../lib/analytics';
+import { getMovementIconPath } from '@/app/lib/iconUtils';
 
 // 한글 초성 추출 함수
 function getChosung(str: string): string {
@@ -36,27 +38,35 @@ export default function BalanceCarePage() {
   const [frequentMovements, setFrequentMovements] = useState<Movement[]>([]);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
+  const { showError } = useError();
+
   // API에서 운동 데이터 로드
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [movementsRes, frequentRes] = await Promise.all([
-          fetch('/api/v1/movements'),
-          fetch('/api/v1/movements/frequent')
-        ]);
+  const fetchData = useCallback(async () => {
+    try {
+      const [movementsRes, frequentRes] = await Promise.all([
+        fetch('/api/v1/movements'),
+        fetch('/api/v1/movements/frequent')
+      ]);
 
-        const movementsData = await movementsRes.json();
-        const frequentData = await frequentRes.json();
-
-        setAllMovements(movementsData.data?.movements || []);
-        setFrequentMovements(frequentData.data?.movements || []);
-      } catch (error) {
-        console.error('Failed to fetch movements:', error);
+      if (!movementsRes.ok || !frequentRes.ok) {
+        throw new Error('API fetch error');
       }
-    };
 
+      const movementsData = await movementsRes.json();
+      const frequentData = await frequentRes.json();
+
+      setAllMovements(movementsData.data?.movements || []);
+      setFrequentMovements(frequentData.data?.movements || []);
+    } catch (err) {
+      console.error('Failed to fetch movements:', err);
+      const isNetworkError = err instanceof TypeError;
+      showError(isNetworkError ? 'NETWORK' : 'UNKNOWN', fetchData);
+    }
+  }, [showError]);
+
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   // 검색 필터링 (초성 검색 포함)
   const filteredMovements = searchInput.trim()
@@ -191,21 +201,8 @@ export default function BalanceCarePage() {
                     onClick={() => handleAddFrequent(movement)}
                     label={movement.name}
                     themeColor="#f43000"
-                    icon={undefined} // No specific icon for frequent movements in data, or use default logic?
-                  // SelectionCard requires icon or children for correct layout if we want it to look exactly like GoalCare card.
-                  // GoalCare passes children (icon).
-                  // Recent movements don't carry icon data in the JSON usually, but let's check.
-                  // frequent-movements.json has id, name, muscleGroups, equipment... no icon.
-                  // We can render a default icon or just text? 
-                  // SelectionCard structure: Icon box -> Text -> Checkmark.
-                  // If we pass no icon/children, the icon box will be empty opacity-40.
-                  // Let's pass a generic activity icon or just leave it empty.
-                  // "fa-person-running" seems appropriate or muscle group icon?
-                  // Let's deduce icon from muscle group like GoalCare does? 
-                  // Goal Care uses `getGoalIcon`. We can define similar helper or just use a dot/star.
-                  >
-                    <i className="fa-solid fa-person-running" />
-                  </SelectionCard>
+                    icon={getMovementIconPath(movement)}
+                  />
                 ))}
               </div>
             </div>
@@ -226,6 +223,7 @@ export default function BalanceCarePage() {
                     onClick={() => handleExerciseSelect(movement.id)}
                     label={movement.name}
                     themeColor="#f43000"
+                    icon={getMovementIconPath(movement)}
                   />
                 ))}
               </div>

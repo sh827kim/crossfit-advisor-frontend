@@ -7,7 +7,7 @@ interface SelectionCardProps {
     onClick: () => void;
     label: string;
     subLabel?: ReactNode; // Optional checkmark or other elements
-    icon?: string; // FontAwesome icon class
+    icon?: string; // FontAwesome icon class or .svg path
     themeColor: string; // Hex color for active state
     children?: ReactNode; // Custom content if needed
 }
@@ -38,12 +38,16 @@ export function SelectionCard({
             } : undefined}
         >
             {/* Icon */}
-            <div className={`text-xl flex-shrink-0 ${selected ? 'opacity-100' : 'opacity-40'} ${icon ? 'w-8 text-center' : ''}`}>
-                {icon ? <i className={`fa-solid ${icon}`} /> : children}
-                {/* If children is provided as icon slot equivalent, render it. 
-                 But usually children might be used for something else. 
-                 Let's stick to icon prop or fallback to children if no icon.
-             */}
+            <div className={`text-xl flex-shrink-0 flex items-center justify-center ${selected ? 'opacity-100' : 'opacity-40'} ${icon ? 'w-8' : ''}`}>
+                {icon ? (
+                    icon.endsWith('.svg') ? (
+                        <img src={icon} alt="icon" className="w-[22px] h-[22px]" />
+                    ) : (
+                        <i className={`fa-solid ${icon}`} />
+                    )
+                ) : (
+                    children
+                )}
             </div>
 
             <span

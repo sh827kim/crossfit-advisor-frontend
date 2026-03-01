@@ -14,11 +14,11 @@ import { useApp } from '@/app/context/AppContext';
 import { analytics } from '../lib/analytics';
 
 const MUSCLE_GROUPS: { id: MuscleGroup; label: string; icon: string }[] = [
-  { id: 'CORE', label: '복근 / 코어', icon: 'fa-cube' },
-  { id: 'LEGS', label: '하체 / 힙', icon: 'fa-person-running' },
-  { id: 'BACK', label: '등 / 광배', icon: 'fa-dumbbell' },
-  { id: 'CHEST', label: '가슴 / 어깨', icon: 'fa-shirt' },
-  { id: 'CARDIO', label: '유산소', icon: 'fa-heart-pulse' }
+  { id: 'CORE', label: '복근 / 코어', icon: '/wod-icon/part/core.svg' },
+  { id: 'LEGS', label: '하체 / 힙', icon: '/wod-icon/part/legs.svg' },
+  { id: 'BACK', label: '등 / 광배', icon: '/wod-icon/part/back.svg' },
+  { id: 'CHEST', label: '가슴 / 어깨', icon: '/wod-icon/part/chest.svg' },
+  { id: 'CARDIO', label: '유산소', icon: '/wod-icon/part/cardio-focus.svg' }
 ];
 
 export default function PartCarePage() {

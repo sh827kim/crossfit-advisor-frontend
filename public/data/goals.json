@@ -1,12 +1,95 @@
 {
   "movements": [
-    {"id": "kipping_pullup", "name": "키핑 풀업", "muscleGroups": ["BACK"], "equipment": "BAR", "minReps": 5, "maxReps": 15},
-    {"id": "strict_pullup", "name": "스트릭 풀업", "muscleGroups": ["BACK"], "equipment": "BAR", "minReps": 3, "maxReps": 10},
-    {"id": "butterfly_pullup", "name": "버터플라이 풀업", "muscleGroups": ["BACK"], "equipment": "BAR", "minReps": 3, "maxReps": 10},
-    {"id": "toes_to_bar", "name": "토투바", "muscleGroups": ["CORE", "BACK"], "equipment": "BAR", "minReps": 10, "maxReps": 15},
-    {"id": "chest_to_bar", "name": "체스트 투 바", "muscleGroups": ["BACK"], "equipment": "BAR", "minReps": 3, "maxReps": 8},
-    {"id": "bar_muscle_up", "name": "바 머슬업", "muscleGroups": ["BACK", "CHEST"], "equipment": "BAR", "minReps": 2, "maxReps": 5},
-    {"id": "ring_muscle_up", "name": "링 머슬업", "muscleGroups": ["BACK", "CHEST"], "equipment": "RINGS", "minReps": 2, "maxReps": 5},
-    {"id": "handstand_walk", "name": "핸드스탠드 워크", "muscleGroups": ["CHEST"], "equipment": "WALL", "minReps": null, "maxReps": null}
+    {
+      "id": "kipping_pullup",
+      "name": "키핑 풀업",
+      "muscleGroups": [
+        "BACK"
+      ],
+      "equipment": "BAR",
+      "minReps": 5,
+      "maxReps": 15,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "strict_pullup",
+      "name": "스트릭 풀업",
+      "muscleGroups": [
+        "BACK"
+      ],
+      "equipment": "BAR",
+      "minReps": 3,
+      "maxReps": 10,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "butterfly_pullup",
+      "name": "버터플라이 풀업",
+      "muscleGroups": [
+        "BACK"
+      ],
+      "equipment": "BAR",
+      "minReps": 3,
+      "maxReps": 10,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "toes_to_bar",
+      "name": "토투바",
+      "muscleGroups": [
+        "CORE",
+        "BACK"
+      ],
+      "equipment": "BAR",
+      "minReps": 10,
+      "maxReps": 15,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "chest_to_bar",
+      "name": "체스트 투 바",
+      "muscleGroups": [
+        "BACK"
+      ],
+      "equipment": "BAR",
+      "minReps": 3,
+      "maxReps": 8,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "bar_muscle_up",
+      "name": "바 머슬업",
+      "muscleGroups": [
+        "BACK",
+        "CHEST"
+      ],
+      "equipment": "BAR",
+      "minReps": 2,
+      "maxReps": 5,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "ring_muscle_up",
+      "name": "링 머슬업",
+      "muscleGroups": [
+        "BACK",
+        "CHEST"
+      ],
+      "equipment": "RINGS",
+      "minReps": 2,
+      "maxReps": 5,
+      "type": "GYMNASTICS_EQUIP"
+    },
+    {
+      "id": "handstand_walk",
+      "name": "핸드스탠드 워크",
+      "muscleGroups": [
+        "CHEST"
+      ],
+      "equipment": "WALL",
+      "minReps": null,
+      "maxReps": null,
+      "type": "GYMNASTICS_BODY"
+    }
   ]
 }
