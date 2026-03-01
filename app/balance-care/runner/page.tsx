@@ -209,7 +209,8 @@ export default function RunnerPage() {
             {/* STAGE 1: INTRO */}
             {stage === 'intro' && (
                 <RunnerIntro
-                    title="오늘의 추천와드"
+                    title="밸런스 케어"
+                    description={<>운동이 끝나면 더 강해질거에요.<br />힘들어도 끝까지 화이팅!</>}
                     plan={generatedPlan}
                     themeColor={THEME_COLOR}
                     themeDarkColor={THEME_DARK_COLOR}
@@ -271,6 +272,22 @@ export default function RunnerPage() {
                                 const isActive = idx === currentExerciseIndex;
                                 const isCompleted = idx < currentExerciseIndex;
 
+                                const equipmentMap: Record<string, string> = {
+                                    'BAR': '철봉',
+                                    'BAND': '밴드',
+                                    'RINGS': '링',
+                                    'BARBELL': '바벨',
+                                    'BOX': '박스',
+                                    'DUMBBELL': '덤벨',
+                                    'KETTLEBELL': '케틀벨',
+                                    'WALLBALL': '월볼',
+                                    'WALL': '벽',
+                                    'ASSAULT_BIKE': '어썰트 바이크',
+                                    'ROWING': '로잉',
+                                    'GHD': 'GHD'
+                                };
+                                const eqName = ex.equipment && ex.equipment !== 'BODYWEIGHT' ? (equipmentMap[ex.equipment] || ex.equipment) : null;
+
                                 return (
                                     <div key={idx} className={cn("flex items-center gap-6 relative transition-all duration-300")}>
                                         <div className={cn(
@@ -286,8 +303,8 @@ export default function RunnerPage() {
 
                                         <div className={cn("flex flex-col transition-opacity duration-300", isActive ? "opacity-100" : "opacity-40")}>
                                             <span className={cn("text-xl font-bold text-white leading-tight", isActive ? "text-[#F43000]" : "text-white")}>{ex.name}</span>
-                                            <span className="text-base text-gray-400 font-medium">
-                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}
+                                            <span className="text-base text-gray-400 font-medium whitespace-pre-wrap">
+                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}{eqName ? `, ${eqName}` : ''}
                                             </span>
                                         </div>
                                     </div>

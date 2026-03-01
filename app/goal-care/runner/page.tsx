@@ -210,7 +210,8 @@ export default function GoalRunnerPage() {
             {/* STAGE 1: INTRO */}
             {stage === 'intro' && (
                 <RunnerIntro
-                    title="목표 달성 운동"
+                    title="스킬 마스터"
+                    description={<>라운드를 끝낼수록 목표에 가까워져요.<br />힘들어도 끝까지 화이팅!</>}
                     plan={generatedPlan}
                     themeColor={THEME_COLOR}
                     themeDarkColor={THEME_DARK_COLOR}
@@ -272,6 +273,22 @@ export default function GoalRunnerPage() {
                                 const isActive = idx === currentExerciseIndex;
                                 const isCompleted = idx < currentExerciseIndex;
 
+                                const equipmentMap: Record<string, string> = {
+                                    'BAR': '철봉',
+                                    'BAND': '밴드',
+                                    'RINGS': '링',
+                                    'BARBELL': '바벨',
+                                    'BOX': '박스',
+                                    'DUMBBELL': '덤벨',
+                                    'KETTLEBELL': '케틀벨',
+                                    'WALLBALL': '월볼',
+                                    'WALL': '벽',
+                                    'ASSAULT_BIKE': '어썰트 바이크',
+                                    'ROWING': '로잉',
+                                    'GHD': 'GHD'
+                                };
+                                const eqName = ex.equipment && ex.equipment !== 'BODYWEIGHT' ? (equipmentMap[ex.equipment] || ex.equipment) : null;
+
                                 return (
                                     <div key={idx} className={cn("flex items-center gap-6 relative transition-all duration-300")}>
                                         <div className={cn(
@@ -295,8 +312,8 @@ export default function GoalRunnerPage() {
                                             >
                                                 {ex.name}
                                             </span>
-                                            <span className="text-base text-gray-400 font-medium">
-                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}
+                                            <span className="text-base text-gray-400 font-medium whitespace-pre-wrap">
+                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}{eqName ? `, ${eqName}` : ''}
                                             </span>
                                         </div>
                                     </div>

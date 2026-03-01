@@ -23,6 +23,7 @@ interface GeneratedPlan {
 
 interface RunnerIntroProps {
     title: string;
+    description?: React.ReactNode;
     plan: GeneratedPlan;
     themeColor: string;
     themeDarkColor: string;
@@ -35,6 +36,7 @@ interface RunnerIntroProps {
 
 export function RunnerIntro({
     title,
+    description,
     plan,
     themeColor,
     themeDarkColor,
@@ -46,28 +48,33 @@ export function RunnerIntro({
 }: RunnerIntroProps) {
 
     // Equipment Translation
+    const equipmentMap: Record<string, string> = {
+        'BAR': '철봉',
+        'BAND': '밴드',
+        'RINGS': '링',
+        'BARBELL': '바벨',
+        'BOX': '박스',
+        'DUMBBELL': '덤벨',
+        'KETTLEBELL': '케틀벨',
+        'WALLBALL': '월볼',
+        'WALL': '벽',
+        'ASSAULT_BIKE': '어썰트 바이크',
+        'ROWING': '로잉',
+        'GHD': 'GHD'
+    };
+
     const getEquipmentSummary = () => {
         const uniqueEquipment = Array.from(new Set(plan.exercises.map(ex => ex.equipment)))
             .filter((eq): eq is string => !!eq && eq !== 'BODYWEIGHT');
 
         if (uniqueEquipment.length === 0) return '맨몸';
 
-        const equipmentMap: Record<string, string> = {
-            'BAR': '철봉',
-            'BAND': '밴드',
-            'RINGS': '링',
-            'BARBELL': '바벨',
-            'BOX': '박스',
-            'DUMBBELL': '덤벨',
-            'KETTLEBELL': '케틀벨',
-            'WALLBALL': '월볼',
-            'WALL': '벽',
-            'ASSAULT_BIKE': '어썰트 바이크',
-            'ROWING': '로잉',
-            'GHD': 'GHD'
-        };
-
         return uniqueEquipment.map(eq => equipmentMap[eq] || eq).join(', ');
+    };
+
+    const getEquipmentName = (eq?: string) => {
+        if (!eq || eq === 'BODYWEIGHT') return null;
+        return equipmentMap[eq] || eq;
     };
 
     // Round Target Time Calculation
@@ -119,9 +126,15 @@ export function RunnerIntro({
             {/* Title & Summary */}
             <div className="text-left mb-6 z-10 pl-2">
                 <h2 className="font-extrabold text-[20px] mb-2" style={{ color: themeColor }}>{title}</h2>
-                <p className="text-[40px] font-black text-white leading-none font-barlow mb-6">
+                <p className="text-[40px] font-black text-white leading-none font-barlow mb-2">
                     {plan.rounds || 1} Rounds Quality
                 </p>
+
+                {description && (
+                    <p className="text-[14px] text-white/70 font-medium mb-6 leading-relaxed">
+                        {description}
+                    </p>
+                )}
 
                 <div className="flex flex-col gap-2">
                     {/* Total Time */}
@@ -130,7 +143,7 @@ export function RunnerIntro({
                             <TimeIcon className="w-5 h-5 text-white" />
                         </div>
                         <span className="text-white text-[16px] font-medium">
-                            총 {plan.duration}분
+                            {plan.duration}분
                         </span>
                     </div>
 
@@ -163,11 +176,14 @@ export function RunnerIntro({
             <div className="flex-1 flex flex-col items-center relative overflow-y-auto no-scrollbar mask-gradient-b">
                 <div className="w-full max-w-sm z-10 space-y-8 relative pt-4 pb-4">
                     <VerticalStepper
-                        steps={plan.exercises.map((ex, idx) => ({
-                            id: ex.movementId || `ex - ${idx} `,
-                            title: ex.name,
-                            description: `${ex.minCount || 10} - ${ex.maxCount || 15} ${ex.unit || 'reps'} `
-                        }))}
+                        steps={plan.exercises.map((ex, idx) => {
+                            const eqName = getEquipmentName(ex.equipment);
+                            return {
+                                id: ex.movementId || `ex - ${idx} `,
+                                title: ex.name,
+                                description: `${ex.minCount || 10} - ${ex.maxCount || 15} ${ex.unit || 'reps'} ${eqName ? `, ${eqName}` : ''}`
+                            };
+                        })}
                         themeColor={themeColor}
                         themeDarkColor={themeDarkColor}
                         themeShadow={themeShadow}
@@ -195,10 +211,11 @@ export function RunnerIntro({
                 )}
                 <button
                     onClick={handleStart}
-                    className="flex-1 text-black font-bold h-[62px] rounded-2xl text-[18px] hover:brightness-110 active:scale-95 transition shadow-lg relative z-20"
+                    className="flex-1 flex items-center justify-center gap-2 text-black font-bold h-[62px] rounded-2xl text-[18px] hover:brightness-110 active:scale-95 transition shadow-lg relative z-20"
                     style={{ backgroundColor: themeColor, boxShadow: `0 0 20px ${themeShadow}` }}
                 >
-                    지금부터 성장 시작!
+                    <i className="fa-solid fa-play text-[16px]"></i>
+                    <span>지금부터 성장 시작!</span>
                 </button>
             </div>
         </div>

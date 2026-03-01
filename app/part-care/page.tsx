@@ -81,8 +81,8 @@ export default function PartCarePage() {
   return (
     <>
       <CarePageLayout
-        title="집중적으로 운동할"
-        subtitle="부위를 선택해주세요."
+        title="어떤 부위의"
+        subtitle="근력을 키울까요?"
         description=""
         onBack={handleBack}
         overlayNode={
