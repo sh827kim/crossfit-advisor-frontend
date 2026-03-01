@@ -11,7 +11,7 @@ import { ConfirmDialog } from '@/app/components/shared/ConfirmDialog';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileColorIndex, setUserProfileColorIndex } = useApp();
+  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileColorIndex, setUserProfileColorIndex, isBeginnerMode, setIsBeginnerMode } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
@@ -149,9 +149,29 @@ export function ProfilePage() {
             </div>
 
             {/* 5. Decoration Line */}
-            <div className="w-full h-[1px] bg-white/5 mb-8"></div>
+            <div className="w-full h-[1px] bg-white/5 mb-6"></div>
 
-            {/* 6. Stats Section (Inside Card - Corrected as per feedback) */}
+            {/* Beginner Mode Toggle */}
+            <div className="w-full px-2 mb-6 flex items-center justify-between">
+              <div className={`flex flex-col items-start text-left transition-opacity duration-300 ${!isEditing ? 'opacity-60' : 'opacity-100'}`}>
+                <span className="text-[14px] font-bold text-white tracking-tight">입문자 모드</span>
+                <span className="text-[11px] text-[#959595] font-medium leading-[1.2] mt-1">
+                  난이도가 쉬운 운동 위주로 추천해드려요.
+                </span>
+              </div>
+              <button
+                onClick={() => isEditing && setIsBeginnerMode(!isBeginnerMode)}
+                disabled={!isEditing}
+                className={`relative w-11 h-6 rounded-full transition-all duration-300 focus:outline-none flex-shrink-0 ${isBeginnerMode ? 'bg-[#F43000]' : 'bg-white/10'} ${!isEditing ? 'opacity-50 cursor-default grayscale-[30%]' : 'cursor-pointer hover:brightness-110'}`}
+              >
+                <div className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${isBeginnerMode ? 'translate-x-5' : 'translate-x-0'}`} />
+              </button>
+            </div>
+
+            {/* 6. Decoration Line */}
+            <div className="w-full h-[1px] bg-white/5 mb-6"></div>
+
+            {/* 7. Stats Section (Inside Card) */}
             <div className="w-full mt-4 px-2">
               {isEditing ? (
                 <div className="grid grid-cols-2 gap-y-6 gap-x-4 opacity-40 pointer-events-none grayscale">
@@ -219,13 +239,13 @@ export function ProfilePage() {
       {/* Reset Modal */}
       <ConfirmDialog
         isOpen={showResetPopup}
-        title={<>정말로<br />초기화 하시겠습니까?</>}
+        title={<>운동 기록을<br />초기화 할까요?</>}
         description={<>지금까지의 운동 기록과<br />프로필 정보가 모두 사라집니다.</>}
         confirmText="초기화하기"
         cancelText="취소"
         onConfirm={confirmReset}
         onCancel={() => setShowResetPopup(false)}
-        confirmColor="#f43000"
+        confirmColor="#ffffff"
       />
     </div>
   );

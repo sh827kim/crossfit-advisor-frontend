@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 import { cn } from '@/app/lib/utils';
 import { RunnerIntro } from '@/app/components/shared/runner/RunnerIntro';
 import { RunnerControls } from '@/app/components/shared/runner/RunnerControls';
@@ -15,7 +16,8 @@ type Stage = 'intro' | 'countdown' | 'workout' | 'paused' | 'done';
 
 export default function GoalRunnerPage() {
     const router = useRouter();
-    const { generatedPlan, addWorkoutRecord } = useApp();
+    const { generatedPlan, addWorkoutRecord, selectedGoal } = useApp();
+    const { generateWorkout, isLoading: isGenerating } = useWorkoutGenerator();
     const [stage, setStage] = useState<Stage>('intro');
     const [countdown, setCountdown] = useState(3);
     const [timer, setTimer] = useState(0);
@@ -44,6 +46,14 @@ export default function GoalRunnerPage() {
         setDateString(now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }));
         setDateTimeString(now.toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true }));
     }, []);
+
+    const handleRegenerate = async () => {
+        if (!generatedPlan || !selectedGoal) return;
+        await generateWorkout('/api/v1/workouts/generate/goal', {
+            duration: generatedPlan.duration,
+            goalMovementId: selectedGoal.id
+        }, '/goal-care/runner');
+    };
 
     const handleStartCountdown = () => {
         setStage('countdown');
@@ -207,6 +217,8 @@ export default function GoalRunnerPage() {
                     themeShadow={THEME_SHADOW}
                     onStart={handleStartCountdown}
                     onBack={() => router.back()}
+                    onRegenerate={handleRegenerate}
+                    isGenerating={isGenerating}
                 />
             )}
 
@@ -341,11 +353,8 @@ export default function GoalRunnerPage() {
                 <div ref={cardRef} className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
                     <div className="w-full flex flex-col items-center pb-8">
                         <h1 className="text-[32px] font-extrabold text-white text-center mb-2 leading-[40px]">
-                            오늘도<br />수고많으셨습니다!
+                            오늘도 해냈어요!<br /> Good Work
                         </h1>
-                        <p className="text-white/60 text-sm font-bold mb-12">
-                            {dateString}
-                        </p>
 
                         {/* Main Content Area */}
                         <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
@@ -379,7 +388,7 @@ export default function GoalRunnerPage() {
                                 className="flex-1 text-black font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px]"
                                 style={{ backgroundColor: THEME_COLOR }}
                             >
-                                기록하기
+                                운동 기록하기
                             </button>
                         </div>
 
@@ -387,7 +396,7 @@ export default function GoalRunnerPage() {
                             onClick={() => router.push('/')}
                             className="text-white/60 font-medium text-[15px] hover:text-white transition py-2"
                         >
-                            처음으로 돌아가기
+                            처음으로
                         </button>
                     </div>
                 </div>

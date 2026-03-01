@@ -14,18 +14,18 @@ type OnboardingStep = 'splash' | 'walkthrough' | 'profile';
 const walkthroughStepper = defineStepper(
   {
     id: 'plan',
-    title: '운동 계획 추천',
-    description: 'WOD, 목표, 부위별로 선택하여\n맞춤형 워크아웃을 추천받으세요.'
+    title: '맞춤형 운동 설계',
+    description: '목표에 맞는 운동과 시간을 선택해요.'
   },
   {
     id: 'progress',
-    title: '운동 진행',
-    description: '타이머와 체크박스로 운동을\n체계적으로 진행하세요.'
+    title: '집중 훈련',
+    description: '오늘의 운동을 시간 안에 끝내요.'
   },
   {
     id: 'record',
-    title: '기록하기',
-    description: '완료한 운동을 기록하여\n당신의 운동 데이터를 관리하세요.'
+    title: '오늘의 운동 기록',
+    description: '하루 하루 꾸준히, 성장을 기록해요.'
   }
 );
 
@@ -35,7 +35,7 @@ export function OnboardingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const shouldReset = searchParams.get('reset') === 'true';
-  const { hasVisited, userNickname, setUserNickname, markAsVisited, resetAllData, userProfileColorIndex, setUserProfileColorIndex } = useApp();
+  const { hasVisited, userNickname, setUserNickname, markAsVisited, resetAllData, userProfileColorIndex, setUserProfileColorIndex, isBeginnerMode, setIsBeginnerMode } = useApp();
   const hasHandledResetRef = useRef(false);
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('splash');
   const [showContent, setShowContent] = useState(false);
@@ -202,7 +202,7 @@ export function OnboardingPage() {
               onClick={() => setCurrentStep('profile')}
               className="self-end bg-[#f43000] hover:bg-[#d92a00] text-black font-bold py-3 px-8 rounded-full flex items-center gap-2 transition active:scale-95 animate-fadeIn text-lg"
             >
-              <span>Next</span>
+              <span>다음</span>
               <i className="fa-solid fa-arrow-right"></i>
             </button>
           )}
@@ -307,6 +307,22 @@ export function OnboardingPage() {
                     maxLength={10}
                     className="w-full h-full bg-white/5 border border-white/5 rounded-[16px] text-center text-[17px] font-extrabold text-white placeholder-white/20 focus:outline-none focus:border-[#F43000]/50 transition-colors font-apple-sd"
                   />
+                </div>
+
+                {/* Beginner Mode Toggle */}
+                <div className="w-full mt-6 px-5 flex items-center justify-between">
+                  <div className="flex flex-col items-start text-left">
+                    <span className="text-[13px] font-bold text-white tracking-tight">입문자 모드</span>
+                    <span className="text-[10px] text-[#959595] font-medium leading-[1.2] mt-1">
+                      난이도가 쉬운 운동 위주로 추천해드려요.
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsBeginnerMode(!isBeginnerMode)}
+                    className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none flex-shrink-0 ${isBeginnerMode ? 'bg-[#F43000]' : 'bg-white/10'}`}
+                  >
+                    <div className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${isBeginnerMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </button>
                 </div>
               </div>
             </div>

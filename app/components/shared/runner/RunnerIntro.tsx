@@ -29,6 +29,8 @@ interface RunnerIntroProps {
     themeShadow: string;
     onStart: () => void;
     onBack: () => void;
+    onRegenerate?: () => void;
+    isGenerating?: boolean;
 }
 
 export function RunnerIntro({
@@ -38,7 +40,9 @@ export function RunnerIntro({
     themeDarkColor,
     themeShadow,
     onStart,
-    onBack
+    onBack,
+    onRegenerate,
+    isGenerating
 }: RunnerIntroProps) {
 
     // Equipment Translation
@@ -172,13 +176,29 @@ export function RunnerIntro({
                 </div>
             </div>
 
-            <div className="mt-4 pb-8 pt-4">
+            <div className="mt-4 pb-8 pt-4 flex gap-3 w-full">
+                {onRegenerate && (
+                    <button
+                        onClick={onRegenerate}
+                        disabled={isGenerating}
+                        className="w-[70px] flex-shrink-0 text-white font-bold h-[62px] rounded-2xl hover:bg-white/10 active:scale-95 transition flex flex-col items-center justify-center bg-white/5 border border-white/10"
+                    >
+                        {isGenerating ? (
+                            <i className="fa-solid fa-spinner fa-spin text-[20px]"></i>
+                        ) : (
+                            <>
+                                <i className="fa-solid fa-rotate-right mb-1 text-[20px]"></i>
+                                <span className="text-[10px] tracking-tight">다시 생성</span>
+                            </>
+                        )}
+                    </button>
+                )}
                 <button
                     onClick={handleStart}
-                    className="w-full text-black font-bold h-[62px] rounded-2xl text-[18px] hover:brightness-110 active:scale-95 transition shadow-lg relative z-20"
+                    className="flex-1 text-black font-bold h-[62px] rounded-2xl text-[18px] hover:brightness-110 active:scale-95 transition shadow-lg relative z-20"
                     style={{ backgroundColor: themeColor, boxShadow: `0 0 20px ${themeShadow}` }}
                 >
-                    운동 시작하기
+                    지금부터 성장 시작!
                 </button>
             </div>
         </div>

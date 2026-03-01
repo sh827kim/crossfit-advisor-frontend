@@ -10,14 +10,14 @@ import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { EncouragedOverlay } from '@/app/components/shared/EncouragedOverlay';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
+import { useApp } from '@/app/context/AppContext';
 import { analytics } from '@/app/lib/analytics';
 
 export default function GoalCarePage() {
   const router = useRouter();
   const { generateWorkout, isLoading, error, setError } = useWorkoutGenerator();
+  const { selectedGoal, setSelectedGoal, totalTime: selectedTime, setTotalTime: setSelectedTime } = useApp();
 
-  const [selectedGoal, setSelectedGoal] = useState<Movement | null>(null);
-  const [selectedTime, setSelectedTime] = useState(20);
   const [goals, setGoals] = useState<Movement[]>([]);
   const [isLoadingGoals, setIsLoadingGoals] = useState(true);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -86,14 +86,14 @@ export default function GoalCarePage() {
   return (
     <>
       <CarePageLayout
-        title="달성하고 싶은"
-        subtitle="운동 목표를 알려주세요."
+        title="어떤 동작을"
+        subtitle="연습할까요?"
         description=""
         onBack={handleBack}
         overlayNode={
           selectedGoal ? (
             <EncouragedOverlay
-              label="선택한 운동 목표"
+              label="선택한 동작"
               title={selectedGoal.name}
               themeColor={THEME_ACCENT}
             />

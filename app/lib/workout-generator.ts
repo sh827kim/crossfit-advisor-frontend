@@ -176,14 +176,19 @@ export function generateWorkoutPlan(
 export function generateBalancePlan(
   duration: number,
   wodMovements: Movement[],
-  allMovements: Movement[]
+  allMovements: Movement[],
+  isBeginnerMode: boolean = false
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
   const avoidMuscles = detectAvoidMuscles(wodMovements);
-  const candidates = selectCandidatesForBalance(avoidMuscles, allMovements);
+  const availableMovements = isBeginnerMode
+    ? allMovements.filter(m => (m.difficulty || 2) <= 2)
+    : allMovements;
+
+  const candidates = selectCandidatesForBalance(avoidMuscles, availableMovements);
 
   // 만약 후보가 너무 적으면(0개), Tier 2 제한을 더 풀어서(모든 GB/CA) 가져오거나 코어만.
   if (candidates.length === 0) {
-    const core = allMovements.filter(m => m.muscleGroups.includes('CORE'));
+    const core = availableMovements.filter(m => m.muscleGroups.includes('CORE'));
     return generateWorkoutPlan('BALANCE', duration, core);
   }
 
@@ -196,9 +201,13 @@ export function generateBalancePlan(
 export function generateGoalPlan(
   duration: number,
   goalMovementId: string, // ID로 변경됨
-  allMovements: Movement[]
+  allMovements: Movement[],
+  isBeginnerMode: boolean = false
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
-  const candidates = selectCandidatesForGoal(goalMovementId, allMovements);
+  const availableMovements = isBeginnerMode
+    ? allMovements.filter(m => (m.difficulty || 2) <= 2)
+    : allMovements;
+  const candidates = selectCandidatesForGoal(goalMovementId, availableMovements);
   return generateWorkoutPlan('GOAL', duration, candidates);
 }
 
@@ -208,9 +217,13 @@ export function generateGoalPlan(
 export function generatePartPlan(
   duration: number,
   targetMuscles: MuscleGroup[],
-  allMovements: Movement[]
+  allMovements: Movement[],
+  isBeginnerMode: boolean = false
 ): { exercises: Exercise[]; rounds: number; targetTimePerRound: string } {
-  const candidates = selectCandidatesForPart(targetMuscles, allMovements);
+  const availableMovements = isBeginnerMode
+    ? allMovements.filter(m => (m.difficulty || 2) <= 2)
+    : allMovements;
+  const candidates = selectCandidatesForPart(targetMuscles, availableMovements);
   return generateWorkoutPlan('PART', duration, candidates);
 }
 

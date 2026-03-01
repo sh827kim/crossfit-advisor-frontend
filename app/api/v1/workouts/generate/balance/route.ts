@@ -6,7 +6,7 @@ import { WorkoutGenerateBalanceRequest, WorkoutPlan, ApiResponse, Movement } fro
 export async function POST(request: NextRequest) {
   try {
     const body: WorkoutGenerateBalanceRequest = await request.json();
-    const { duration, wodMovementIds } = body;
+    const { duration, wodMovementIds, isBeginnerMode } = body;
 
     // 유효성 검사
     if (!duration || ![5, 10, 15, 20, 25, 30, 35, 40].includes(duration)) {
@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
     const { exercises, rounds, targetTimePerRound } = generateBalancePlan(
       duration,
       wodMovements,
-      allMovements
+      allMovements,
+      isBeginnerMode
     );
 
     const workoutPlan: WorkoutPlan = {

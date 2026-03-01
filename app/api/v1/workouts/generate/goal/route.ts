@@ -6,7 +6,7 @@ import { WorkoutGenerateGoalRequest, WorkoutPlan, ApiResponse, Movement } from '
 export async function POST(request: NextRequest) {
   try {
     const body: WorkoutGenerateGoalRequest = await request.json();
-    const { duration, goalMovementId } = body;
+    const { duration, goalMovementId, isBeginnerMode } = body;
 
     // 유효성 검사
     if (!duration || ![5, 10, 15, 20, 25, 30, 35, 40].includes(duration)) {
@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
     const { exercises, rounds, targetTimePerRound } = generateGoalPlan(
       duration,
       goalMovement.id,
-      allMovements
+      allMovements,
+      isBeginnerMode
     );
 
     const workoutPlan: WorkoutPlan = {

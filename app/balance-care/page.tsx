@@ -9,6 +9,7 @@ import { CareBottomPanel } from '@/app/components/shared/CareBottomPanel';
 import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
+import { useApp } from '@/app/context/AppContext';
 import { analytics } from '../lib/analytics';
 
 // 한글 초성 추출 함수
@@ -26,10 +27,11 @@ function getChosung(str: string): string {
 export default function BalanceCarePage() {
   const router = useRouter();
   const { generateWorkout, isLoading, error, setError } = useWorkoutGenerator();
+  const { wodList, addWod, removeWod, totalTime: selectedTime, setTotalTime: setSelectedTime } = useApp();
+
+  const selectedExercises = wodList.map(m => m.id);
 
   const [searchInput, setSearchInput] = useState('');
-  const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
-  const [selectedTime, setSelectedTime] = useState(20);
   const [allMovements, setAllMovements] = useState<Movement[]>([]);
   const [frequentMovements, setFrequentMovements] = useState<Movement[]>([]);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -66,16 +68,20 @@ export default function BalanceCarePage() {
     : [];
 
   const handleExerciseSelect = (movementId: string) => {
-    setSelectedExercises(prev =>
-      prev.includes(movementId)
-        ? prev.filter(id => id !== movementId)
-        : [...prev, movementId]
-    );
+    const isSelected = selectedExercises.includes(movementId);
+    if (isSelected) {
+      removeWod(movementId);
+    } else {
+      const movement = allMovements.find(m => m.id === movementId);
+      if (movement) {
+        addWod(movement);
+      }
+    }
   };
 
   const handleAddFrequent = (movement: Movement) => {
     if (!selectedExercises.includes(movement.id)) {
-      setSelectedExercises(prev => [...prev, movement.id]);
+      addWod(movement);
     }
   };
 
@@ -121,9 +127,9 @@ export default function BalanceCarePage() {
   return (
     <>
       <CarePageLayout
-        title="오늘의 WOD를"
+        title="오늘 한 WOD를"
         subtitle="알려주세요."
-        description="오늘 수행한 운동을 알려주세요"
+        description=""
         onBack={handleBack}
         bottomControls={
           <CareBottomPanel
@@ -132,7 +138,7 @@ export default function BalanceCarePage() {
             onGenerate={handleGenerate}
             isGenerating={isLoading}
             error={error}
-            buttonText="나만의 밸런스 운동 생성하기"
+            buttonText="오늘의 플랜 확인하기"
             themeColor="#f43000"
             gradientOverlay="linear-gradient(135deg, rgba(244, 48, 0, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
             isDisabled={selectedExercises.length === 0}
@@ -164,7 +170,7 @@ export default function BalanceCarePage() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="운동 검색 (초성: ㅅㄴㅊ)"
+                placeholder="초성으로 검색 (예: ㅅㄴㅊ)"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 pl-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-700 transition border border-gray-800"

@@ -10,6 +10,7 @@ import { SelectionCard } from '@/app/components/shared/SelectionCard';
 import { AlertDialog } from '@/app/components/shared/AlertDialog';
 import { EncouragedOverlay } from '@/app/components/shared/EncouragedOverlay';
 import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
+import { useApp } from '@/app/context/AppContext';
 import { analytics } from '../lib/analytics';
 
 const MUSCLE_GROUPS: { id: MuscleGroup; label: string; icon: string }[] = [
@@ -23,13 +24,18 @@ const MUSCLE_GROUPS: { id: MuscleGroup; label: string; icon: string }[] = [
 export default function PartCarePage() {
   const router = useRouter();
   const { generateWorkout, isLoading, error, setError } = useWorkoutGenerator();
+  const { selectedParts, clearParts, togglePart, totalTime: selectedTime, setTotalTime: setSelectedTime } = useApp();
 
-  const [selectedPart, setSelectedPart] = useState<MuscleGroup | null>(null);
-  const [selectedTime, setSelectedTime] = useState(20);
+  const selectedPart = selectedParts[0] || null;
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleSelectPart = (part: MuscleGroup) => {
-    setSelectedPart(prev => (prev === part ? null : part));
+    if (selectedParts[0] === part) {
+      clearParts();
+    } else {
+      clearParts();
+      togglePart(part);
+    }
   };
 
   const handleGenerate = () => {
@@ -63,7 +69,7 @@ export default function PartCarePage() {
       target: 'back'
     });
     if (selectedPart) {
-      setSelectedPart(null);
+      clearParts();
     } else {
       router.push('/');
     }

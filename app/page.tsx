@@ -118,7 +118,7 @@ export default function HomePage() {
           }}
         >
           <h3 className="text-[22px] font-bold text-white leading-[26px]">밸런스 케어</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">목표에 맞는 운동 플랜을 설계해 드릴게요.</p>
+          <p className="text-[14px] font-normal text-white/55 leading-[19px]">WOD 분석을 통한 균형 잡힌 나머지 운동</p>
 
           {/* Hover/Active Effect Overlay */}
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />

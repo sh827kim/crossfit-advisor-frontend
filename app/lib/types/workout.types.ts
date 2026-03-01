@@ -30,6 +30,7 @@ export interface Movement {
   minCount?: number | null;
   maxCount?: number | null;
   unit?: string;
+  difficulty?: number;
 }
 
 export interface Exercise {
@@ -67,16 +68,19 @@ export interface GoalRoutine {
 export interface WorkoutGenerateBalanceRequest {
   duration: number;
   wodMovementIds?: string[];
+  isBeginnerMode?: boolean;
 }
 
 export interface WorkoutGenerateGoalRequest {
   duration: number;
   goalMovementId: string;
+  isBeginnerMode?: boolean;
 }
 
 export interface WorkoutGeneratePartRequest {
   duration: number;
   targetMuscleGroups: MuscleGroup[];
+  isBeginnerMode?: boolean;
 }
 
 export interface WorkoutPlan {

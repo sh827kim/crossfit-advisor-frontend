@@ -60,9 +60,11 @@ interface AppContextType {
   userNickname: string;
   userProfileImage: string | null;
   userProfileColorIndex: number;
+  isBeginnerMode: boolean; // 초보자 모드
   setUserNickname: (nickname: string) => void;
   setUserProfileImage: (image: string | null) => void;
   setUserProfileColorIndex: (index: number) => void;
+  setIsBeginnerMode: (mode: boolean) => void;
   markAsVisited: () => void;
 
   // 리셋
@@ -97,6 +99,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [userNickname, setUserNickname] = useState(''); // Initial empty
   const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
   const [userProfileColorIndex, setUserProfileColorIndex] = useState<number>(0);
+  const [isBeginnerMode, setIsBeginnerMode] = useState<boolean>(false);
 
   // Load from LocalStorage on mount (Client-side only)
   useEffect(() => {
@@ -153,6 +156,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const newColor = Math.floor(Math.random() * 10);
         setUserProfileColorIndex(newColor);
         // localStorage.setItem will handle this
+      }
+
+      const savedBeginnerMode = localStorage.getItem('cf_is_beginner_mode');
+      if (savedBeginnerMode) {
+        setIsBeginnerMode(savedBeginnerMode === 'true');
       }
 
     } catch (e) {
@@ -224,6 +232,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem('cf_user_profile_color_index', userProfileColorIndex.toString());
   }, [userProfileColorIndex]);
+
+  // 초보자 모드 상태 저장
+  useEffect(() => {
+    localStorage.setItem('cf_is_beginner_mode', isBeginnerMode.toString());
+  }, [isBeginnerMode]);
 
   // 생성된 계획 저장
   useEffect(() => {
@@ -393,6 +406,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setUserNickname(generateRandomNickname());
     setUserProfileImage(null);
     setUserProfileColorIndex(Math.floor(Math.random() * 10));
+    setIsBeginnerMode(false);
     setWorkoutHistory([]);
     setHistoryError(null);
     setIsLoadingHistory(true);
@@ -458,9 +472,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         userNickname,
         userProfileImage,
         userProfileColorIndex,
+        isBeginnerMode,
         setUserNickname,
         setUserProfileImage,
         setUserProfileColorIndex,
+        setIsBeginnerMode,
         markAsVisited,
         resetInputState,
         resetAllData

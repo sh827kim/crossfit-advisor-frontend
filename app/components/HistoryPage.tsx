@@ -263,9 +263,9 @@ export function HistoryPage() {
                       <span className={`text-[12px] font-bold tracking-wider ${record.mode === 'BALANCE' ? 'text-[#F43000]' :
                         record.mode === 'GOAL' ? 'text-[#EEFD32]' : 'text-[#00DCEB]'
                         }`}>
-                        {record.mode === 'BALANCE' ? '밸런스 케어 운동' :
-                          record.mode === 'GOAL' ? '목표 관리 운동' :
-                            record.mode === 'PART' ? '부위별 운동' : '자유 운동'}
+                        {record.mode === 'BALANCE' ? '밸런스 케어' :
+                          record.mode === 'GOAL' ? '스킬 마스터' :
+                            record.mode === 'PART' ? '포커스 트레이닝' : '자유 운동'}
                       </span>
                       <span className="text-[12px] text-gray-500 font-medium ml-1 border-l border-white/10 pl-2 font-barlow">
                         {dateDisplay}
@@ -334,13 +334,13 @@ export function HistoryPage() {
       {/* Delete Confirmation Modal */}
       <ConfirmDialog
         isOpen={showDeleteConfirm}
-        title="기록 삭제"
-        description={<>선택한 운동 기록이 영구적으로 삭제됩니다.<br />계속하시겠습니까?</>}
+        title={<>운동 기록을<br />삭제할까요?</>}
+        description=""
         confirmText="삭제하기"
         cancelText="취소"
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
-        confirmColor="#f43000"
+        confirmColor="#ffffff"
       />
     </div>
   );

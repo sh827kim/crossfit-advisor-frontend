@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/context/AppContext';
+import { useWorkoutGenerator } from '@/app/hooks/useWorkoutGenerator';
 import { cn } from '@/app/lib/utils';
 import { RunnerIntro } from '@/app/components/shared/runner/RunnerIntro';
 import { RunnerControls } from '@/app/components/shared/runner/RunnerControls';
@@ -19,7 +20,8 @@ const THEME_SHADOW = 'rgba(244, 48, 0, 0.5)';
 
 export default function RunnerPage() {
     const router = useRouter();
-    const { generatedPlan, addWorkoutRecord } = useApp();
+    const { generatedPlan, addWorkoutRecord, wodList } = useApp();
+    const { generateWorkout, isLoading: isGenerating } = useWorkoutGenerator();
     const [stage, setStage] = useState<Stage>('intro');
     const [countdown, setCountdown] = useState(3);
     const [timer, setTimer] = useState(0);
@@ -48,6 +50,14 @@ export default function RunnerPage() {
         setDateString(now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }));
         setDateTimeString(now.toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true }));
     }, []);
+
+    const handleRegenerate = async () => {
+        if (!generatedPlan) return;
+        await generateWorkout('/api/v1/workouts/generate/balance', {
+            duration: generatedPlan.duration,
+            wodMovementIds: wodList.map(m => m.id)
+        }, '/balance-care/runner');
+    };
 
     const handleStartCountdown = () => {
         setStage('countdown');
@@ -206,6 +216,8 @@ export default function RunnerPage() {
                     themeShadow={THEME_SHADOW}
                     onStart={handleStartCountdown}
                     onBack={() => router.back()}
+                    onRegenerate={handleRegenerate}
+                    isGenerating={isGenerating}
                 />
             )}
 
@@ -331,11 +343,8 @@ export default function RunnerPage() {
                 <div ref={cardRef} className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
                     <div className="w-full flex flex-col items-center pb-12">
                         <h1 className="text-[32px] font-extrabold text-white text-center mb-8 leading-[40px]">
-                            오늘도<br />수고많으셨습니다!
+                            오늘도 해냈어요!<br /> Good Work
                         </h1>
-                        <p className="text-white/60 text-sm font-bold mb-8">
-                            {dateString}
-                        </p>
                         {/* Main Content Area */}
                         <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
                             <WorkoutSummaryCard
@@ -368,14 +377,14 @@ export default function RunnerPage() {
                                 className="flex-1 text-black font-bold h-[58px] rounded-2xl shadow-xl active:scale-95 transition hover:brightness-110 text-[17px]"
                                 style={{ backgroundColor: THEME_COLOR }}
                             >
-                                기록하기
+                                운동 기록하기
                             </button>
                         </div>
                         <button
                             onClick={() => router.push('/')}
                             className="text-white/60 font-medium text-[15px] hover:text-white transition py-2"
                         >
-                            처음으로 돌아가기
+                            처음으로
                         </button>
                     </div>
                 </div>

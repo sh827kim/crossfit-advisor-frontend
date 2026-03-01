@@ -32,14 +32,14 @@ export function CareBottomPanel({
         <div className="flex-shrink-0 relative w-full mt-auto z-50">
             <div className="absolute top-[-30px] left-0 right-0 h-[30px] bg-gradient-to-b from-transparent to-black pointer-events-none"></div>
 
-            <div className="w-full bg-[#1F1F1F] rounded-t-[32px] border-t border-white/10 shadow-[0_-6px_44px_rgba(0,0,0,0.8)] relative overflow-hidden pb-6 pt-2">
+            <div className="w-full bg-[#1F1F1F] rounded-t-[32px] border-t border-white/10 shadow-[0_-6px_44px_rgba(0,0,0,0.8)] relative overflow-hidden pb-3 pt-2">
                 {/* Gradient Overlay */}
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{ background: gradientOverlay || `linear-gradient(121deg, ${themeColor}20 0%, rgba(10, 10, 10, 0.2) 100%)` }}
                 ></div>
 
-                <div className="relative z-10 flex flex-col items-center pb-8">
+                <div className="relative z-10 flex flex-col items-center pb-2">
                     <CareTimeSelector value={selectedTime} onChange={onTimeChange} />
 
                     {/* 에러 메시지 */}

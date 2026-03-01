@@ -8,7 +8,7 @@ const VALID_MUSCLE_GROUPS: MuscleGroup[] = ['CORE', 'LEGS', 'BACK', 'CHEST', 'CA
 export async function POST(request: NextRequest) {
   try {
     const body: WorkoutGeneratePartRequest = await request.json();
-    const { duration, targetMuscleGroups } = body;
+    const { duration, targetMuscleGroups, isBeginnerMode } = body;
 
     // 유효성 검사
     if (!duration || ![5, 10, 15, 20, 25, 30, 35, 40].includes(duration)) {
@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
     const { exercises, rounds, targetTimePerRound } = generatePartPlan(
       duration,
       validMuscles,
-      allMovements
+      allMovements,
+      isBeginnerMode
     );
 
     const workoutPlan: WorkoutPlan = {

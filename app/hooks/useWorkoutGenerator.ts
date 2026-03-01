@@ -14,7 +14,7 @@ interface UseWorkoutGeneratorReturn {
 
 export function useWorkoutGenerator(): UseWorkoutGeneratorReturn {
     const router = useRouter();
-    const { setGeneratedPlan } = useApp();
+    const { setGeneratedPlan, isBeginnerMode } = useApp();
     const { showError } = useError();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -24,10 +24,12 @@ export function useWorkoutGenerator(): UseWorkoutGeneratorReturn {
         setError(null);
 
         try {
+            const requestBody = { ...body, isBeginnerMode };
+
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
@@ -45,6 +47,7 @@ export function useWorkoutGenerator(): UseWorkoutGeneratorReturn {
             }
 
             setGeneratedPlan(data.data);
+            setIsLoading(false);
             router.push(redirectPath);
         } catch (err) {
             console.error('Error generating workout:', err);

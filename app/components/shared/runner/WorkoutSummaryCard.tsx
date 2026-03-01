@@ -31,9 +31,9 @@ export const WorkoutSummaryCard = forwardRef<HTMLDivElement, WorkoutSummaryCardP
 
         const getModeTitle = (mode: string) => {
             switch (mode) {
-                case 'PART': return '파트 케어 운동';
-                case 'BALANCE': return '밸런스 케어 운동';
-                case 'GOAL': return '골 케어 운동';
+                case 'PART': return '포커스 트레이닝';
+                case 'BALANCE': return '밸런스 케어';
+                case 'GOAL': return '스킬 마스터';
                 default: return '운동 완료';
             }
         };

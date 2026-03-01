@@ -11,7 +11,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "power_snatch",
@@ -24,7 +25,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "squat_snatch",
@@ -37,7 +39,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "hang_snatch",
@@ -50,7 +53,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "dumbbell_snatch",
@@ -63,7 +67,8 @@
       ],
       "equipment": "DUMBBELL",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "clean",
@@ -76,7 +81,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "power_clean",
@@ -89,7 +95,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "squat_clean",
@@ -102,7 +109,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "hang_clean",
@@ -115,7 +123,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "clean_and_jerk",
@@ -128,7 +137,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "jerk",
@@ -140,7 +150,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "push_jerk",
@@ -152,7 +163,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "split_jerk",
@@ -164,7 +176,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 3
     },
     {
       "id": "deadlift",
@@ -176,7 +189,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 2
     },
     {
       "id": "sumo_deadlift",
@@ -188,7 +202,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 3,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 2
     },
     {
       "id": "squat",
@@ -199,7 +214,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 15,
-      "maxCount": 20
+      "maxCount": 20,
+      "difficulty": 1
     },
     {
       "id": "back_squat",
@@ -210,7 +226,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 5,
-      "maxCount": 8
+      "maxCount": 8,
+      "difficulty": 2
     },
     {
       "id": "front_squat",
@@ -221,7 +238,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 5,
-      "maxCount": 8
+      "maxCount": 8,
+      "difficulty": 2
     },
     {
       "id": "overhead_squat",
@@ -233,7 +251,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 5,
-      "maxCount": 8
+      "maxCount": 8,
+      "difficulty": 3
     },
     {
       "id": "air_squat",
@@ -244,7 +263,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 15,
-      "maxCount": 20
+      "maxCount": 20,
+      "difficulty": 1
     },
     {
       "id": "lunge",
@@ -255,7 +275,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 1
     },
     {
       "id": "overhead_lunge",
@@ -267,7 +288,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "dumbbell_lunge",
@@ -278,7 +300,8 @@
       ],
       "equipment": "DUMBBELL",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "thruster",
@@ -290,7 +313,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 5,
-      "maxCount": 8
+      "maxCount": 8,
+      "difficulty": 3
     },
     {
       "id": "dumbbell_thruster",
@@ -302,7 +326,8 @@
       ],
       "equipment": "DUMBBELL",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "wallball_shot",
@@ -315,7 +340,8 @@
       ],
       "equipment": "WALLBALL",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 2
     },
     {
       "id": "wall_walk",
@@ -326,7 +352,8 @@
       ],
       "equipment": "WALL",
       "minCount": 5,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 3
     },
     {
       "id": "pullup",
@@ -337,7 +364,8 @@
       ],
       "equipment": "BAR",
       "minCount": 5,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 3
     },
     {
       "id": "strict_pullup",
@@ -348,7 +376,8 @@
       ],
       "equipment": "BAR",
       "minCount": 3,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 3
     },
     {
       "id": "kipping_pullup",
@@ -359,7 +388,8 @@
       ],
       "equipment": "BAR",
       "minCount": 5,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 3
     },
     {
       "id": "butterfly_pullup",
@@ -370,7 +400,8 @@
       ],
       "equipment": "BAR",
       "minCount": 3,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 3
     },
     {
       "id": "chest_to_bar",
@@ -381,7 +412,8 @@
       ],
       "equipment": "BAR",
       "minCount": 3,
-      "maxCount": 8
+      "maxCount": 8,
+      "difficulty": 3
     },
     {
       "id": "muscle_up",
@@ -393,7 +425,8 @@
       ],
       "equipment": "BAR",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 4
     },
     {
       "id": "bar_muscle_up",
@@ -405,7 +438,8 @@
       ],
       "equipment": "BAR",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 4
     },
     {
       "id": "ring_muscle_up",
@@ -417,7 +451,8 @@
       ],
       "equipment": "RINGS",
       "minCount": 2,
-      "maxCount": 5
+      "maxCount": 5,
+      "difficulty": 4
     },
     {
       "id": "toes_to_bar",
@@ -429,7 +464,8 @@
       ],
       "equipment": "BAR",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 3
     },
     {
       "id": "knees_to_elbow",
@@ -441,7 +477,8 @@
       ],
       "equipment": "BAR",
       "minCount": 12,
-      "maxCount": 18
+      "maxCount": 18,
+      "difficulty": 3
     },
     {
       "id": "pushup",
@@ -452,7 +489,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 15,
-      "maxCount": 25
+      "maxCount": 25,
+      "difficulty": 1
     },
     {
       "id": "handstand_pushup",
@@ -463,7 +501,8 @@
       ],
       "equipment": "WALL",
       "minCount": 5,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 3
     },
     {
       "id": "ring_dips",
@@ -474,7 +513,8 @@
       ],
       "equipment": "RINGS",
       "minCount": 8,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 3
     },
     {
       "id": "bar_dips",
@@ -485,7 +525,8 @@
       ],
       "equipment": "BAR",
       "minCount": 8,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 3
     },
     {
       "id": "rowing",
@@ -498,7 +539,8 @@
       "equipment": "ROWING",
       "minCount": 8,
       "maxCount": 12,
-      "unit": "cal"
+      "unit": "cal",
+      "difficulty": 1
     },
     {
       "id": "assault_bike",
@@ -511,7 +553,8 @@
       "equipment": "ASSAULT_BIKE",
       "minCount": 7,
       "maxCount": 10,
-      "unit": "cal"
+      "unit": "cal",
+      "difficulty": 1
     },
     {
       "id": "double_under",
@@ -522,7 +565,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 30,
-      "maxCount": 50
+      "maxCount": 50,
+      "difficulty": 3
     },
     {
       "id": "box_jump",
@@ -534,7 +578,8 @@
       ],
       "equipment": "BOX",
       "minCount": 5,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 2
     },
     {
       "id": "burpee",
@@ -546,7 +591,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 1
     },
     {
       "id": "burpee_box_jump",
@@ -559,7 +605,8 @@
       ],
       "equipment": "BOX",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "hollow_rock",
@@ -570,7 +617,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 20,
-      "maxCount": 30
+      "maxCount": 30,
+      "difficulty": 1
     },
     {
       "id": "plank",
@@ -582,7 +630,8 @@
       "equipment": "BODYWEIGHT",
       "minCount": 20,
       "maxCount": 40,
-      "unit": "sec"
+      "unit": "sec",
+      "difficulty": 1
     },
     {
       "id": "ghd_situp",
@@ -593,7 +642,8 @@
       ],
       "equipment": "GHD",
       "minCount": 10,
-      "maxCount": 20
+      "maxCount": 20,
+      "difficulty": 3
     },
     {
       "id": "hanging_leg_raise",
@@ -604,7 +654,8 @@
       ],
       "equipment": "BAR",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 3
     },
     {
       "id": "vup",
@@ -615,7 +666,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 12,
-      "maxCount": 18
+      "maxCount": 18,
+      "difficulty": 1
     },
     {
       "id": "band_pulldown",
@@ -626,7 +678,8 @@
       ],
       "equipment": "BAND",
       "minCount": 12,
-      "maxCount": 18
+      "maxCount": 18,
+      "difficulty": 1
     },
     {
       "id": "ring_row",
@@ -637,7 +690,8 @@
       ],
       "equipment": "RINGS",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 1
     },
     {
       "id": "scapular_pullup",
@@ -648,7 +702,8 @@
       ],
       "equipment": "BAR",
       "minCount": 5,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 2
     },
     {
       "id": "negative_pullup",
@@ -659,7 +714,8 @@
       ],
       "equipment": "BAR",
       "minCount": 5,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 2
     },
     {
       "id": "bent_over_barbell_row",
@@ -670,7 +726,8 @@
       ],
       "equipment": "BARBELL",
       "minCount": 6,
-      "maxCount": 10
+      "maxCount": 10,
+      "difficulty": 2
     },
     {
       "id": "box_dips",
@@ -681,7 +738,8 @@
       ],
       "equipment": "BOX",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 2
     },
     {
       "id": "dumbbell_bench_press",
@@ -692,7 +750,8 @@
       ],
       "equipment": "DUMBBELL",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "bulgarian_split_squat",
@@ -703,7 +762,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "goblet_squat",
@@ -714,7 +774,8 @@
       ],
       "equipment": "KETTLEBELL",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 2
     },
     {
       "id": "handstand_hold",
@@ -726,7 +787,8 @@
       "equipment": "WALL",
       "minCount": 20,
       "maxCount": 30,
-      "unit": "sec"
+      "unit": "sec",
+      "difficulty": 4
     },
     {
       "id": "pike_pushup",
@@ -737,7 +799,8 @@
       ],
       "equipment": "BOX",
       "minCount": 10,
-      "maxCount": 15
+      "maxCount": 15,
+      "difficulty": 3
     },
     {
       "id": "dumbbell_shoulder_press",
@@ -748,7 +811,8 @@
       ],
       "equipment": "DUMBBELL",
       "minCount": 8,
-      "maxCount": 12
+      "maxCount": 12,
+      "difficulty": 2
     },
     {
       "id": "shoulder_taps",
@@ -760,7 +824,8 @@
       ],
       "equipment": "BODYWEIGHT",
       "minCount": 20,
-      "maxCount": 40
+      "maxCount": 40,
+      "difficulty": 1
     },
     {
       "id": "handstand_walk",
@@ -773,7 +838,8 @@
       "equipment": "BODYWEIGHT",
       "minCount": 10,
       "maxCount": 20,
-      "unit": "m"
+      "unit": "m",
+      "difficulty": 4
     }
   ]
 }
