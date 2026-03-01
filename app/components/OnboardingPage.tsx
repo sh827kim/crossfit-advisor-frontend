@@ -37,8 +37,8 @@ export function OnboardingPage() {
   const shouldReset = searchParams.get('reset') === 'true';
   const { hasVisited, userNickname, setUserNickname, markAsVisited, resetAllData, userProfileColorIndex, setUserProfileColorIndex, isBeginnerMode, setIsBeginnerMode } = useApp();
   const hasHandledResetRef = useRef(false);
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>('splash');
-  const [showContent, setShowContent] = useState(false);
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>('walkthrough');
+  const [showContent, setShowContent] = useState(true);
   const [nickname, setNickname] = useState(userNickname);
 
   // Walkthrough 애니메이션 상태
@@ -96,15 +96,9 @@ export function OnboardingPage() {
 
   // 온보딩 단계별 타이밍
   useEffect(() => {
-    // 초기화 요청이거나 첫 방문인 경우
+    // 초기화 요청이거나 첫 방문인 경우 바로 워크스루 화면으로 진입 (스플래시 화면 제거)
     if (hasVisited === false || shouldReset) {
-      // 스플래시 화면 표시
       setShowContent(true);
-      // 2.5초 후 워크스루 화면으로 전환
-      const timer = setTimeout(() => {
-        setCurrentStep('walkthrough');
-      }, 2500);
-      return () => clearTimeout(timer);
     }
   }, [hasVisited, shouldReset]);
 
@@ -136,28 +130,6 @@ export function OnboardingPage() {
 
   // 첫 방문이거나 초기화 요청: 온보딩 페이지
   if (!hasVisited || shouldReset) {
-    // 스플래시 화면 - AFTERWOD CLUB 로고
-    if (currentStep === 'splash') {
-      return (
-        <div className={`flex-grow flex flex-col justify-center items-center bg-black transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'
-          }`}>
-          <div className="flex flex-col items-center justify-center">
-            {/* AFTERWOD 로고 */}
-            <div className="mb-8 px-8 max-w-sm w-full flex justify-center">
-              <Image
-                src="/logo-splash.svg"
-                alt="AFTERWOD CLUB"
-                width={300}
-                height={150}
-                className="w-full h-auto max-w-[280px]"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      );
-    }
-
     // 워크스루 화면 - 3가지 기능 설명
     if (currentStep === 'walkthrough') {
       // Steps are always fully visible now
