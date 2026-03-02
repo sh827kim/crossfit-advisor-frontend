@@ -52,9 +52,10 @@ export function WindowScaler() {
          margin: 0 auto;
          transform: scale(var(--app-scale));
          transform-origin: top center;
-         height: calc(100vh / var(--app-scale));
-         min-height: calc(100dvh / var(--app-scale));
+         height: calc(100% / var(--app-scale));
          overflow-x: hidden;
+         padding-top: env(safe-area-inset-top);
+         padding-bottom: env(safe-area-inset-bottom);
       }
       `
         }} />

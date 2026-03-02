@@ -64,15 +64,14 @@ export default function RootLayout({
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`bg-black font-sans ${barlowCondensed.variable} overflow-hidden w-full h-[100dvh] flex justify-center items-start`}>
+      <body className={`bg-black font-sans ${barlowCondensed.variable} overflow-hidden w-full h-full flex justify-center items-start`}>
         <AppProvider>
           <ErrorProvider>
             <WindowScaler />
             <GlobalPageTracker />
             <PWAInitializer />
             <BackButtonHandler />
-            <GlobalErrorModal />
-            <div className="flex flex-col bg-[#010101] app-container shadow-lg pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+            <div className="flex flex-col bg-[#010101] app-container shadow-lg">
               <Header />
               <main className="flex-1 flex flex-col overflow-y-auto overscroll-none hide-scrollbar">
                 {children}
