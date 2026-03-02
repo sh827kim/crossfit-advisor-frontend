@@ -61,17 +61,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="애프터와드" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`bg-gray-100 font-sans ${barlowCondensed.variable} overflow-hidden h-[100dvh]`}>
+      <body className={`bg-black font-sans ${barlowCondensed.variable} overflow-hidden w-full h-[100dvh] flex justify-center items-start`}>
         <AppProvider>
           <ErrorProvider>
             <WindowScaler />
@@ -79,9 +72,9 @@ export default function RootLayout({
             <PWAInitializer />
             <BackButtonHandler />
             <GlobalErrorModal />
-            <div className="flex flex-col bg-black app-container shadow-lg overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+            <div className="flex flex-col bg-[#010101] app-container shadow-lg pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
               <Header />
-              <main className="flex-1 flex flex-col overflow-y-auto overscroll-none">
+              <main className="flex-1 flex flex-col overflow-y-auto overscroll-none hide-scrollbar">
                 {children}
               </main>
             </div>
