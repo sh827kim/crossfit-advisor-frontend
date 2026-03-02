@@ -84,41 +84,41 @@ export default function HomePage() {
     return null;
   }
 
-  // Figma 디자인 기반 홈 페이지
+  // Figma 디자인 기반 홈 페이지 (픽셀 대신 rem 단위 사용)
   return (
     <div className="min-h-full flex flex-col bg-[#010101] text-white relative font-apple-sd">
-      {/* 상단 로고 및 텍스트 영역 (Top spacing approx 130px from design considering header) */}
-      <div className="pt-[80px] pl-[41px] mb-[40px]">
+      {/* 상단 로고 및 텍스트 영역 */}
+      <div className="pt-[5rem] pl-[2.6rem] mb-[2.5rem]">
         {/* Logo */}
         <div className="mb-4">
-          <img src="/logo-red.svg" alt="AFTERWOD" className="w-[94px] h-auto" />
+          <img src="/logo-red.svg" alt="AFTERWOD" className="w-[5.9rem] h-auto" />
         </div>
         {/* Text */}
-        <h1 className="text-[24px] font-bold leading-tight text-white mb-1">
+        <h1 className="text-[1.5rem] font-bold leading-tight text-white mb-1">
           오늘도 잘 오셨어요!
         </h1>
-        <h2 className="text-[24px] font-bold leading-tight text-white mb-2">
+        <h2 className="text-[1.5rem] font-bold leading-tight text-white mb-2">
           어떤 운동을 할까요?
         </h2>
-        <p className="text-[14px] text-gray-500 font-normal">
+        <p className="text-[0.9rem] text-gray-500 font-normal">
           목표에 맞는 운동 플랜을 설계해 드릴게요.
         </p>
       </div>
 
       {/* 케어 버튼 영역 */}
-      <div className="flex flex-col gap-[14px] items-center w-full px-[12px]">
+      <div className="flex flex-col gap-[0.9rem] items-center w-full px-[0.8rem]">
         {/* 1. 애프터와드 밸런스 케어 (Red) */}
         <button
           onClick={() => handleInputClick('wod')}
-          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] pr-[24px] flex flex-col justify-center gap-1 group"
+          className="w-full max-w-[22.3rem] h-[6.3rem] rounded-[1.5rem] relative overflow-hidden transition active:scale-95 text-left pl-[1.5rem] pr-[1.5rem] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(244, 48, 0, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.08)',
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[22px] font-bold text-white leading-[26px]">밸런스 케어</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">WOD 분석을 통한 균형 잡힌 나머지 운동</p>
+          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">밸런스 케어</h3>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">WOD 분석을 통한 균형 잡힌 나머지 운동</p>
 
           {/* Hover/Active Effect Overlay */}
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
@@ -127,30 +127,30 @@ export default function HomePage() {
         {/* 2. 목표 달성 트레이닝 (Yellow) */}
         <button
           onClick={() => handleInputClick('goal')}
-          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] pr-[24px] flex flex-col justify-center gap-1 group"
+          className="w-full max-w-[22.3rem] h-[6.3rem] rounded-[1.5rem] relative overflow-hidden transition active:scale-95 text-left pl-[1.5rem] pr-[1.5rem] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(238, 253, 50, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.08)',
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[22px] font-bold text-white leading-[26px]">스킬 마스터</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">체계적인 플랜으로 목표 동작 달성</p>
+          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">스킬 마스터</h3>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">체계적인 플랜으로 목표 동작 달성</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
 
         {/* 3. 부위별 집중 강화 (Blue) */}
         <button
           onClick={() => handleInputClick('part')}
-          className="w-full max-w-[357px] h-[100px] rounded-[24px] relative overflow-hidden transition active:scale-95 text-left pl-[24px] pr-[24px] flex flex-col justify-center gap-1 group"
+          className="w-full max-w-[22.3rem] h-[6.3rem] rounded-[1.5rem] relative overflow-hidden transition active:scale-95 text-left pl-[1.5rem] pr-[1.5rem] flex flex-col justify-center gap-1 group"
           style={{
             background: 'linear-gradient(115.05deg, rgba(35, 212, 224, 0.2) 15.67%, rgba(0, 0, 0, 0.2) 42.31%), #1F1F1F',
             boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.08)',
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[22px] font-bold text-white leading-[26px]">포커스 트레이닝</h3>
-          <p className="text-[14px] font-normal text-white/55 leading-[19px]">원하는 신체 부위의 근력을 효과적으로 강화</p>
+          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">포커스 트레이닝</h3>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">원하는 신체 부위의 근력을 효과적으로 강화</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
       </div>

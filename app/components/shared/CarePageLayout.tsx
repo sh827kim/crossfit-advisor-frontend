@@ -29,18 +29,18 @@ export function CarePageLayout({
                 /* relative 부모(z-10)가 있으면 그 안의 z-50은 부모의 z-10 레벨에 갇힘. */
                 /* 따라서 부모의 z-index를 제거함. */
             }
-            <div className="flex-shrink-0 px-4 pt-4 pb-6 relative">
+            <div className="flex-shrink-0 px-[1rem] pt-[1rem] pb-[1.5rem] relative">
                 <button
                     onClick={onBack}
                     aria-label="이전으로"
                     type="button"
-                    className="w-11 h-11 mb-4 flex items-center justify-center text-white/80 hover:text-white transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 relative z-50"
+                    className="w-[2.75rem] h-[2.75rem] mb-[1rem] flex items-center justify-center text-white/80 hover:text-white transition active:scale-95 focus-visible:outline-none focus-visible:ring-[0.125rem] focus-visible:ring-white/40 relative z-50"
                 >
-                    <i aria-hidden="true" className="fa-solid fa-angle-left text-2xl"></i>
+                    <i aria-hidden="true" className="fa-solid fa-angle-left text-[1.5rem]"></i>
                 </button>
-                <h1 className="text-3xl font-black text-white">{title}</h1>
-                <h2 className="text-3xl font-black text-white">{subtitle}</h2>
-                <p className="text-xs text-gray-500 font-medium mt-2">{description}</p>
+                <h1 className="text-[1.875rem] font-black text-white">{title}</h1>
+                <h2 className="text-[1.875rem] font-black text-white">{subtitle}</h2>
+                <p className="text-[0.75rem] text-gray-500 font-medium mt-[0.5rem]">{description}</p>
             </div>
 
             {/* Main Content Area */}

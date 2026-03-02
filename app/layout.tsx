@@ -40,6 +40,7 @@ const barlowCondensed = Barlow_Condensed({
 import { GlobalPageTracker } from "@/app/components/GlobalPageTracker";
 import { ErrorProvider } from "@/app/context/ErrorContext";
 import { GlobalErrorModal } from "@/app/components/shared/GlobalErrorModal";
+import { WindowScaler } from "@/app/components/WindowScaler";
 
 import { GoogleAnalytics } from '@next/third-parties/google';
 
@@ -61,14 +62,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="애프터와드" />
       </head>
-      <body className={`bg-gray-100 font-sans ${barlowCondensed.variable}`}>
+      <body className={`bg-gray-100 font-sans ${barlowCondensed.variable} overflow-hidden h-[100dvh]`}>
         <AppProvider>
           <ErrorProvider>
+            <WindowScaler />
             <GlobalPageTracker />
             <PWAInitializer />
             <BackButtonHandler />
             <GlobalErrorModal />
-            <div className="flex flex-col bg-black max-w-md mx-auto h-[100dvh] shadow-lg overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+            <div className="flex flex-col bg-black app-container shadow-lg overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
               <Header />
               <main className="flex-1 flex flex-col overflow-y-auto overscroll-none">
                 {children}

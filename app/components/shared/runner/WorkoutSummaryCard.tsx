@@ -58,34 +58,34 @@ export const WorkoutSummaryCard = forwardRef<HTMLDivElement, WorkoutSummaryCardP
         return (
             <div
                 ref={ref}
-                className="relative w-full max-w-[325px] h-[424px] shrink-0 rounded-[32px] p-[3px] mb-8"
+                className="relative w-full max-w-[20.3rem] h-[26.5rem] shrink-0 rounded-[2rem] p-[0.2rem] mb-8"
                 style={borderStyle}
             >
-                <div className="w-full h-full rounded-[29px] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
+                <div className="w-full h-full rounded-[1.8rem] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
                     style={cardBgStyle}>
 
                     <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
                         <div className="flex flex-col items-start mb-4 flex-none">
-                            <div className="text-[60px] font-black text-white leading-none tracking-tight font-barlow">
+                            <div className="text-[3.8rem] font-black text-white leading-none tracking-tight font-barlow">
                                 {formatTime(durationSeconds)}
                             </div>
-                            <div className="text-[15px] font-bold text-white mt-1">운동시간</div>
+                            <div className="text-[0.9rem] font-bold text-white mt-1">운동시간</div>
                         </div>
 
                         <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>
 
                         <div className="text-left mb-4 flex-none">
-                            <h2 className="font-extrabold text-[15px] mb-1" style={{ color: theme.textColor || theme.color }}>
+                            <h2 className="font-extrabold text-[0.9rem] mb-1" style={{ color: theme.textColor || theme.color }}>
                                 {getModeTitle(mode)}
                             </h2>
-                            <p className="text-[32px] font-black text-white font-barlow whitespace-nowrap">
+                            <p className="text-[2rem] font-black text-white font-barlow whitespace-nowrap">
                                 {rounds} Rounds Quality
                             </p>
                         </div>
 
                         <div className="text-left mb-4 flex flex-col gap-1 flex-1 overflow-y-auto w-full no-scrollbar min-h-0">
                             {exercises.map((ex, i) => (
-                                <span key={i} className="text-white text-[15px] font-normal leading-relaxed flex-shrink-0">
+                                <span key={i} className="text-white text-[0.9rem] font-normal leading-relaxed flex-shrink-0">
                                     {ex.name}
                                 </span>
                             ))}
@@ -93,7 +93,7 @@ export const WorkoutSummaryCard = forwardRef<HTMLDivElement, WorkoutSummaryCardP
 
                         {dateTimeString && (
                             <div className="text-left flex-none">
-                                <p className="text-white text-[13px] font-normal opacity-55">
+                                <p className="text-white text-[0.8rem] font-normal opacity-55">
                                     {dateTimeString}
                                 </p>
                             </div>
