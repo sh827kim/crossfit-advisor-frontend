@@ -9,10 +9,21 @@ export const metadata: Metadata = {
   title: "애프터와드 - 보강운동 추천",
   description: "Crossfit WOD 후 맞춤형 보강운동을 추천하는 앱",
   applicationName: "애프터와드",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "애프터와드",
+  },
   icons: {
     icon: [
       { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png' },
+      { url: '/icon-152x152.png', sizes: '152x152', type: 'image/png' },
+      { url: '/icon-167x167.png', sizes: '167x167', type: 'image/png' },
+      { url: '/icon-180x180.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   formatDetection: {
@@ -55,15 +66,6 @@ export default function RootLayout({
       <head>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
         <link rel="manifest" href="/manifest.json" />
-
-        {/* iOS PWA 강제 적용 및 캐시 무효화를 위한 명시적 태그 */}
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="167x167" href="/icon-167x167.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icon-180x180.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="애프터와드" />
       </head>
       <body className={`bg-black font-sans ${barlowCondensed.variable} overflow-hidden w-full h-full flex justify-center items-start`}>
         <AppProvider>
