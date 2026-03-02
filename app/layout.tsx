@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     ],
     apple: [
       { url: '/icon-192x192.png' },
+      { url: '/icon-192x192.png', sizes: '180x180', type: 'image/png' },
+      { url: '/icon-192x192.png', sizes: '167x167', type: 'image/png' },
+      { url: '/icon-192x192.png', sizes: '152x152', type: 'image/png' },
+      { url: '/icon-192x192.png', sizes: '120x120', type: 'image/png' },
     ],
   },
   formatDetection: {
