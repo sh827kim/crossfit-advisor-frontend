@@ -47,13 +47,14 @@ export function WindowScaler() {
         --app-scale: ${scale};
       }
       .app-container {
-         width: 100vw;
+         width: 100%;
          max-width: ${430}px;
          margin: 0 auto;
          transform: scale(var(--app-scale));
          transform-origin: top center;
          height: calc(100vh / var(--app-scale));
          min-height: calc(100dvh / var(--app-scale));
+         overflow-x: hidden;
       }
       `
         }} />

@@ -90,6 +90,15 @@
     word-break: keep-all;
     overflow-wrap: break-word;
     font-style: normal !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    position: fixed;
+    inset: 0;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: none;
   }
 
   /* 작은 모바일 기기에서의 텍스트 크기 최적화 */
