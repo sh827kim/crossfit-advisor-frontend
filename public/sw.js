@@ -78,8 +78,12 @@ self.addEventListener('fetch', event => {
 
   // 4. 기타 요청 (이미지 등): 네트워크 우선 (Network First)
   // 404 에러 방지를 위해 네트워크 시도 후 실패 시 캐시 확인 (또는 그 반대)
-  // 여기서는 안전하게 네트워크 우선 사용
   if (request.method === 'GET') {
+    // iOS PWA 아이콘 캐시 무한 지속 현상을 막기 위해 아이콘 캐싱 완전 제외
+    if (url.pathname.includes('icon') || url.pathname.includes('apple-touch')) {
+      return event.respondWith(fetch(request));
+    }
+
     event.respondWith(
       fetch(request).then(response => {
         // 정상 응답이면 캐시 업데이트
