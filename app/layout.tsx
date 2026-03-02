@@ -57,10 +57,10 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
 
         {/* iOS PWA 강제 적용 및 캐시 무효화를 위한 명시적 태그 */}
-        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png?v=2" />
-        <link rel="apple-touch-icon" sizes="167x167" href="/icon-192x192.png?v=2" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icon-192x192.png?v=2" />
-        <link rel="apple-touch-icon" href="/icon-192x192.png?v=2" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png?v=3" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icon-192x192.png?v=3" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/icon-192x192.png?v=3" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png?v=3" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="애프터와드" />
