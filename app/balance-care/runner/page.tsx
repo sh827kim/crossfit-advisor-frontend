@@ -165,10 +165,16 @@ export default function RunnerPage() {
         }
     }, [stage]);
 
+    useEffect(() => {
+        if (!generatedPlan) {
+            router.replace('/balance-care');
+        }
+    }, [generatedPlan, router]);
+
     if (!generatedPlan) {
         return (
-            <div className="flex items-center justify-center h-screen bg-black text-white">
-                Loading...
+            <div className="flex items-center justify-center h-[100dvh] bg-black text-white">
+                <i className="fa-solid fa-circle-notch fa-spin text-3xl"></i>
             </div>
         );
     }
