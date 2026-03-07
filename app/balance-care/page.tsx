@@ -101,18 +101,15 @@ export default function BalanceCarePage() {
       return;
     }
 
-    // Get movement names for logging
+    // Get movement names for logging (no longer sent to GA, preserved for future local logic if needed)
     const selectedNames = selectedExercises
       .map(id => allMovements.find(m => m.id === id)?.name)
       .filter(Boolean)
       .join(',');
 
-    analytics.logEvent('click', {
-      screen_name: 'recommend_1',
-      event_category: 'recommend_workout',
-      target: 'create_workout_button',
-      time_select: selectedTime,
-      selected_wod: selectedNames
+    analytics.logEvent('request_recommendation', {
+      recommend_type: 'selected_wod',
+      time_select: selectedTime.toString()
     });
 
     generateWorkout(
@@ -126,11 +123,6 @@ export default function BalanceCarePage() {
   };
 
   const handleBack = () => {
-    analytics.logEvent('click', {
-      screen_name: 'recommend_1',
-      event_category: 'header',
-      target: 'back'
-    });
     router.push('/');
   };
 

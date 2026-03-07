@@ -60,12 +60,6 @@ export default function HomePage() {
     else if (mode === 'goal') target = 'workout_2';
     else if (mode === 'part') target = 'workout_3';
 
-    analytics.logEvent('click', {
-      screen_name: 'main',
-      event_category: 'main',
-      target: target
-    });
-
     resetInputState();
     setCurrentMode(mode);
 

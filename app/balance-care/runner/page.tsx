@@ -36,6 +36,7 @@ export default function RunnerPage() {
     const cardRef = useRef<HTMLDivElement>(null);
 
     const handleShare = async () => {
+        analytics.logEvent('share', { content_type: 'workout_result' });
         if (cardRef.current) {
             await shareWorkoutCard(cardRef.current, `balance-care-workout-${new Date().toISOString().split('T')[0]}.png`);
         }
@@ -53,6 +54,7 @@ export default function RunnerPage() {
 
     const handleRegenerate = async () => {
         if (!generatedPlan) return;
+        analytics.logEvent('regenerate_plan', { recommend_type: 'selected_wod' });
         await generateWorkout('/api/v1/workouts/generate/balance', {
             duration: generatedPlan.duration,
             wodMovementIds: wodList.map(m => m.id)
@@ -77,6 +79,7 @@ export default function RunnerPage() {
     const handleConfirmFinish = () => {
         setShowQuitModal(false);
         setStage('done');
+        analytics.logEvent('cancel_workout', { recommend_type: 'selected_wod', time_result: formatTime(timer) });
     };
 
     const handleCancelFinish = () => {
@@ -100,6 +103,10 @@ export default function RunnerPage() {
                 // All rounds finished
                 setStage('done');
                 setIsTimerRunning(false);
+                analytics.logEvent('complete_workout', {
+                    recommend_type: 'selected_wod',
+                    time_select: generatedPlan.duration.toString()
+                });
             }
         }
     };
@@ -146,24 +153,7 @@ export default function RunnerPage() {
         }
     }, [stage]);
 
-    // Analytics: Stage Tracking
-    const lastLoggedStageRef = useRef<Stage | null>(null);
 
-    useEffect(() => {
-        if (lastLoggedStageRef.current === stage) return;
-
-        lastLoggedStageRef.current = stage;
-
-        if (stage === 'intro') {
-            analytics.logEvent('pageview', {
-                screen_name: 'workout_ready'
-            });
-        } else if (stage === 'done') {
-            analytics.logEvent('pageview', {
-                screen_name: 'workout_result'
-            });
-        }
-    }, [stage]);
 
     useEffect(() => {
         if (!generatedPlan) {
@@ -187,6 +177,7 @@ export default function RunnerPage() {
     };
 
     const handleSaveAndExit = async () => {
+        analytics.logEvent('record_workout', { recommend_type: 'selected_wod' });
         if (!generatedPlan) return;
 
         try {
@@ -225,6 +216,7 @@ export default function RunnerPage() {
                     onBack={() => router.back()}
                     onRegenerate={handleRegenerate}
                     isGenerating={isGenerating}
+                    recommendType="selected_wod"
                 />
             )}
 

@@ -1,33 +1,27 @@
 'use client';
 
-type EventType = 'pageview' | 'click';
+type EventType =
+    | 'request_recommendation'
+    | 'start_workout'
+    | 'regenerate_plan'
+    | 'complete_workout'
+    | 'cancel_workout'
+    | 'share'
+    | 'record_workout'
+    | 'view_calendar';
 
 interface BaseParams {
-    screen_name: string;
     uu: string;
-    device: string;
     ts?: number;
     path?: string;
 }
 
-interface PageViewParams extends BaseParams {
-    // No extra params in Final Spec
-}
-
-interface ClickParams extends BaseParams {
-    target: string;
-    event_category?: string; // Optional in interface but required by spec logic if strict
-    target_no?: number; // Not in Final Spec table explicitly, but useful? Final Spec removed target_no.
-    // Final Spec Table columns: screen_name, event_category, target, params
-    // So target_no is gone.
+interface CustomEventParams extends BaseParams {
+    recommend_type?: 'selected_wod' | 'selected_goal' | 'selected_target';
     time_select?: string | number;
     time_result?: string | number;
-    selected_wod?: string;
-    selected_goal?: string;
-    selected_target?: string;
+    content_type?: string;
 }
-
-type EventParams = PageViewParams | ClickParams;
 
 const STORAGE_KEY_UU = 'crossfit_advisor_uu';
 
@@ -40,12 +34,10 @@ declare global {
 class AnalyticsService {
     private static instance: AnalyticsService;
     private uu: string = '';
-    private device: string = '';
 
     private constructor() {
         if (typeof window !== 'undefined') {
             this.initUU();
-            this.initDevice();
         }
     }
 
@@ -66,30 +58,12 @@ class AnalyticsService {
         }
     }
 
-    private initDevice() {
-        const ua = navigator.userAgent.toLowerCase();
-        if (/iphone|ipad|ipod/.test(ua)) {
-            this.device = 'ios';
-        } else if (/android/.test(ua)) {
-            this.device = 'android';
-        } else if (/mac os/.test(ua)) {
-            this.device = 'mac';
-        } else if (/windows/.test(ua)) {
-            this.device = 'window';
-        } else {
-            this.device = 'unknown';
-        }
-    }
-
-    public logEvent(eventType: 'pageview', params: Omit<PageViewParams, 'uu' | 'device'>): void;
-    public logEvent(eventType: 'click', params: Omit<ClickParams, 'uu' | 'device'>): void;
-    public logEvent(eventType: EventType, params: any) {
+    public logEvent(eventType: EventType, params?: Omit<CustomEventParams, 'uu'>): void {
         if (typeof window === 'undefined') return;
 
         const fullParams = {
             ...params,
             uu: this.uu,
-            device: this.device,
             ts: Date.now(),
         };
 
@@ -105,20 +79,10 @@ class AnalyticsService {
     private sendToGA4(eventType: EventType, params: any) {
         if (typeof window === 'undefined' || !window.gtag) return;
 
-        // GA4 Event Mapping
-        if (eventType === 'pageview') {
-            window.gtag('event', 'page_view', {
-                page_title: params.screen_name,
-                screen_name: params.screen_name,
-                ...params
-            });
-        } else if (eventType === 'click') {
-            window.gtag('event', 'click', {
-                event_category: params.event_category,
-                event_label: params.target,
-                ...params
-            });
-        }
+        // New Semantic Events
+        window.gtag('event', eventType, {
+            ...params
+        });
     }
 }
 

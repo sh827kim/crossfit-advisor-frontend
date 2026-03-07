@@ -32,6 +32,7 @@ interface RunnerIntroProps {
     onBack: () => void;
     onRegenerate?: () => void;
     isGenerating?: boolean;
+    recommendType: 'selected_wod' | 'selected_goal' | 'selected_target';
 }
 
 export function RunnerIntro({
@@ -44,7 +45,8 @@ export function RunnerIntro({
     onStart,
     onBack,
     onRegenerate,
-    isGenerating
+    isGenerating,
+    recommendType
 }: RunnerIntroProps) {
 
     // Equipment Translation
@@ -87,14 +89,9 @@ export function RunnerIntro({
     };
 
     const handleStart = () => {
-        // Analytics
-        const screenName = 'workout_ready';
-
-        analytics.logEvent('click', {
-            screen_name: screenName,
-            event_category: 'start_workout',
-            target: 'start_button',
-            time_select: plan?.duration
+        analytics.logEvent('start_workout', {
+            recommend_type: recommendType,
+            time_select: plan?.duration.toString()
         });
 
         onStart();
@@ -107,13 +104,6 @@ export function RunnerIntro({
                 <div className="flex gap-2">
                     <button
                         onClick={() => {
-                            const screenName = 'workout_ready';
-
-                            analytics.logEvent('click', {
-                                screen_name: screenName,
-                                event_category: 'header',
-                                target: 'back'
-                            });
                             onBack();
                         }}
                         className="w-10 h-10 flex items-center justify-center rounded-full active:bg-white/10 transition"

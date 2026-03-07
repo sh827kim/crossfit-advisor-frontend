@@ -86,12 +86,9 @@ export default function GoalCarePage() {
       return;
     }
 
-    analytics.logEvent('click', {
-      screen_name: 'recommend_2',
-      event_category: 'recommend_workout',
-      target: 'create_workout_button',
-      time_select: selectedTime,
-      selected_goal: selectedGoal.name
+    analytics.logEvent('request_recommendation', {
+      recommend_type: 'selected_goal',
+      time_select: selectedTime.toString()
     });
 
     generateWorkout(
@@ -105,11 +102,6 @@ export default function GoalCarePage() {
   };
 
   const handleBack = () => {
-    analytics.logEvent('click', {
-      screen_name: 'recommend_2',
-      event_category: 'header',
-      target: 'back'
-    });
     router.push('/');
   };
 
