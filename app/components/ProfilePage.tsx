@@ -154,7 +154,10 @@ export function ProfilePage() {
             {/* Beginner Mode Toggle */}
             <div className="w-full px-2 mb-6 flex items-center justify-between">
               <div className={`flex flex-col items-start text-left transition-opacity duration-300 ${!isEditing ? 'opacity-60' : 'opacity-100'}`}>
-                <span className="text-[14px] font-bold text-white tracking-tight">입문자 모드</span>
+                <span className="flex items-center text-[14px] font-bold text-white tracking-tight">
+                  <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />
+                  초보자 모드
+                </span>
                 <span className="text-[11px] text-[#959595] font-medium leading-[1.2] mt-1">
                   난이도가 쉬운 운동 위주로 추천해드려요.
                 </span>

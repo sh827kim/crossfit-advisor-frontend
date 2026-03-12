@@ -64,7 +64,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" crossOrigin="anonymous" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`bg-black font-sans ${barlowCondensed.variable} overflow-hidden w-full h-full flex justify-center items-start`}>

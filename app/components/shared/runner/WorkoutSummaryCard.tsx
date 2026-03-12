@@ -20,8 +20,7 @@ export interface WorkoutSummaryCardProps {
     dateTimeString?: string;
 }
 
-export const WorkoutSummaryCard = forwardRef<HTMLDivElement, WorkoutSummaryCardProps>(
-    ({ mode, rounds, durationSeconds, dateString, exercises, theme, dateTimeString }, ref) => {
+export const WorkoutSummaryCard = ({ mode, rounds, durationSeconds, dateString, exercises, theme, dateTimeString, ref }: WorkoutSummaryCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
 
         const formatTime = (seconds: number) => {
             const m = Math.floor(seconds / 60);
@@ -107,6 +106,5 @@ export const WorkoutSummaryCard = forwardRef<HTMLDivElement, WorkoutSummaryCardP
             </div>
         );
     }
-);
 
 WorkoutSummaryCard.displayName = 'WorkoutSummaryCard';

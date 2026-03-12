@@ -368,7 +368,7 @@ export default function GoalRunnerPage() {
                 <div ref={cardRef} className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
                     <div className="w-full flex flex-col items-center pb-8">
                         <h1 className="text-[32px] font-extrabold text-white text-center mb-2 leading-[40px]">
-                            오늘도 해냈어요!<br /> Good Work
+                            오늘도 해냈어요!<br /> Great Job!
                         </h1>
 
                         {/* Main Content Area */}

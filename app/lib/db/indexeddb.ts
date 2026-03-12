@@ -22,7 +22,7 @@ export interface WorkoutRecordDB {
 const DB_NAME = 'AfterWOD_DB';
 const DB_VERSION = 1;
 const STORE_NAME = 'workout_records';
-const MAX_MONTHLY_RECORDS = 100; // 당월 최대 보관 기록 수
+const MAX_TOTAL_RECORDS = 3000; // 최대 보관 기록 수
 
 /**
  * IndexedDB 데이터베이스 연결 및 스키마 생성
@@ -252,56 +252,27 @@ export async function deleteWorkoutRecord(id: number): Promise<void> {
 }
 
 /**
- * 당월 운동 기록 100건 제한 적용
- * - 당월 기록이 100건을 초과하면 오래된 기록 삭제
- * - 이전 달 기록은 모두 삭제
+ * 운동 기록 3000건 제한 적용
+ * - 3000건을 초과하면 가장 오래된 기록 삭제
  */
-export async function cleanupMonthlyRecords(): Promise<void> {
+export async function cleanupOldRecords(): Promise<void> {
   const db = await openDatabase();
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
-
-  // 전체 기록 조회
+  // 전체 기록 조회 (getAllWorkoutRecords는 기본적으로 최신순 정렬)
   const allRecords = await getAllWorkoutRecords();
+
+  if (allRecords.length <= MAX_TOTAL_RECORDS) {
+    return;
+  }
 
   // 삭제할 기록 ID 목록
   const idsToDelete: number[] = [];
 
-  // 이번달 기록과 이전 기록 분리
-  const thisMonthRecords: WorkoutRecordDB[] = [];
-  const otherRecords: WorkoutRecordDB[] = [];
-
-  allRecords.forEach(record => {
-    const recordDate = new Date(record.date);
-    const recordYear = recordDate.getFullYear();
-    const recordMonth = recordDate.getMonth() + 1;
-
-    if (recordYear === currentYear && recordMonth === currentMonth) {
-      thisMonthRecords.push(record);
-    } else if (recordYear < currentYear || (recordYear === currentYear && recordMonth < currentMonth)) {
-      // 이전 달 기록은 삭제 대상
-      if (record.id !== undefined) {
-        idsToDelete.push(record.id);
-      }
-    } else {
-      // 미래 기록은 유지
-      otherRecords.push(record);
-    }
-  });
-
-  // 이번달 기록이 MAX_MONTHLY_RECORDS건 초과하면 오래된 기록 삭제
-  if (thisMonthRecords.length > MAX_MONTHLY_RECORDS) {
-    // createdAt 기준 내림차순 정렬 (최신순)
-    thisMonthRecords.sort((a, b) => b.createdAt - a.createdAt);
-
-    // MAX_MONTHLY_RECORDS건 이후의 기록은 삭제 대상
-    for (let i = MAX_MONTHLY_RECORDS; i < thisMonthRecords.length; i++) {
-      const recordId = thisMonthRecords[i].id;
-      if (recordId !== undefined) {
-        idsToDelete.push(recordId);
-      }
+  // MAX_TOTAL_RECORDS건 이후의 기록은 삭제 대상
+  for (let i = MAX_TOTAL_RECORDS; i < allRecords.length; i++) {
+    const recordId = allRecords[i].id;
+    if (recordId !== undefined) {
+      idsToDelete.push(recordId);
     }
   }
 

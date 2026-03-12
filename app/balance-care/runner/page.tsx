@@ -358,7 +358,7 @@ export default function RunnerPage() {
                 <div ref={cardRef} className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
                     <div className="w-full flex flex-col items-center pb-12">
                         <h1 className="text-[32px] font-extrabold text-white text-center mb-8 leading-[40px]">
-                            오늘도 해냈어요!<br /> Good Work
+                            오늘도 해냈어요!<br /> Great Job!
                         </h1>
                         {/* Main Content Area */}
                         <div className="flex-1 w-full flex flex-col items-center justify-center my-4">

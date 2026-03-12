@@ -13,7 +13,7 @@ import {
   getRecordsByMonth,
   addWorkoutRecord as addToIndexedDB,
   deleteWorkoutRecord as deleteFromIndexedDB,
-  cleanupMonthlyRecords,
+  cleanupOldRecords,
   WorkoutRecordDB
 } from './indexeddb';
 import { migrateFromLocalStorage } from './migration';
@@ -87,7 +87,7 @@ class IndexedDBAdapter implements WorkoutStorageAdapter {
   }
 
   async cleanup(): Promise<void> {
-    await cleanupMonthlyRecords();
+    await cleanupOldRecords();
   }
 
   /** DB 레코드를 앱 레코드로 변환 */

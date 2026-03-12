@@ -1,5 +1,16 @@
 import { toPng } from 'html-to-image';
 
+function dataURItoBlob(dataURI: string): Blob {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+
 export const shareWorkoutCard = async (element: HTMLElement | null, fileName: string = 'workout-summary.png') => {
     if (!element) return;
 
@@ -8,7 +19,6 @@ export const shareWorkoutCard = async (element: HTMLElement | null, fileName: st
         const dataUrl = await toPng(element, {
             cacheBust: true,
             pixelRatio: 2, // High resolution
-            // backgroundColor: undefined // default is transparent, we capture element's background
             filter: (node) => {
                 // Exclude elements with 'no-share' class
                 if (node instanceof HTMLElement && node.classList.contains('no-share')) {
@@ -18,10 +28,7 @@ export const shareWorkoutCard = async (element: HTMLElement | null, fileName: st
             }
         });
 
-        // Convert dataURL to Blob
-        const response = await fetch(dataUrl);
-        const blob = await response.blob();
-
+        const blob = dataURItoBlob(dataUrl);
         const file = new File([blob], fileName, { type: 'image/png' });
 
         // Check if Web Share API is supported and can share files
@@ -35,6 +42,11 @@ export const shareWorkoutCard = async (element: HTMLElement | null, fileName: st
             } catch (error) {
                 if ((error as Error).name !== 'AbortError') {
                     console.error('Error sharing:', error);
+                    // Fallback to download
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = dataUrl;
+                    link.click();
                 }
             }
         } else {
@@ -45,7 +57,8 @@ export const shareWorkoutCard = async (element: HTMLElement | null, fileName: st
             link.click();
         }
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error in sharing workflow:', error);
+        alert('이미지 생성 공유 중 에러가 발생했습니다: ' + (error?.message || error));
     }
 };
