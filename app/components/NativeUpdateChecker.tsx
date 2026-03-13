@@ -31,20 +31,35 @@ export function NativeUpdateChecker() {
   const [currentVersion, setCurrentVersion] = useState('');
 
   useEffect(() => {
-    if (!Capacitor.isNativePlatform()) return;
+    // 1. 네이티브 플랫폼 확인
+    const isNative = Capacitor.isNativePlatform();
+    console.log('[NativeUpdateChecker] Is Native Platform:', isNative);
+    if (!isNative) return;
 
+    // 2. 앱 정보 확인
     import('@capacitor/app')
       .then(async ({ App }) => {
-        const info = await App.getInfo();
-        const buildNumber = parseInt(info.build, 10);
+        try {
+          const info = await App.getInfo();
+          console.log('[NativeUpdateChecker] App Info:', info);
+          
+          const buildNumber = parseInt(info.build, 10);
+          console.log(`[NativeUpdateChecker] Build Check: Current(${buildNumber}) < Min(${MINIMUM_BUILD_NUMBER})`);
 
-        if (!isNaN(buildNumber) && buildNumber < MINIMUM_BUILD_NUMBER) {
-          setCurrentVersion(info.version); // 예: "1.1"
-          setShowUpdate(true);
+          if (!isNaN(buildNumber) && buildNumber < MINIMUM_BUILD_NUMBER) {
+            setCurrentVersion(info.version);
+            setShowUpdate(true);
+          }
+        } catch (err) {
+          console.error('[NativeUpdateChecker] Failed to get app info:', err);
         }
       })
-      .catch(() => {
-        // @capacitor/app 미설치 시 무시
+      .catch((err) => {
+        console.warn('[NativeUpdateChecker] @capacitor/app plugin not found in this build:', err);
+        // 만약 플러그인이 없는 구버전이라면? 
+        // 여기서 무조건 팝업을 띄우게 할 수도 있습니다 (가장 확실한 방법)
+        setCurrentVersion('Low');
+        setShowUpdate(true);
       });
   }, []);
 

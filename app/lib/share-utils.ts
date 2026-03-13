@@ -51,8 +51,13 @@ export const shareWorkoutCard = async (element: HTMLElement | null, fileName: st
                     url: savedFile.uri, // 저장된 로컬 파일 경로 지정
                 });
             } catch (error: any) {
+                // 사용자가 공유 시트를 취소한 경우 → 조용히 무시
+                const msg: string = error?.message || String(error);
+                if (msg.toLowerCase().includes('cancel') || error?.name === 'AbortError') {
+                    return;
+                }
                 console.error('Error sharing natively:', error);
-                alert('앱 내 이미지 공유 중 에러가 발생했습니다: ' + (error?.message || error));
+                alert('앱 내 이미지 공유 중 에러가 발생했습니다: ' + msg);
             }
         } else {
             // 일반 모바일 웹 / 데스크톱 브라우저 환경
