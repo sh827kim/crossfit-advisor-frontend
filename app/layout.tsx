@@ -4,6 +4,7 @@ import { AppProvider } from "@/app/context/AppContext";
 import { Header } from "@/app/components/Header";
 import { PWAInitializer } from "@/app/components/PWAInitializer";
 import { BackButtonHandler } from "@/app/components/BackButtonHandler";
+import { NativeUpdateChecker } from "@/app/components/NativeUpdateChecker";
 
 export const metadata: Metadata = {
   title: "애프터와드 - 보강운동 추천",
@@ -74,6 +75,7 @@ export default function RootLayout({
             <GlobalPageTracker />
             <PWAInitializer />
             <BackButtonHandler />
+            <NativeUpdateChecker />
             <div className="flex flex-col bg-[#010101] app-container shadow-lg">
               <Header />
               <main className="flex-1 flex flex-col overflow-y-auto overscroll-none hide-scrollbar">
