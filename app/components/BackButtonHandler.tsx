@@ -99,6 +99,7 @@ export function BackButtonHandler() {
       cancelText="취소"
       onConfirm={handleExitApp}
       onCancel={() => setShowExitDialog(false)}
+      confirmColor="#ffffff"
     />
   );
 }
