@@ -207,7 +207,7 @@ export default function GoalRunnerPage() {
             {/* STAGE 1: INTRO */}
             {stage === 'intro' && (
                 <RunnerIntro
-                    title="스킬 마스터"
+                    title="목표 동작 달성"
                     description={<>라운드를 끝낼수록 목표에 가까워져요.<br />힘들어도 끝까지 화이팅!</>}
                     plan={generatedPlan}
                     themeColor={THEME_COLOR}

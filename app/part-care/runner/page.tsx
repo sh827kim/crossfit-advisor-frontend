@@ -207,7 +207,7 @@ export default function PartRunnerPage() {
             {/* STAGE 1: INTRO */}
             {stage === 'intro' && (
                 <RunnerIntro
-                    title="포커스 트레이닝"
+                    title="부위별 근력 강화"
                     description={<>탄탄한 근력이 있다면 무엇이든 해낼 수 있어요.<br />힘들어도 끝까지 화이팅!</>}
                     plan={generatedPlan}
                     themeColor={THEME_COLOR}

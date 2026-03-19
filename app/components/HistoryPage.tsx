@@ -261,9 +261,9 @@ export function HistoryPage() {
                       <span className={`text-[12px] font-bold tracking-wider ${record.mode === 'BALANCE' ? 'text-[#F43000]' :
                         record.mode === 'GOAL' ? 'text-[#EEFD32]' : 'text-[#00DCEB]'
                         }`}>
-                        {record.mode === 'BALANCE' ? '밸런스 케어' :
-                          record.mode === 'GOAL' ? '스킬 마스터' :
-                            record.mode === 'PART' ? '포커스 트레이닝' : '자유 운동'}
+                        {record.mode === 'BALANCE' ? 'WOD 기반 맞춤 운동' :
+                          record.mode === 'GOAL' ? '목표 동작 달성' :
+                            record.mode === 'PART' ? '부위별 근력 강화' : '자유 운동'}
                       </span>
                       <span className="text-[12px] text-gray-500 font-medium ml-1 border-l border-white/10 pl-2 font-barlow">
                         {dateDisplay}

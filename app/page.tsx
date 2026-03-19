@@ -101,7 +101,7 @@ export default function HomePage() {
 
       {/* 케어 버튼 영역 */}
       <div className="flex flex-col gap-[0.9rem] items-center w-full px-[0.8rem]">
-        {/* 1. 애프터와드 밸런스 케어 (Red) */}
+        {/* 1. 애프터와드 WOD 기반 맞춤 운동 (Red) */}
         <button
           onClick={() => handleInputClick('wod')}
           className="w-full max-w-[22.3rem] h-[6.3rem] rounded-[1.5rem] relative overflow-hidden transition active:scale-95 text-left pl-[1.5rem] pr-[1.5rem] flex flex-col justify-center gap-1 group"
@@ -111,8 +111,8 @@ export default function HomePage() {
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">밸런스 케어</h3>
-          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">WOD 분석을 통한 균형 잡힌 나머지 운동</p>
+          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">WOD 기반 맞춤 운동</h3>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">WOD를 분석해 균형잡힌 추가운동을 해요.</p>
 
           {/* Hover/Active Effect Overlay */}
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
@@ -128,8 +128,8 @@ export default function HomePage() {
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">스킬 마스터</h3>
-          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">체계적인 플랜으로 목표 동작 달성</p>
+          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">목표 동작 달성</h3>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">어려운 동작을 단계적으로 익히고 완성해요.</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
 
@@ -143,8 +143,8 @@ export default function HomePage() {
             backgroundClip: 'padding-box'
           }}
         >
-          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">포커스 트레이닝</h3>
-          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">원하는 신체 부위의 근력을 효과적으로 강화</p>
+          <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">부위별 근력 강화</h3>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">원하는 부위의 근력을 효과적으로 강화해요.</p>
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />
         </button>
       </div>

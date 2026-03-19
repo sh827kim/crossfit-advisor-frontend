@@ -206,7 +206,7 @@ export default function RunnerPage() {
             {/* STAGE 1: INTRO */}
             {stage === 'intro' && (
                 <RunnerIntro
-                    title="밸런스 케어"
+                    title="WOD 기반 맞춤 운동"
                     description={<>운동이 끝나면 더 강해질거에요.<br />힘들어도 끝까지 화이팅!</>}
                     plan={generatedPlan}
                     themeColor={THEME_COLOR}

@@ -22,24 +22,24 @@ export interface WorkoutSummaryCardProps {
 
 export const WorkoutSummaryCard = ({ mode, rounds, durationSeconds, dateString, exercises, theme, dateTimeString, ref }: WorkoutSummaryCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
 
-        const formatTime = (seconds: number) => {
-            const m = Math.floor(seconds / 60);
-            const s = seconds % 60;
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        };
+    const formatTime = (seconds: number) => {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    };
 
-        const getModeTitle = (mode: string) => {
-            switch (mode) {
-                case 'PART': return '포커스 트레이닝';
-                case 'BALANCE': return '밸런스 케어';
-                case 'GOAL': return '스킬 마스터';
-                default: return '운동 완료';
-            }
-        };
+    const getModeTitle = (mode: string) => {
+        switch (mode) {
+            case 'PART': return '부위별 근력 강화';
+            case 'BALANCE': return 'WOD 기반 맞춤 운동';
+            case 'GOAL': return '목표 동작 달성';
+            default: return '운동 완료';
+        }
+    };
 
-        // Conic gradient border style
-        const borderStyle = {
-            background: `conic-gradient(from 180deg at 50% 50%, 
+    // Conic gradient border style
+    const borderStyle = {
+        background: `conic-gradient(from 180deg at 50% 50%, 
                 #707070 0deg, 
                 #FFFFFF 45deg, 
                 #9E9E9E 110deg, 
@@ -48,63 +48,63 @@ export const WorkoutSummaryCard = ({ mode, rounds, durationSeconds, dateString, 
                 #FFFFFF 260deg, 
                 #9E9E9E 310deg, 
                 #FFFFFF 360deg)`
-        };
+    };
 
-        const cardBgStyle = {
-            background: `linear-gradient(134.49deg, ${theme.gradientStart} 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F`
-        };
+    const cardBgStyle = {
+        background: `linear-gradient(134.49deg, ${theme.gradientStart} 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F`
+    };
 
-        return (
-            <div
-                ref={ref}
-                className="relative w-full max-w-[20.3rem] h-[26.5rem] shrink-0 rounded-[2rem] p-[0.2rem] mb-8"
-                style={borderStyle}
-            >
-                <div className="w-full h-full rounded-[1.8rem] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
-                    style={cardBgStyle}>
+    return (
+        <div
+            ref={ref}
+            className="relative w-full max-w-[20.3rem] h-[26.5rem] shrink-0 rounded-[2rem] p-[0.2rem] mb-8"
+            style={borderStyle}
+        >
+            <div className="w-full h-full rounded-[1.8rem] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"
+                style={cardBgStyle}>
 
-                    <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
-                        <div className="flex flex-col items-start mb-4 flex-none">
-                            <div className="text-[3.8rem] font-black text-white leading-none tracking-tight font-barlow">
-                                {formatTime(durationSeconds)}
-                            </div>
-                            <div className="text-[0.9rem] font-bold text-white mt-1">운동시간</div>
+                <div className="relative z-10 flex flex-col items-start flex-1 w-full min-h-0">
+                    <div className="flex flex-col items-start mb-4 flex-none">
+                        <div className="text-[3.8rem] font-black text-white leading-none tracking-tight font-barlow">
+                            {formatTime(durationSeconds)}
                         </div>
+                        <div className="text-[0.9rem] font-bold text-white mt-1">운동시간</div>
+                    </div>
 
-                        <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>
+                    <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>
 
-                        <div className="text-left mb-4 flex-none">
-                            <h2 className="font-extrabold text-[0.9rem] mb-1" style={{ color: theme.textColor || theme.color }}>
-                                {getModeTitle(mode)}
-                            </h2>
-                            <p className="text-[2rem] font-black text-white font-barlow whitespace-nowrap">
-                                {rounds} Rounds Quality
+                    <div className="text-left mb-4 flex-none">
+                        <h2 className="font-extrabold text-[0.9rem] mb-1" style={{ color: theme.textColor || theme.color }}>
+                            {getModeTitle(mode)}
+                        </h2>
+                        <p className="text-[2rem] font-black text-white font-barlow whitespace-nowrap">
+                            {rounds} Rounds Quality
+                        </p>
+                    </div>
+
+                    <div className="text-left mb-4 flex flex-col gap-1 flex-1 overflow-y-auto w-full no-scrollbar min-h-0">
+                        {exercises.map((ex, i) => (
+                            <span key={i} className="text-white text-[0.9rem] font-normal leading-relaxed flex-shrink-0">
+                                {ex.name}
+                            </span>
+                        ))}
+                    </div>
+
+                    {dateTimeString && (
+                        <div className="text-left flex-none">
+                            <p className="text-white text-[0.8rem] font-normal opacity-55">
+                                {dateTimeString}
                             </p>
                         </div>
+                    )}
 
-                        <div className="text-left mb-4 flex flex-col gap-1 flex-1 overflow-y-auto w-full no-scrollbar min-h-0">
-                            {exercises.map((ex, i) => (
-                                <span key={i} className="text-white text-[0.9rem] font-normal leading-relaxed flex-shrink-0">
-                                    {ex.name}
-                                </span>
-                            ))}
-                        </div>
-
-                        {dateTimeString && (
-                            <div className="text-left flex-none">
-                                <p className="text-white text-[0.8rem] font-normal opacity-55">
-                                    {dateTimeString}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Watermark for shared image (optional, initially hidden or handle in CSS if needed only for capture) 
+                    {/* Watermark for shared image (optional, initially hidden or handle in CSS if needed only for capture) 
                             For now, keeping it simple as per original design. 
                         */}
-                    </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+}
 
 WorkoutSummaryCard.displayName = 'WorkoutSummaryCard';
