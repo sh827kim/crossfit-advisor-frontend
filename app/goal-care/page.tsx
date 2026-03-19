@@ -146,12 +146,22 @@ export default function GoalCarePage() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="초성으로 검색 (예: ㅅㄴㅊ)"
+                placeholder="한글/초성으로 검색"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 pl-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-700 transition border border-gray-800"
+                className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 pl-10 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-700 transition border border-gray-800"
               />
               <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={() => setSearchInput('')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition w-5 h-5 flex items-center justify-center"
+                  aria-label="검색어 초기화"
+                >
+                  <i className="fa-solid fa-circle-xmark"></i>
+                </button>
+              )}
             </div>
           </div>
 

@@ -51,7 +51,7 @@ export function SelectionCard({
             </div>
 
             <span
-                className={`text-[15px] font-bold text-left ml-3 leading-tight truncate pr-6 ${selected ? '' : 'text-white/60'}`}
+                className={`text-[13px] font-bold text-left ml-2 leading-snug break-keep line-clamp-2 pr-7 ${selected ? '' : 'text-white/60'}`}
                 style={selected ? { color: themeColor } : undefined}
             >
                 {label}

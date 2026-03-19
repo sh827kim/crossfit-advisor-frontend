@@ -192,10 +192,7 @@ export function RunnerIntro({
                         {isGenerating ? (
                             <i className="fa-solid fa-spinner fa-spin text-[20px]"></i>
                         ) : (
-                            <>
-                                <i className="fa-solid fa-rotate-right mb-1 text-[20px]"></i>
-                                <span className="text-[10px] tracking-tight">다시 생성</span>
-                            </>
+                            <i className="fa-solid fa-rotate-right text-[20px]"></i>
                         )}
                     </button>
                 )}
@@ -205,7 +202,7 @@ export function RunnerIntro({
                     style={{ backgroundColor: themeColor, boxShadow: `0 0 20px ${themeShadow}` }}
                 >
                     <i className="fa-solid fa-play text-[16px]"></i>
-                    <span>지금부터 성장 시작!</span>
+                    <span>시작하기</span>
                 </button>
             </div>
         </div>
