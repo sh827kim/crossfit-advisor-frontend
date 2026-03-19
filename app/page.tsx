@@ -95,7 +95,7 @@ export default function HomePage() {
           어떤 운동을 할까요?
         </h2>
         <p className="text-[0.9rem] text-gray-500 font-normal">
-          목표에 맞는 운동 플랜을 설계해 드릴게요.
+          목표에 맞는 운동 루틴을 설계해 드릴게요.
         </p>
       </div>
 
