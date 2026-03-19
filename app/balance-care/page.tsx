@@ -172,7 +172,7 @@ export default function BalanceCarePage() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="초성으로 검색 (예: ㅅㄴㅊ)"
+                placeholder="한글/초성으로 검색"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="w-full bg-gray-900 text-white placeholder-gray-500 rounded-2xl px-4 py-3 pl-10 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-700 transition border border-gray-800"
