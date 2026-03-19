@@ -288,9 +288,9 @@ export function OnboardingPage() {
                       <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />
                       초보자 모드
                     </span>
-                    <span className="text-[10px] text-[#959595] font-medium leading-[1.2] mt-1">
+                    {/* <span className="text-[10px] text-[#959595] font-medium leading-[1.2] mt-1">
                       난이도가 쉬운 운동 위주로 추천해드려요.
-                    </span>
+                    </span> */}
                   </div>
                   <button
                     onClick={() => setIsBeginnerMode(!isBeginnerMode)}

@@ -54,6 +54,7 @@ interface AppContextType {
   historyError: string | null;
   addWorkoutRecord: (record: WorkoutRecord) => Promise<void>;
   deleteWorkoutRecord: (id: number) => Promise<void>;
+  resetWorkoutHistory: () => Promise<void>;
 
   // 사용자 프로필
   hasVisited: boolean;
@@ -373,6 +374,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const resetWorkoutHistory = useCallback(async () => {
+    if (!storageRef.current) {
+      console.error('Storage adapter not initialized');
+      return;
+    }
+
+    try {
+      await storageRef.current.clear();
+      setWorkoutHistory([]);
+    } catch (error) {
+      console.error('Failed to reset workout history:', error);
+      throw error;
+    }
+  }, []);
+
   const resetInputState = useCallback(() => {
     setWodList([]);
     setSelectedGoal(null);
@@ -468,6 +484,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         historyError,
         addWorkoutRecord,
         deleteWorkoutRecord,
+        resetWorkoutHistory,
         hasVisited,
         userNickname,
         userProfileImage,

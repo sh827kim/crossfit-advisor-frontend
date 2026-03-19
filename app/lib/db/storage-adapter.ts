@@ -14,6 +14,7 @@ import {
   addWorkoutRecord as addToIndexedDB,
   deleteWorkoutRecord as deleteFromIndexedDB,
   cleanupOldRecords,
+  clearAllWorkoutRecords,
   WorkoutRecordDB
 } from './indexeddb';
 import { migrateFromLocalStorage } from './migration';
@@ -44,6 +45,9 @@ export interface WorkoutStorageAdapter {
 
   /** 정리 작업 (100건 제한 등) */
   cleanup(): Promise<void>;
+
+  /** 모든 기록 초기화 */
+  clear(): Promise<void>;
 }
 
 /**
@@ -84,6 +88,10 @@ class IndexedDBAdapter implements WorkoutStorageAdapter {
 
   async delete(id: number): Promise<void> {
     await deleteFromIndexedDB(id);
+  }
+
+  async clear(): Promise<void> {
+    await clearAllWorkoutRecords();
   }
 
   async cleanup(): Promise<void> {
@@ -148,6 +156,10 @@ class LocalStorageAdapter implements WorkoutStorageAdapter {
     const records = this.loadRecords();
     const newRecords = records.filter(r => r.id !== id);
     this.saveRecords(newRecords);
+  }
+
+  async clear(): Promise<void> {
+    localStorage.removeItem(this.HISTORY_KEY);
   }
 
   async cleanup(): Promise<void> {

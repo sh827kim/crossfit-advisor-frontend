@@ -11,7 +11,7 @@ import { ConfirmDialog } from '@/app/components/shared/ConfirmDialog';
 
 export function ProfilePage() {
   const router = useRouter();
-  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileColorIndex, setUserProfileColorIndex, isBeginnerMode, setIsBeginnerMode } = useApp();
+  const { workoutHistory, isLoadingHistory, userNickname, setUserNickname, userProfileColorIndex, setUserProfileColorIndex, isBeginnerMode, setIsBeginnerMode, resetWorkoutHistory } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(userNickname);
@@ -60,10 +60,9 @@ export function ProfilePage() {
     setUserProfileColorIndex(nextIndex);
   };
 
-  const confirmReset = () => {
+  const confirmReset = async () => {
     setShowResetPopup(false);
-    localStorage.removeItem('cf_has_visited');
-    router.replace('/onboarding?reset=true');
+    await resetWorkoutHistory();
   };
 
   const fallbackColor = useMemo(() => getProfileColorByIndex(userProfileColorIndex), [userProfileColorIndex]);
@@ -158,9 +157,9 @@ export function ProfilePage() {
                   <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />
                   초보자 모드
                 </span>
-                <span className="text-[11px] text-[#959595] font-medium leading-[1.2] mt-1">
+                {/* <span className="text-[11px] text-[#959595] font-medium leading-[1.2] mt-1">
                   난이도가 쉬운 운동 위주로 추천해드려요.
-                </span>
+                </span> */}
               </div>
               <button
                 onClick={() => isEditing && setIsBeginnerMode(!isBeginnerMode)}
@@ -231,9 +230,10 @@ export function ProfilePage() {
           <div className="mt-auto pb-6">
             <button
               onClick={() => setShowResetPopup(true)}
-              className="text-[#555] text-[13px] underline decoration-[#555] underline-offset-4 hover:text-[#666] transition"
+              className="flex items-center gap-1 text-[#555] text-[13px] hover:text-[#666] transition"
             >
-              운동 기록 초기화
+              <Image src="/trash.svg" alt="초기화" width={14} height={14} />
+              <span className="underline decoration-[#555] underline-offset-4">운동 기록 초기화</span>
             </button>
           </div>
         )}
@@ -243,9 +243,9 @@ export function ProfilePage() {
       <ConfirmDialog
         isOpen={showResetPopup}
         title={<>운동 기록을<br />초기화 할까요?</>}
-        description={<>지금까지의 운동 기록과<br />프로필 정보가 모두 사라집니다.</>}
-        confirmText="초기화하기"
-        cancelText="취소"
+        description=""
+        confirmText="네"
+        cancelText="아니요"
         onConfirm={confirmReset}
         onCancel={() => setShowResetPopup(false)}
         confirmColor="#ffffff"

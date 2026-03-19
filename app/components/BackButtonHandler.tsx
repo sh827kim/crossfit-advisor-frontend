@@ -30,7 +30,7 @@ export function BackButtonHandler() {
     if (Capacitor.isNativePlatform()) {
       import('@capacitor/app')
         .then(({ App }) => App.exitApp())
-        .catch(() => {});
+        .catch(() => { });
     }
     // Web/PWA 환경에서는 종료 수단이 없으므로 팝업만 닫힘
   };
@@ -93,10 +93,10 @@ export function BackButtonHandler() {
   return (
     <ConfirmDialog
       isOpen={showExitDialog}
-      title="앱을 종료하시겠습니까?"
+      title="앱을 종료할까요?"
       description="뒤로가기를 누르셨습니다."
-      confirmText="종료"
-      cancelText="취소"
+      confirmText="네"
+      cancelText="아니요"
       onConfirm={handleExitApp}
       onCancel={() => setShowExitDialog(false)}
       confirmColor="#ffffff"

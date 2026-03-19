@@ -340,7 +340,7 @@ export default function PartRunnerPage() {
                         <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 animate-fadeIn">
                             <div className="w-[275px] bg-[#1F1F1F] border border-white/5 rounded-[32px] p-6 shadow-2xl flex flex-col items-center">
                                 <h2 className="text-white text-[18px] font-bold text-center leading-[28px] mt-4 mb-8">
-                                    운동을<br />종료하시겠습니까?
+                                    운동을<br />종료할까요?
                                 </h2>
 
                                 <button
@@ -348,14 +348,14 @@ export default function PartRunnerPage() {
                                     className="w-full text-black font-bold h-[54px] rounded-2xl text-[15px] hover:brightness-110 active:scale-95 transition mb-3"
                                     style={{ backgroundColor: THEME_COLOR }}
                                 >
-                                    종료하기
+                                    네
                                 </button>
 
                                 <button
                                     onClick={handleCancelFinish}
                                     className="text-white font-bold text-[15px] opacity-80 hover:opacity-100 p-2"
                                 >
-                                    계속하기
+                                    아니요
                                 </button>
                             </div>
                         </div>

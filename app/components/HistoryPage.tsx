@@ -334,8 +334,8 @@ export function HistoryPage() {
         isOpen={showDeleteConfirm}
         title={<>운동 기록을<br />삭제할까요?</>}
         description=""
-        confirmText="삭제하기"
-        cancelText="취소"
+        confirmText="네"
+        cancelText="아니요"
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
         confirmColor="#ffffff"
