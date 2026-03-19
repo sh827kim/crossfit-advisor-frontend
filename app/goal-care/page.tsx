@@ -133,7 +133,7 @@ export default function GoalCarePage() {
             onGenerate={handleGenerate}
             isGenerating={isLoading}
             error={error}
-            buttonText="오늘의 플랜 확인하기"
+            buttonText="루틴 확인하기"
             themeColor={THEME_ACCENT}
             gradientOverlay="linear-gradient(121deg, rgba(124, 253, 50, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
             isDisabled={!selectedGoal}

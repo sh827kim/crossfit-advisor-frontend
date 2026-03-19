@@ -140,7 +140,7 @@ export default function BalanceCarePage() {
             onGenerate={handleGenerate}
             isGenerating={isLoading}
             error={error}
-            buttonText="오늘의 플랜 확인하기"
+            buttonText="루틴 확인하기"
             themeColor="#f43000"
             gradientOverlay="linear-gradient(135deg, rgba(244, 48, 0, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
             isDisabled={selectedExercises.length === 0}

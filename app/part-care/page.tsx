@@ -80,7 +80,7 @@ export default function PartCarePage() {
         overlayNode={
           selectedPart ? (
             <EncouragedOverlay
-              label="선택한 타겟 부위"
+              label="선택한 부위"
               title={MUSCLE_GROUPS.find(g => g.id === selectedPart)?.label || ''}
               themeColor={THEME_ACCENT}
             />
@@ -93,7 +93,7 @@ export default function PartCarePage() {
             onGenerate={handleGenerate}
             isGenerating={isLoading}
             error={error}
-            buttonText="타겟 부위 운동 생성하기"
+            buttonText="루틴 확인하기"
             themeColor={THEME_ACCENT}
             gradientOverlay="linear-gradient(121deg, rgba(35, 212, 224, 0.2) 0%, rgba(10, 10, 10, 0.2) 100%)"
             isDisabled={!selectedPart}
