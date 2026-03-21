@@ -85,7 +85,7 @@ export function ProfilePage() {
 
       <div className="flex-1 overflow-y-auto px-6 pb-10 flex flex-col items-center pt-[60px]">
         {/* Profile Card Container (Onboarding Style) */}
-        <div className="relative w-full max-w-[325px] rounded-[32px] p-[3px] mb-8"
+        <div className="relative w-full max-w-[290px] rounded-[32px] p-[3px] mb-8"
           style={{
             background: `conic-gradient(from 180deg at 50% 50%, 
                  #707070 0deg, 
@@ -133,18 +133,25 @@ export function ProfilePage() {
 
             {/* 4. Nickname */}
             <div className="w-full flex justify-center mb-8">
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={tempName}
-                  onChange={(e) => setTempName(e.target.value)}
-                  className="w-[180px] bg-white/5 border border-white/10 rounded-[12px] py-2 text-center text-[20px] font-extrabold text-white placeholder-white/20 focus:outline-none focus:border-[#F43000]/50 transition-colors font-apple-sd"
-                  maxLength={10}
-                  placeholder="닉네임"
-                />
-              ) : (
-                <h2 className="text-[24px] font-extrabold text-white font-apple-sd">{userNickname}</h2>
-              )}
+              <div className="relative flex items-center justify-center">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={tempName}
+                    onChange={(e) => setTempName(e.target.value)}
+                    className="w-[231px] bg-white/5 border border-white/10 rounded-[12px] py-2 text-center text-[20px] font-extrabold text-white placeholder-white/20 focus:outline-none focus:border-[#F43000]/50 transition-colors font-apple-sd"
+                    maxLength={10}
+                    placeholder="닉네임"
+                  />
+                ) : (
+                  <h2 className="text-[24px] font-extrabold text-white font-apple-sd text-center">{userNickname}</h2>
+                )}
+                {isBeginnerMode && (
+                  <div className="absolute -left-6.5 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                    <Image src="/beginner.svg" alt="초보자 모드" width={26} height={26} className="opacity-90" />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* 5. Decoration Line */}
@@ -153,7 +160,7 @@ export function ProfilePage() {
             {/* Beginner Mode Toggle (Only visible in Edit Mode) */}
             {isEditing && (
               <>
-                <div className="w-full px-2 mb-4 flex items-center justify-between opacity-100 transition-opacity duration-300">
+                <div className="w-[231px] mx-auto mb-4 flex items-center justify-between opacity-100 transition-opacity duration-300">
                   <div className="flex flex-col items-start text-left">
                     <span className="flex items-center text-[14px] font-bold text-white tracking-tight">
                       <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />

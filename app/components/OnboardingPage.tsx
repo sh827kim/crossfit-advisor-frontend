@@ -206,7 +206,7 @@ export function OnboardingPage() {
 
             {/* 프로필 카드 */}
             {/* 프로필 카드 Container - Border & Background Separation */}
-            <div className="relative w-full max-w-[305px] h-[420px] mx-auto mb-8 rounded-[30px] p-[3px]"
+            <div className="relative w-full max-w-[270px] mx-auto mb-8 rounded-[30px] p-[3px]"
               style={{
                 // 은색 위주의 메탈릭 그라데이션 테두리
                 background: `conic-gradient(from 180deg at 50% 50%, 
@@ -222,13 +222,13 @@ export function OnboardingPage() {
             >
               {/* Inner Content (빨강-검정 배경) */}
               <div
-                className="w-full h-full rounded-[27px] flex flex-col items-center relative overflow-hidden"
+                className="w-full h-full rounded-[27px] flex flex-col items-center relative overflow-hidden pb-5"
                 style={{
                   background: 'linear-gradient(134.49deg, rgba(244, 48, 0, 0.2) 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F',
                 }}
               >
                 {/* Logo (Top) */}
-                <div className="mt-[36px] mb-6 opacity-30">
+                <div className="mt-5 mb-1 opacity-30">
                   <Image
                     src="/logo-gray.svg"
                     alt="AFTERWOD CLUB"
@@ -239,12 +239,12 @@ export function OnboardingPage() {
                 </div>
 
                 {/* Member Label */}
-                <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[20px]">
+                <p className="text-[9px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[40px]">
                   Member
                 </p>
 
                 {/* Profile Image */}
-                <div className="relative mb-[24px]">
+                <div className="relative mb-[16px]">
                   <div className="group relative">
                     <div
                       className="w-[88px] h-[88px] rounded-full relative flex items-center justify-center overflow-hidden shadow-xl transition"
@@ -282,15 +282,12 @@ export function OnboardingPage() {
                 </div>
 
                 {/* Beginner Mode Toggle */}
-                <div className="w-full mt-6 px-5 flex items-center justify-between">
+                <div className="w-[231px] mt-6 flex items-center justify-between">
                   <div className="flex flex-col items-start text-left">
                     <span className="flex items-center text-[13px] font-bold text-white tracking-tight">
                       <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />
                       초보자 모드
                     </span>
-                    {/* <span className="text-[10px] text-[#959595] font-medium leading-[1.2] mt-1">
-                      난이도가 쉬운 운동 위주로 추천해드려요.
-                    </span> */}
                   </div>
                   <button
                     onClick={() => setIsBeginnerMode(!isBeginnerMode)}
