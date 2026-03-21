@@ -108,12 +108,12 @@ export function ProfilePage() {
             </div>
 
             {/* 2. Member Label */}
-            <p className="text-[10px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[24px]">
+            <p className="text-[8px] font-extrabold text-white/40 uppercase tracking-[3px] mb-[40px]">
               Member
             </p>
 
             {/* 3. Profile Image & Refresh Button */}
-            <div className="relative mb-[24px]">
+            <div className="relative mb-[16px]">
               <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex items-center justify-center relative shadow-2xl border border-white/5"
                 style={{ backgroundColor: fallbackColor }}>
                 <span className="text-[44px] font-extrabold text-black font-apple-sd mt-1">
