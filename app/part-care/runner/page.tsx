@@ -375,7 +375,7 @@ export default function PartRunnerPage() {
                         <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
                             <WorkoutSummaryCard
                                 mode="PART"
-                                rounds={generatedPlan.rounds || 1}
+                                rounds={currentRound}
                                 durationSeconds={timer}
                                 dateString={dateString}
                                 exercises={generatedPlan.exercises}

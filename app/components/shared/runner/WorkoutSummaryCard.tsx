@@ -57,7 +57,7 @@ export const WorkoutSummaryCard = ({ mode, rounds, durationSeconds, dateString, 
     return (
         <div
             ref={ref}
-            className="relative w-full max-w-[20.3rem] h-[26.5rem] shrink-0 rounded-[2rem] p-[0.2rem] mb-8"
+            className="relative w-full max-w-[18.125rem] h-[26.5rem] shrink-0 rounded-[2rem] p-[0.2rem] mb-8"
             style={borderStyle}
         >
             <div className="w-full h-full rounded-[1.8rem] flex flex-col items-start relative overflow-hidden bg-[#1F1F1F] px-8 py-8"

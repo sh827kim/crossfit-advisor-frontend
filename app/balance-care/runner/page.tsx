@@ -364,7 +364,7 @@ export default function RunnerPage() {
                         <div className="flex-1 w-full flex flex-col items-center justify-center my-4">
                             <WorkoutSummaryCard
                                 mode="BALANCE"
-                                rounds={5}
+                                rounds={currentRound}
                                 durationSeconds={timer}
                                 dateString={dateString}
                                 exercises={generatedPlan.exercises}
