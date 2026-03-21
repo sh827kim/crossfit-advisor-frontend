@@ -99,11 +99,11 @@ export function ProfilePage() {
           }}
         >
           {/* Inner Content */}
-          <div className="w-full h-full rounded-[29px] flex flex-col items-center relative overflow-hidden bg-[#1F1F1F] px-4 py-8"
+          <div className="w-full h-full rounded-[29px] flex flex-col items-center relative overflow-hidden bg-[#1F1F1F] px-4 pt-5 pb-8"
             style={{ background: 'linear-gradient(134.49deg, rgba(244, 48, 0, 0.2) 3.24%, rgba(0, 0, 0, 0.2) 35.53%), #1F1F1F' }}>
 
             {/* 1. Logo (Top) */}
-            <div className="mb-4 opacity-30 mt-2">
+            <div className="mb-1 opacity-30 mt-0">
               <Image src="/logo-gray.svg" alt="AFTERWOD" width={78} height={26} className="h-[22px] w-auto" />
             </div>
 
@@ -148,74 +148,99 @@ export function ProfilePage() {
             </div>
 
             {/* 5. Decoration Line */}
-            <div className="w-full h-[1px] bg-white/5 mb-6"></div>
+            <div className="w-full h-[1px] bg-white/5 mb-4"></div>
 
-            {/* Beginner Mode Toggle */}
-            <div className="w-full px-2 mb-6 flex items-center justify-between">
-              <div className={`flex flex-col items-start text-left transition-opacity duration-300 ${!isEditing ? 'opacity-60' : 'opacity-100'}`}>
-                <span className="flex items-center text-[14px] font-bold text-white tracking-tight">
-                  <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />
-                  초보자 모드
-                </span>
-                {/* <span className="text-[11px] text-[#959595] font-medium leading-[1.2] mt-1">
-                  난이도가 쉬운 운동 위주로 추천해드려요.
-                </span> */}
-              </div>
-              <button
-                onClick={() => isEditing && setIsBeginnerMode(!isBeginnerMode)}
-                disabled={!isEditing}
-                className={`relative w-11 h-6 rounded-full transition-all duration-300 focus:outline-none flex-shrink-0 ${isBeginnerMode ? 'bg-[#F43000]' : 'bg-white/10'} ${!isEditing ? 'opacity-50 cursor-default grayscale-[30%]' : 'cursor-pointer hover:brightness-110'}`}
-              >
-                <div className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${isBeginnerMode ? 'translate-x-5' : 'translate-x-0'}`} />
-              </button>
-            </div>
+            {/* Beginner Mode Toggle (Only visible in Edit Mode) */}
+            {isEditing && (
+              <>
+                <div className="w-full px-2 mb-4 flex items-center justify-between opacity-100 transition-opacity duration-300">
+                  <div className="flex flex-col items-start text-left">
+                    <span className="flex items-center text-[14px] font-bold text-white tracking-tight">
+                      <Image src="/beginner.svg" alt="초보자 모드" width={16} height={16} className="mr-1" />
+                      초보자 모드
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsBeginnerMode(!isBeginnerMode)}
+                    className={`relative w-11 h-6 rounded-full transition-all duration-300 focus:outline-none flex-shrink-0 cursor-pointer hover:brightness-110 ${isBeginnerMode ? 'bg-[#F43000]' : 'bg-white/10'}`}
+                  >
+                    <div className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${isBeginnerMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </button>
+                </div>
 
-            {/* 6. Decoration Line */}
-            <div className="w-full h-[1px] bg-white/5 mb-6"></div>
+                {/* 6. Decoration Line */}
+                <div className="w-full h-[1px] bg-white/5 mb-4"></div>
+              </>
+            )}
 
             {/* 7. Stats Section (Inside Card) */}
-            <div className="w-full mt-4 px-2">
+            <div className="w-full px-2">
               {isEditing ? (
-                <div className="grid grid-cols-2 gap-y-6 gap-x-4 opacity-40 pointer-events-none grayscale">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="flex flex-col items-start justify-center animate-pulse">
-                      {/* Label Skeleton */}
-                      <div className="w-24 h-4 bg-white/20 rounded mb-2"></div>
-                      {/* Value Skeleton */}
-                      <div className="w-16 h-6 bg-white/20 rounded"></div>
+                <div className="grid grid-cols-2 gap-x-4 opacity-40 pointer-events-none grayscale">
+                  <div className="flex flex-col gap-4">
+                    <div className="w-16 h-4 bg-white/20 rounded mb-0 animate-pulse"></div>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col">
+                        <div className="w-12 h-3 bg-white/20 rounded animate-pulse"></div>
+                        <div className="w-16 h-8 bg-white/20 rounded animate-pulse mt-1"></div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="w-8 h-3 bg-white/20 rounded animate-pulse"></div>
+                        <div className="w-16 h-8 bg-white/20 rounded animate-pulse mt-1"></div>
+                      </div>
                     </div>
-                  ))}
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div className="w-16 h-4 bg-white/20 rounded mb-0 animate-pulse"></div>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col">
+                        <div className="w-12 h-3 bg-white/20 rounded animate-pulse"></div>
+                        <div className="w-20 h-8 bg-white/20 rounded animate-pulse mt-1"></div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="w-8 h-3 bg-white/20 rounded animate-pulse"></div>
+                        <div className="w-20 h-8 bg-white/20 rounded animate-pulse mt-1"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-                  {/* Item 1 */}
-                  <div className="flex flex-col items-start justify-center">
-                    <span className="text-[13px] text-white font-medium mb-1">이번 달 운동 횟수</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-barlow">{stats.thisMonthCount}</span>
+                <div className="grid grid-cols-2 gap-x-4">
+                  {/* Left Column: 운동 횟수 */}
+                  <div className="flex flex-col">
+                    <span className="text-[15px] text-white/90 font-bold mb-4">운동 횟수</span>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col items-start justify-center">
+                        <span className="text-[12px] text-white/80 font-medium leading-none">이번 달</span>
+                        <div className="flex items-baseline gap-1 mt-0.5">
+                          <span className="text-[30px] font-bold text-white font-barlow leading-none">{stats.thisMonthCount}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-start justify-center">
+                        <span className="text-[12px] text-white/80 font-medium leading-none">총</span>
+                        <div className="flex items-baseline gap-1 mt-0.5">
+                          <span className="text-[30px] font-bold text-white font-barlow leading-none">{stats.totalCount}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  {/* Item 2 */}
-                  <div className="flex flex-col items-start justify-center">
-                    <span className="text-[13px] text-white font-medium mb-1">이번 달 운동 시간</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-barlow">{stats.thisMonthDuration}</span>
-                      <span className="text-[15px] text-white font-medium">분</span>
-                    </div>
-                  </div>
-                  {/* Item 3 */}
-                  <div className="flex flex-col items-start justify-center">
-                    <span className="text-[13px] text-white font-medium mb-1">총 운동 횟수</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-barlow">{stats.totalCount}</span>
-                    </div>
-                  </div>
-                  {/* Item 4 */}
-                  <div className="flex flex-col items-start justify-center">
-                    <span className="text-[13px] text-white font-medium mb-1">총 운동 시간</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-[30px] font-bold text-white font-barlow">{stats.totalDuration}</span>
-                      <span className="text-[15px] text-white font-medium">분</span>
+
+                  {/* Right Column: 운동 시간 */}
+                  <div className="flex flex-col">
+                    <span className="text-[15px] text-white/90 font-bold mb-4">운동 시간</span>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col items-start justify-center">
+                        <span className="text-[12px] text-white/80 font-medium leading-none">이번 달</span>
+                        <div className="flex items-baseline gap-1 mt-0.5">
+                          <span className="text-[30px] font-bold text-white font-barlow leading-none">{stats.thisMonthDuration}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-start justify-center">
+                        <span className="text-[12px] text-white/80 font-medium leading-none">총</span>
+                        <div className="flex items-baseline gap-1 mt-0.5">
+                          <span className="text-[30px] font-bold text-white font-barlow leading-none">{stats.totalDuration}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
