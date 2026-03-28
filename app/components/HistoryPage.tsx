@@ -277,7 +277,7 @@ export function HistoryPage() {
                   {/* Main Title */}
                   <div className="text-[20px] font-extrabold text-white mb-2 font-barlow tracking-tight">
                     {record.rounds
-                      ? `${record.rounds} Rounds`
+                      ? `${record.rounds} Rounds Quality`
                       : `${Math.ceil(record.duration / 60)}분 운동`
                     }
                   </div>
