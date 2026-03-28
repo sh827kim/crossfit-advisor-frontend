@@ -659,7 +659,7 @@
     },
     {
       "id": "vup",
-      "name": "V-up",
+      "name": "브이업",
       "type": "GYMNASTICS_BODY",
       "muscleGroups": [
         "CORE"

@@ -130,7 +130,7 @@ export default function BalanceCarePage() {
     <>
       <CarePageLayout
         title="오늘 한 WOD를"
-        subtitle="알려주세요."
+        subtitle="알려주세요"
         description=""
         onBack={handleBack}
         bottomControls={
@@ -191,10 +191,10 @@ export default function BalanceCarePage() {
             </div>
           </div>
 
-          {/* 자주하는 운동 */}
+          {/* 자주하는 WOD */}
           {frequentMovements.length > 0 && !searchInput.trim() && (
             <div className="flex-shrink-0 pb-4">
-              <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">자주하는 운동</p>
+              <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">자주하는 WOD</p>
               <div className="grid grid-cols-2 gap-3">
                 {frequentMovements.map(movement => (
                   <SelectionCard

@@ -85,7 +85,7 @@ export function RunnerIntro({
         const roundSeconds = Math.floor(totalSeconds / (plan.rounds || 1));
         const m = Math.floor(roundSeconds / 60);
         const s = roundSeconds % 60;
-        return `${m}분 ${s > 0 ? `${s}초` : ''} `;
+        return s > 0 ? `${m}분 ${s}초` : `${m}분`;
     };
 
     const handleStart = () => {
@@ -153,12 +153,9 @@ export function RunnerIntro({
             <div className="w-full h-[1px] bg-white/10 mb-6"></div>
 
             {/* Round Target Time */}
-            <div className="text-left mb-2 pl-2 flex items-center gap-4">
+            <div className="text-left mb-2 pl-2">
                 <p className="text-xl font-bold text-white uppercase tracking-wider">
-                    1라운드당 목표
-                </p>
-                <p className="text-xl font-bold text-white">
-                    {getRoundTargetTime()}
+                    1라운드당 목표 <span className="normal-case">{getRoundTargetTime()}</span>
                 </p>
             </div>
 
@@ -169,9 +166,9 @@ export function RunnerIntro({
                         steps={plan.exercises.map((ex, idx) => {
                             const eqName = getEquipmentName(ex.equipment);
                             return {
-                                id: ex.movementId || `ex - ${idx} `,
+                                id: ex.movementId || `ex-${idx}`,
                                 title: ex.name,
-                                description: `${ex.minCount || 10} - ${ex.maxCount || 15} ${ex.unit || 'reps'} ${eqName ? `, ${eqName}` : ''}`
+                                description: `${ex.minCount || 10}-${ex.maxCount || 15}${(!ex.unit || ex.unit === 'reps') ? '회' : ex.unit === 'cal' ? '칼로리' : ` ${ex.unit}`}${eqName ? `, ${eqName}` : ''}`
                             };
                         })}
                         themeColor={themeColor}

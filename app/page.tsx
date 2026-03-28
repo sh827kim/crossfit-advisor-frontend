@@ -112,7 +112,7 @@ export default function HomePage() {
           }}
         >
           <h3 className="text-[1.4rem] font-bold text-white leading-[1.6rem]">WOD 기반 맞춤 운동</h3>
-          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">WOD를 분석해 균형잡힌 추가운동을 해요.</p>
+          <p className="text-[0.9rem] font-normal text-white/55 leading-[1.2rem]">WOD를 분석해 균형 잡힌 추가 운동을 해요.</p>
 
           {/* Hover/Active Effect Overlay */}
           <div className="absolute inset-0 bg-white/5 opacity-0 group-active:opacity-100 transition-opacity" />

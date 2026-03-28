@@ -204,7 +204,7 @@ export default function GoalCarePage() {
                 </div>
               ) : (
                 <>
-                  <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">주요 목표 동작</p>
+                  <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">인기 동작</p>
                   <div className="grid grid-cols-2 gap-3">
                     {goals.map(goal => {
                       const isSelected = selectedGoal?.id === goal.id;

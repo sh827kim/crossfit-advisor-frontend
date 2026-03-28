@@ -68,7 +68,7 @@ export const WorkoutSummaryCard = ({ mode, rounds, durationSeconds, dateString, 
                         <div className="text-[3.8rem] font-black text-white leading-none tracking-tight font-barlow">
                             {formatTime(durationSeconds)}
                         </div>
-                        <div className="text-[0.9rem] font-bold text-white mt-1">운동시간</div>
+                        <div className="text-[0.9rem] font-bold text-white mt-1">운동 시간</div>
                     </div>
 
                     <div className="w-full h-[1px] bg-white/10 mb-4 flex-none"></div>

@@ -197,7 +197,7 @@ export function OnboardingPage() {
               <h2 className="text-3xl font-bold leading-tight mb-4">
                 프로필을
                 <br />
-                등록해주세요.
+                등록해 주세요
               </h2>
               <p className="text-sm text-gray-400">
                 닉네임은 언제든 수정할 수 있어요.

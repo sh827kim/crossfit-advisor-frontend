@@ -74,7 +74,7 @@ export function ProfilePage() {
         <button onClick={() => router.push('/')} className="w-10 h-10 flex items-center justify-center">
           <i className="fa-solid fa-xmark text-[24px] text-gray-400"></i>
         </button>
-        <h1 className="text-[17px] font-bold absolute left-1/2 -translate-x-1/2">Profile</h1>
+        <h1 className="text-[17px] font-bold absolute left-1/2 -translate-x-1/2">프로필</h1>
         <button
           onClick={handleEditToggle}
           className={`text-[16px] font-bold w-[60px] text-right transition-colors text-white hover:text-gray-300`}
@@ -274,7 +274,7 @@ export function ProfilePage() {
       {/* Reset Modal */}
       <ConfirmDialog
         isOpen={showResetPopup}
-        title={<>운동 기록을<br />초기화 할까요?</>}
+        title={<>운동 기록을<br />초기화할까요?</>}
         description=""
         confirmText="네"
         cancelText="아니요"

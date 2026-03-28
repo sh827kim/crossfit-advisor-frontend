@@ -44,8 +44,16 @@ export default function PartRunnerPage() {
 
     useEffect(() => {
         const now = new Date();
-        setDateString(now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }));
-        setDateTimeString(now.toLocaleString('ko-KR', { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true }));
+        const y = now.getFullYear();
+        const m = now.getMonth() + 1;
+        const d = now.getDate();
+        const week = ['일', '월', '화', '수', '목', '금', '토'][now.getDay()];
+        let h = now.getHours();
+        const min = String(now.getMinutes()).padStart(2, '0');
+        const ampm = h >= 12 ? '오후' : '오전';
+        h = h % 12 || 12;
+        setDateString(`${y}년 ${m}월 ${d}일 ${week}요일`);
+        setDateTimeString(`${y}년 ${m}월 ${d}일 ${week}요일 ${ampm} ${h}:${min}`);
     }, []);
 
     const handleRegenerate = async () => {
@@ -311,7 +319,7 @@ export default function PartRunnerPage() {
                                                 {ex.name}
                                             </span>
                                             <span className="text-base text-gray-400 font-medium whitespace-pre-wrap">
-                                                {ex.minCount || 10} - {ex.maxCount || 15} {ex.unit || 'reps'}{eqName ? `, ${eqName}` : ''}
+                                                {ex.minCount || 10}-{ex.maxCount || 15}{(!ex.unit || ex.unit === 'reps') ? '회' : ex.unit === 'cal' ? '칼로리' : ` ${ex.unit}`}{eqName ? `, ${eqName}` : ''}
                                             </span>
                                         </div>
                                     </div>
@@ -368,7 +376,7 @@ export default function PartRunnerPage() {
                 <div ref={cardRef} className="h-full flex flex-col items-center p-6 pt-12 overflow-y-auto" style={{ background: `linear-gradient(to bottom, #000000 70%, ${THEME_DARK_COLOR} 100%)` }}>
                     <div className="w-full flex flex-col items-center pb-4">
                         <h1 className="text-[32px] font-extrabold text-white text-center mb-2 leading-[40px]">
-                            오늘도 해냈어요!<br /> Great Job!
+                            오늘도 해냈어요<br /> Great Job!
                         </h1>
 
                         {/* Main Content Area */}

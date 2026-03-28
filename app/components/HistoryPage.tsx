@@ -177,7 +177,7 @@ export function HistoryPage() {
           <i className="fa-solid fa-chevron-left text-[16px] text-gray-500 hover:text-white transition"></i>
         </button>
         <h1 className="text-[20px] font-bold font-barlow tabular-nums tracking-wide text-center pt-1">
-          {year}.{String(month + 1).padStart(2, '0')}
+          {year} {month + 1}월
         </h1>
         <button
           onClick={handleNextMonth}
@@ -237,19 +237,13 @@ export function HistoryPage() {
         </div>
       </div>
 
-      {/* Selected Date Header */}
-      <div className='px-6 mb-4'>
-        <h3 className='text-[14px] font-bold text-white/40 tracking-wide font-barlow'>{selectedDate.replace(/-/g, '.')}</h3>
-      </div>
+
 
       {/* Floating Card List */}
       <div className="px-5 pb-10 flex-1 overflow-y-auto no-scrollbar pt-2">
         {selectedDateRecords.length > 0 ? (
           <div className="space-y-3">
             {selectedDateRecords.map((record, i) => {
-              const recordDate = new Date(record.date);
-              const dateDisplay = `${String(recordDate.getMonth() + 1).padStart(2, '0')}.${String(recordDate.getDate()).padStart(2, '0')}`;
-
               return (
                 <div key={i} className="bg-[#1F1F1F] border border-white/5 rounded-[24px] p-5 relative group transition-all active:scale-[0.98]">
                   {/* Header Row: Mode & Date & Menu */}
@@ -264,9 +258,6 @@ export function HistoryPage() {
                         {record.mode === 'BALANCE' ? 'WOD 기반 맞춤 운동' :
                           record.mode === 'GOAL' ? '목표 동작 달성' :
                             record.mode === 'PART' ? '부위별 근력 강화' : '자유 운동'}
-                      </span>
-                      <span className="text-[12px] text-gray-500 font-medium ml-1 border-l border-white/10 pl-2 font-barlow">
-                        {dateDisplay}
                       </span>
                     </div>
 
@@ -289,9 +280,6 @@ export function HistoryPage() {
                       ? `${record.rounds} Rounds`
                       : `${Math.ceil(record.duration / 60)}분 운동`
                     }
-                    <span className="text-[13px] font-bold text-gray-500 ml-2 align-middle">
-                      / {Math.ceil(record.duration / 60)} mins
-                    </span>
                   </div>
 
                   {/* Exercises */}
@@ -313,7 +301,7 @@ export function HistoryPage() {
                         className="w-[100px] py-2.5 bg-[#333333] border border-white/10 shadow-xl rounded-xl flex items-center justify-center gap-2 hover:bg-[#444444] transition active:scale-95"
                       >
                         <i className="fa-solid fa-trash-can text-[#999999] text-[12px]"></i>
-                        <span className="text-[13px] text-[#DDDDDD] font-bold">삭제하기</span>
+                        <span className="text-[13px] text-[#DDDDDD] font-bold">삭제</span>
                       </button>
                     </div>
                   )}
