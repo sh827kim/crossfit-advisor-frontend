@@ -488,8 +488,8 @@
         "CHEST"
       ],
       "equipment": "BODYWEIGHT",
-      "minCount": 15,
-      "maxCount": 25,
+      "minCount": 10,
+      "maxCount": 15,
       "difficulty": 1
     },
     {
@@ -553,6 +553,20 @@
       "equipment": "ASSAULT_BIKE",
       "minCount": 7,
       "maxCount": 10,
+      "unit": "cal",
+      "difficulty": 1
+    },
+    {
+      "id": "ergo_bike",
+      "name": "에르고 바이크",
+      "type": "CARDIO",
+      "muscleGroups": [
+        "CARDIO",
+        "LEGS"
+      ],
+      "equipment": "ERGO_BIKE",
+      "minCount": 10,
+      "maxCount": 15,
       "unit": "cal",
       "difficulty": 1
     },
